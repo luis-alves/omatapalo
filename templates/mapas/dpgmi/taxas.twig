@@ -1,0 +1,79 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<table class="items" id="myTdable" width=100%>
+    {% if label1 is not defined %}
+        <caption>
+            <div class="centrar_titulo">
+                <div class="colorir">
+                    <h2>{{title}}</h2>
+                </div>
+             </div>
+             <div class="al_esquerda">
+                 <p ><b>Ano:</b> {{ session.ano }}</p>
+                 <p><b>Empresa:</b> Omatapalo, S.A. </p>
+             </div>
+             <div class="al_direita" >
+                 <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
+             </div>
+         </caption>
+    {% endif %}
+    <thead>
+        <tr>
+            <th>Mês</th>
+            <th colspan="3">Imposto Industrial</th>
+            <th colspan="3">Imposto Selo</th>
+            <th colspan="3">Royalty</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th>Valor <br>(Akz)</th>
+            <th>Banco</th>
+            <th>Rep.Fiscal</th>
+            <th>Valor <br>(Akz)</th>
+            <th>Banco</th>
+            <th>Rep.Fiscal</th>
+            <th>Valor <br>(Akz)</th>
+            <th>Banco</th>
+            <th>Rep.Fiscal</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <th>Totais</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>{{rodapeVolExtraido}}</th>
+        <th>-</th>
+        <th>-</th>
+    </tfoot>
+
+    <tbody>
+        {% for i in 1..12 %}
+            <tr>
+                <td>{{lista_meses[loop.index0]}}</td>
+                <td>Isento</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>{{totalExtraido[loop.index]}}</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<style>
+    td, th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+
+{% endblock %}

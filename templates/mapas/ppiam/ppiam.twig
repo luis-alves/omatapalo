@@ -1,0 +1,152 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<!-- <div id="container"> -->
+<table class="table table-striped table-bordered table-hover" id="myTable" stylse="width:100%">
+    {% if label1 is not defined %}
+        <caption>
+            <div class="centrar_titulo">
+                <div class="colorir">
+                    <h2>{{title}}</h2>
+                </div>
+             </div>
+             <div class="al_esquerda">
+                 <p ><b>Ano:</b> {{ session.ano }}</p>
+                 <p><b>Empresa:</b> Omatapalo, S.A. </p>
+             </div>
+             <div class="al_direita" >
+                 <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
+             </div>
+         </caption>
+    {% endif %}
+    <thead>
+        <tr>
+            <th class="text-center" style="vertical-align:middle;">Designação</th>
+            <th class="text-center" colspan="1">Janeiro</th>
+            <th class="text-center" colspan="1">Fevereiro</th>
+            <th class="text-center" colspan="1">Março</th>
+            <th class="text-center" colspan="1">Abril</th>
+            <th class="text-center" colspan="1">Maio</th>
+            <th class="text-center" colspan="1">Junho</th>
+            <th class="text-center" colspan="1">Julho</th>
+            <th class="text-center" colspan="1">Agosto</th>
+            <th class="text-center" colspan="1">Setembro</th>
+            <th class="text-center" colspan="1">Outubro</th>
+            <th class="text-center" colspan="1">Novembro</th>
+            <th class="text-center" colspan="1">Dezembro</th>
+        </tr>
+    </thead>
+
+    <tfoot>
+    </tfoot>
+
+    <tbody>
+            <tr>
+                <td class="text-center">Preço Médio Interno</td>
+                {% for item in 1..12 %}
+                    <td class="text-center">{{ pmi[loop.index]|number_format(0,",",".") }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="text-center">Preço Médio Externo</td>
+                {% for item in 1..12 %}
+                    <td class="text-center">{{ pme[loop.index]|number_format(0,",",".") }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="text-center">Produção</td>
+                {% for item in 1..12 %}
+                    <td class="text-center">{{ totalProducao[loop.index]|number_format(0,",",".") }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="text-center">Qt. Forn. Internamente</td>
+                {% for item in 1..12 %}
+                    <td class="text-center">{{ totalVendasInternas[loop.index]|number_format(0,",",".") }}</td>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <td class="text-center">Qt. Forn. Externamente</td>
+                {% for item in 1..12 %}
+                    <td class="text-center">{{ totalVendasExternas[loop.index]|number_format(0,",",".") }}</td>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <td class="text-center">Valor Médio Global de Venda</td>
+                {% for item in 1..12 %}
+                    <td class="text-center">{{ mediaPrecos[loop.index]|number_format(0,",",".") }}</td>
+                {% endfor %}
+            </tr>
+
+
+
+
+    </tbody>
+</table>
+<div class="parent">
+    <div ><h2><span class="label label-primary">Preço Médio de Venda Ponderado - Anual</span></h2></div>
+        <canvas id="myChart" ></canvas>
+</div>
+
+<!-- </div> -->
+
+<script type="text/javascript">
+    var data = {
+        labels : ["Janeiro","Fevereiro","Março",
+                  "Abril","Maio","Junho",
+                  "Julho","Agosto","Setembro",
+                  "Outubro","Novembro","Dezembro"],
+        datasets : [
+           {
+            label : "Média de preços",
+            backgroundColor : "rgba(252,233,79,0.3)",
+            borderColor : "rgba(82,75,25,1)",
+            pointBorderColor : "rgba(166,152,51,1)",
+            pointBackgroundColor : "#fff",
+            pointHoverBackgroundColor : "rgba(252,233,79,1)",
+            data : {{ mediaPrecosGrafico|json_encode|raw }}
+            },
+        ]
+    }
+
+    //Get context with jQuery - using jQuery's .get() method.
+    var ctx = $("#myChart").get(0).getContext("2d");
+    new Chart(ctx,{
+        type:'line',
+        data:data,
+        options:{
+            legend:{
+                position:'bottom'
+            }
+        }
+    });
+
+</script>
+
+<style>
+    td, th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    /*#myChart {
+        width: 940px !important;
+        height: 470px !important;
+    }*/
+    /*canvas{
+        width: 100% !important;
+        max-width: 940px;
+        height: auto !important;
+    }*/
+    /*.parent {
+        width: 100%;
+        text-align:center;
+        canvas {
+            height:100px !important;
+        }
+    }*/
+</style>
+
+{% endblock %}

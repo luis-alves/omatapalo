@@ -1,0 +1,81 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="colorir" style="background-color:#003686;padding:5px;">
+        <h2 style="color:white;text-align:center;">{{title}}</h2>
+    </div>
+    <h3><strong></strong>{{mes_titulo}} de {{ session.ano }}</h3>
+</div>
+<div class="container">
+    <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" style="width:100%;overflow-x:auto">
+        <thead>
+            <tr>
+                <th rowspan="2" class="text-center" style="vertical-align:middle;">CLIENTES</th>
+                {% for ci,codigo in cisRelatorioMensal %}
+                    <th colspan="2" class="text-center">{{ ci }}</th>
+                {% endfor %}
+                <th colspan="2" class="text-center">TOTAL</th>
+            </tr>
+            <tr>
+                {% for item in range(0,3) %}
+                    <th class="text-center">Qt. Fornecida <br>(m3)</th>
+                    <th class="text-center">Valor Facturado <br>(USD)</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th class="text-center">Total</th>
+                {% for ci,valor in cisRelatorioMensal %}
+                    <th class="text-center">{{ rodapeM3[ci]|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeTotal[ci]|number_format(0,","," ") }}</th>
+                {% endfor %}
+                <th class="text-center">{{ rodapeTotalM3|number_format(0,","," ") }}</th>
+                <th class="text-center">{{ rodapeTotalTotal|number_format(0,","," ") }}</th>
+            </tr>
+        </tfoot>
+        <tbody>
+            {% for cliente,lista in vendaGR %}
+                <tr>
+                    <td class="text-center">{{ cliente }}</td>
+                    {% for ci,valor in cisRelatorioMensal %}
+                        <td style="vertical-align:middle;" class="text-center">{{vendaGR[cliente][ci]['m3']|number_format(0,","," ") }}</td>
+                        <td style="vertical-align:middle;" class="text-center">{{vendaGR[cliente][ci]['total']|number_format(0,","," ") }}</td>
+                    {% endfor %}
+                    <td style="vertical-align:middle;" class="text-center">{{ somaM3[cliente]|number_format(0,","," ") }}</td>
+                    <td style="vertical-align:middle;" class="text-center">{{ somaTotal[cliente]|number_format(0,","," ") }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td class="text-center">Vendas a Dinheiro</td>
+                {% for ci,valor in cisRelatorioMensal %}
+                    <td class="text-center">{{ totalVDm3[ci]|number_format(0,","," ") }}</td>
+                    <td class="text-center">{{ totalVDtotal[ci]|number_format(0,","," ") }}</td>
+                {% endfor %}
+                <td class="text-center">{{ somaVDm3|number_format(0,","," ") }}</td>
+                <td class="text-center">{{ somaVDtotal|number_format(0,","," ") }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">Venda Interna</td>
+                {% for ci,valor in cisRelatorioMensal %}
+                    <td class="text-center">{{ totalGTOm3[ci]|number_format(0,","," ") }}</td>
+                    <td class="text-center">{{ totalGTOtotal[ci]|number_format(0,","," ") }}</td>
+                {% endfor %}
+                <td class="text-center">{{ somaGTOm3|number_format(0,","," ") }}</td>
+                <td class="text-center">{{ somaGTOtotal|number_format(0,","," ") }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    td, th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+
+
+{% endblock %}

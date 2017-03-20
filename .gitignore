@@ -1,0 +1,7 @@
+/vendor/
+/public/css
+/public/fonts
+/public/img
+/public/js
+/logs/*
+!/logs/README.md

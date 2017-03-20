@@ -1,0 +1,68 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<br><br>
+<div class="container">
+    <div style="background-color:rgb(0,176,240);padding:5px;">
+        <h3 style="text-align:center;"><strong>CENTRAL DE BRITAGEM DE {{ cIndCapitais }}</strong><br><br>TABELA DE PREÇOS {{ destinoCapitais }}</h3>
+     </div>
+    <h5 style="color:red"><strong>Preços em {{ mesActual }} de {{ session.ano }}</strong></h5>
+</div>
+<div class="container">
+
+    <table align="center">
+        <thead>
+            <tr>
+                <th>Agregado</th>
+                <th>Preço Unitário <br>({{tipoTabela}}/{{ unidade }})</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in 0..numeroPrecos-1 %}
+                <tr>
+                    <td>{{ listaPrecosArray[i]['brita'] }}</td>
+                    <td>{{ listaPrecosArray[i]['preco'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    {% if destino == 'externos' %}
+        <p style="text-align:center"><br>* Adicionar 10% imposto de consumo sobre o valor da tabela.<br>
+        Os valores apresentados poderão ser sujeitos a alterações sem aviso prévio</p>
+    {% endif %}
+</div>
+
+{% if destino == 'externos' %}
+<form action="/omatapalo/tabelas/precos/imprimir" method="post">
+        <button style="margin-left:10px;" class="btn btn-danger" name="printit" type="submit"
+        value="{{print}},{{tipoTabela}},{{destino}},{{unidade}}">Imprimir</button>
+</form>
+{% endif %}
+
+
+
+
+<style>
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;;
+    text-align: center;
+    border-spacing: 15px;
+    padding: 5px 100px;
+    cellspacing
+}
+
+table thead {
+    background-color: lightgrey;
+
+}
+
+
+
+
+</style>
+
+
+{% endblock %}

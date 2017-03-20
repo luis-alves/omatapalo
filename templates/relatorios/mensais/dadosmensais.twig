@@ -1,0 +1,224 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="colorir" style="background-color:#003686;padding:5px;">
+        <h2 style="color:white;text-align:center;">{{title}}</h2>
+     </div>
+    <h3><strong></strong>{{mes_titulo}} de {{ session.ano }}</h3>
+</div>
+<div class="container">
+
+    <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" stylse="width:100%;overflow-x:auto">
+        <thead>
+            <tr>
+                <th class="text-center" colspan="2">Agregados</th>
+                {% for britas,nome in drBritas %}
+                    <th class="text-center" >{{ britas }}</th>
+                {% endfor %}
+                <th class="text-center">Totais</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th class="text-center" rowspan="5" style="vertical-align:middle;border-bottom-width:2px;">Totais</th>
+                <th class="text-center">Stock Inicial</th>
+                {% for brita,nome in drBritas %}
+                    <th class="text-center">{{ rodapeStockInicial[brita]|number_format(0,","," ") }}</th>
+                {% endfor %}
+                <th class="text-center">{{ somaRodapeStockInicial|number_format(0,","," ") }}</th>
+            </tr>
+            <tr>
+                <th class="text-center">Produção</th>
+                {% for brita,nome in drBritas %}
+                    <th class="text-center">{{ rodapeProducao[brita]|number_format(0,","," ") }}</th>
+                {% endfor %}
+                <th class="text-center">{{ somaRodapeProducao|number_format(0,","," ") }}</th>
+            </tr>
+            <tr>
+                <th class="text-center">V. Interna</th>
+                {% for brita,nome in drBritas %}
+                    <th class="text-center">{{ rodapefInterno[brita]|number_format(0,","," ") }}</th>
+                {% endfor %}
+                <th class="text-center">{{ somaRodapefInterno|number_format(0,","," ") }}</th>
+            </tr>
+            <tr>
+                <th class="text-center">V. Externa</th>
+                {% for brita,nome in drBritas %}
+                    <th class="text-center">{{ rodapefExterno[brita]|number_format(0,","," ") }}</th>
+                {% endfor %}
+                <th class="text-center">{{ somaRodapefExterno|number_format(0,","," ") }}</th>
+            </tr>
+            <tr>
+                <th class="text-center" style="border-bottom-width:2px;">Stock Final</th>
+                {% for brita,nome in drBritas %}
+                    <th class="text-center" style="border-bottom-width:2px;">{{ rodapeStockFinal[brita]|number_format(0,","," ") }}</th>
+                {% endfor %}
+                <th class="text-center" style="border-bottom-width:2px;">{{ somaRodapeStockFinal|number_format(0,","," ") }}</th>
+            </tr>
+        </tfoot>
+        <tbody>
+            {% for cIndustrial,codigo in cisRelatorioMensal %}
+                <td class="text-center" style="vertical-align:middle; border-bottom-width:2px;" rowspan="6"><strong>{{ cIndustrial }}</strong></td>
+                <tr>
+                    <td class="text-center"><strong>Stock Inicial</strong></td>
+                        {% for brita,nome in drBritas %}
+                            <td class="text-center">{{stockInicial[codigo][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                    <td class="text-center"><b>{{ somaStockInicial[codigo]|number_format(0,","," ") }}</b></td>
+                </tr>
+                <tr>
+                    <td class="text-center"><strong>Produção</strong></td>
+                        {% for brita,nome in drBritas %}
+                            <td  class="text-center">{{producao[codigo][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                    <td class="text-center"><b>{{ somaProducao[codigo]|number_format(0,","," ") }}</b></td>
+                </tr>
+                <tr>
+                    <td class="text-center"><strong>V. Interna</strong></td>
+                        {% for brita,nome in drBritas %}
+                            <td class="text-center">{{fInterno[codigo][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                    <td class="text-center"><b>{{ somafInterno[codigo]|number_format(0,","," ") }}</b></td>
+                </tr>
+                <tr>
+                    <td class="text-center"><strong>V. Externa</strong></td>
+                        {% for brita,nome in drBritas %}
+                            <td class="text-center">{{fExterno[codigo][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                    <td class="text-center"><b>{{ somafExterno[codigo]|number_format(0,","," ") }}</b></td>
+                </tr>
+                <tr>
+                    <td class="text-center" style="border-bottom-width:2px;"><strong>Stock Final</strong></td>
+                        {% for brita,nome in drBritas %}
+                            <td class="text-center" style="border-bottom-width:2px;">{{stockFinal[codigo][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                    <td class="text-center" style="border-bottom-width:2px;"><b>{{ somaStockFinal[codigo]|number_format(0,","," ") }}</b></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container"  style="text-align: center">
+<table style="display: inline-block;">
+    <thead>
+        <tr>
+            <th class="text-center"><h3>PRODUÇÃO POR C.I.</h3> </th>
+            <th class="text-center"><h3>VENDA POR DESTINO</h3> </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div id="container" style="width: 80;float:left;">
+                    <canvas id="myData1" width="600" height="400"></canvas>
+                </div>
+            </td>
+            <td>
+                <div id="container" style="width: 80;float:right;">
+                  <canvas id="myData2" width="600" height="400"></canvas>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+
+<script type="text/javascript">
+//
+var val1 = {{ somaProducao['120401']|json_encode|raw }};
+var val2 = {{ somaProducao['120402']|json_encode|raw }};
+var val3 = {{ somaProducao['120403']|json_encode|raw }};
+
+var pieData = {
+  labels: [
+  "Arimba",
+  "Caraculo",
+  "Cassosso"],
+  datasets: [
+    {
+      data: [val1, val2, val3],
+      backgroundColor: [
+         "rgba(95,186,125,0.7)",
+         "rgba(166, 134, 244,0.7)",
+         "rgba(244, 66, 107,0.7)"
+      ]
+  }]
+};
+
+var ctx = document.getElementById("myData1").getContext("2d");
+
+var myPieChart = new Chart(ctx, {
+  type: 'pie',
+  data: pieData,
+  options:{
+      legend:{
+          position:'bottom'
+      }
+  }
+});
+// document.getElementById('js-legend2').innerHTML = myChart2.generateLegend();
+
+
+</script>
+
+<script type="text/javascript">
+//
+var val1 = {{ somaRodapefInterno|json_encode|raw }};
+var val2 = {{ somaRodapefExterno|json_encode|raw }};
+
+var pieData = {
+  labels: [
+  "Venda Interna",
+  "Venda Externa"],
+  datasets: [
+    {
+      data: [val1, val2],
+      backgroundColor: [
+          "#D4CCC5",
+          "#949FB1"
+      ]
+  }]
+};
+
+var ctx = document.getElementById("myData2").getContext("2d");
+
+var myPieChart = new Chart(ctx, {
+  type: 'pie',
+  data: pieData,
+  options:{
+      legend:{
+          position:'bottom'
+      }
+  }
+});
+// document.getElementById('js-legend2').innerHTML = myChart2.generateLegend();
+
+
+</script>
+
+
+<style type="text/css">
+    .chart-legend li span{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin-right: 10px;
+        list-style-type: none;
+    }
+
+    .chart-legend li {
+        list-style-type: none;
+        display: inline;
+        margin-left: 10px;
+    }
+
+    td, th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+{% endblock %}

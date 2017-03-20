@@ -1,0 +1,67 @@
+{% extends 'layout.twig' %}
+{% block content %}
+
+<!-- <div class="container-fluid"> -->
+
+    <table class="items" id="myTdable" width=100%>
+        {% if label1 is not defined %}
+            <caption>
+                <div class="centrar_titulo">
+                    <div class="colorir">
+                        <h2>{{title}}</h2>
+                    </div>
+                 </div>
+                 <div class="al_esquerda">
+                     <p ><b>Ano:</b> {{ session.ano }}</p>
+                     <p><b>Empresa:</b> Omatapalo, S.A. </p>
+                 </div>
+                 <div class="al_direita" >
+                     <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
+                 </div>
+             </caption>
+        {% endif %}
+        <thead>
+            <tr>
+                <th>Mês</th>
+                <th>Local</th>
+                <th class="text-center sum">V. Extraido <br>(m3)</th>
+                <th class="text-center sum">V. Transf. <br>(m3)</th>
+                <th class="text-center sum">V. Comercial. <br>(m3)</th>
+                <th class="text-center">Preço Médio <br>(Akz/m3)</th>
+                <th class="text-center sum">Receita Bruta <br>(Akz)</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <th colspan="2">Totais</th>
+            <th>{{rodapeVolExtraido|number_format(0,",",".")}}</th>
+            <th>{{rodapeVolTrans|number_format(0,",",".")}}</th>
+            <th>{{rodapeVolComer|number_format(0,",",".")}}</th>
+            <th>{{rodapePU|number_format(0,",",".")}}</th>
+            <th>{{rodapeFactura|number_format(0,",",".")}}</th>
+        </tfoot>
+        <tbody>
+
+            {% for i in 1..12 %}
+                <tr>
+                    <td>{{mes[loop.index0]}}</td>
+                    <td>{{ ci }}</td>
+                    <td>{{totalIntacto[loop.index]}}</td>
+                    <td>{{totalProducao[loop.index]|number_format(0,",",".")}}</td>
+                    <td>{{totalVendas[loop.index]|number_format(0,",",".")}}</td>
+                    <td>{{mediaPrecos[loop.index]|number_format(0,",",".")}}</td>
+                    <td>{{totalFacturacao[loop.index]|number_format(0,",",".")}}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+<style>
+    td, th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+
+{% endblock %}

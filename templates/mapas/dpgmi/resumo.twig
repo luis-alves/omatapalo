@@ -1,0 +1,79 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<table class="items" id="myTdable" width=100%>
+    {% if label1 is not defined %}
+        <caption>
+            <div class="centrar_titulo">
+                <div class="colorir">
+                    <h2>{{title}}</h2>
+                </div>
+             </div>
+             <div class="al_esquerda">
+                 <p ><b>Ano:</b> {{ session.ano }}</p>
+                 <p><b>Empresa:</b> Omatapalo, S.A. </p>
+             </div>
+             <div class="al_direita" >
+                 <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
+             </div>
+         </caption>
+    {% endif %}
+    <thead>
+        <tr>
+            <th rowspan="2">Mês</th>
+            <th colspan="2">Investimentos</th>
+            <th colspan="6">Operacionais</th>
+        </tr>
+        <tr>
+            <th>Bens <br></th>
+            <th>Equipamentos <br></th>
+            <th>Taxas/ <br>Impostos <br></th>
+            <th>Pessoal <br></th>
+            <th>Transportes <br></th>
+            <th>Serviços <br>Terceiros <br></th>
+            <th>Combustivel/ <br>Lubrif. <br></th>
+            <th>Outros <br>Custos <br></th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Totais</th>
+            <th></th>
+            <th></th>
+            <th>{{rodapeVolExtraido|number_format(0,","," ")}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
+    <tbody>
+
+        {% for i in 1..12 %}
+            <tr>
+                <td>{{lista_meses[loop.index0]|number_format(0,","," ") }}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>{{totalExtraido[loop.index]|number_format(0,","," ") }}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        {% endfor %}
+
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<style>
+    td, th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+
+{% endblock %}

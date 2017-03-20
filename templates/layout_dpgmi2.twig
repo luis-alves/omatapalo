@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+  <head>
+    <!-- The above 3 meta tags *must* come first in the head; any other head
+         content must come *after* these tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW, NOARCHIVE">
+    <link rel='favicon icon' href='/omatapalo/public/img/favicon.ico' type='image/x-icon'/ >
+    <!-- <link rel='favicon icon' href='/home/luisalves/webapps/marizealves/omatapalo/public/img/favicon.ico' type='image/x-icon'/ > -->
+
+    {% if title %}
+    <title> {{ title }} </title>
+    {% else %}
+    <title> Omatapalo, SA </title>
+    {% endif %}
+
+    <!-- jquery para colocar a cor vermelha no navbar -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/
+         jquery.min.js"></script> -->
+    <script src="/omatapalo/public/js/jquery-1.11.3.min.js"></script>
+    <script src="/omatapalo/public/js/scripts.js"></script>
+
+    <!--  BOOTSTRAP -->
+    <link href="/omatapalo/public/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/
+         bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
+    <link rel="stylesheet" href="/omatapalo/public/css/bootstrap-theme.min.css">
+    <link href="/omatapalo/public/css/style_dpgmi.css" rel="stylesheet" type="text/css"/>
+    <script src="/omatapalo/public/js/bootstrap.min.js"></script>
+
+
+    <!-- jquery para choosen ver: https://harvesthq.github.io/chosen/
+         e dataTables ver: https//www.datatables.net
+         também para datetimepicker ver:https://eonasdan.github.io/
+         bootstrap-datetimepicker/ -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/
+         chosen/1.4.2/chosen.css"> -->
+    <link rel="stylesheet" href="/omatapalo/public/css/chosen.css">
+
+    <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/
+         base/jquery-ui.css"> -->
+    <link rel="stylesheet" href="/omatapalo/public/css/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/
+    bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />-->
+    <link rel="stylesheet" href="/omatapalo/public/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="/omatapalo/public/js/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css" />
+
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/
+         3.1.2/css/fixedHeader.dataTables.min.css" /> -->
+    <link rel="stylesheet" href="/omatapalo/public/css/fixedHeader.dataTables.min.css" />
+    <!--
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/
+    jquery.dataTables.min.css" />
+    -->
+    <script src="/omatapalo/public/js/Chart2.5.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/
+         moment.min.js"></script>-->
+    <script src="/omatapalo/public/js/moment.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/
+        bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
+    </script>-->
+    <script src="/omatapalo/public/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>-->
+    <script src="/omatapalo/public/js/jquery-ui.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/
+         chosen.jquery.js"></script>-->
+    <script src="/omatapalo/public/js/chosen.jquery.js"></script>
+    <script src="/omatapalo/public/js/DataTables-1.10.12/media/js/jquery.dataTables.min.js">
+    </script>
+    <script src="/omatapalo/public/js/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js">
+    </script>
+    <!-- <script src="https://cdn.datatables.net/fixedheader/3.1.2/js/
+         dataTables.fixedHeader.min.js"></script>-->
+    <script src="/omatapalo/public/js/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js">
+    </script>
+    <!-- Bootstrap -->
+    <!-- <link rel="stylesheet" href="public/css/bootstrap.min.css" > -->
+    <!-- <script src="public/css/bootsrtrap.min.js"></script> -->
+  </head>
+  <body>
+      <div class="">
+          <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed"
+                        data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1"
+                        aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                  <img alt="Logo" src="/omatapalo/public/img/oma.svg" style="width:50px">
+                  <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/logo.svg" style="width:50px"> -->
+               </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav" id="navbar">
+                  <li ><a href="/omatapalo/home">Novidades <span class="sr-only">(current)</span></a></li>
+                  <li ><a href="/omatapalo/tabelas">Tabelas </a></li>
+                  <li><a href="/omatapalo/mapas">Mapas</a></li>
+                  <li><a href="/omatapalo/relatorios">Relatórios</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/omatapalo/logout">Sair</a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       role="button" aria-haspopup="true" aria-expanded="false">
+                       Preferências <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">A definir</a></li>
+                      <li><a href="#">A definir</a></li>
+                      <li><a href="#">A definir</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="#">A definir</a></li>
+                    </ul>
+                  </li>
+                  <li class="dropdown" id="teste">
+                    <a style="color:white;"href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       role="button" aria-haspopup="true" aria-expanded="false">
+                       britagem {{ session.ci }} <span class="caret"></span></a>
+                    <ul id="alterar-ci" class="dropdown-menu">
+                      <li><a data-ci="arimba">Britagem Arimba</a></li>
+                      <li><a data-ci="caraculo">Britagem Caraculo</a></li>
+                      <li><a data-ci="cassosso">Britagem Cassosso</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="#"></a></li>
+                    </ul>
+                  </li>
+                  <li class="dropdown">
+                    <a style="color:black;"href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    {{ session.ano }} <span class="caret"></span></a>
+                    <ul id="alterar-ano" class="dropdown-menu">
+                        <li><a data-ano="2017" href="#">2017</a></li>
+                        <li><a data-ano="2016" href="#">2016</a></li>
+                        <li><a data-ano="2015" href="#">2015</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+          </nav>
+      </div>
+      <div class="container" style="margin-top:250px;width:100%;">
+          <table class="items">
+              {% if label1 is not defined %}
+                  <caption>
+                      <div class="centrar">
+                          <div class="colorir">
+                              <h2>{{title}}</h2>
+                          </div>
+                       </div>
+                       <div class="al_esquerda">
+                           <p ><b>Ano:</b> {{ session.ano }}</p>
+                           <p><b>Empresa:</b> Omatapalo, S.A. </p>
+                       </div>
+                       <div class="al_direita" >
+                           <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
+                       </div>
+                   </caption>
+              {% endif %}
+
+
+
+              {% block content %}
+              {% endblock %}
+
+
+      </div>
+      <form action="/omatapalo/dpgmi/imprimir" method="post">
+          {% if mes %}
+              <button name="printit" type="submit" value="{{print}},{{mes}},{{mesNumero}}">Imprimir</button>
+          {% else %}
+              <button style="margin-left:10px;" class="btn btn-danger" name="printit" type="submit" value="{{print}}">Imprimir</button>
+          {% endif %}
+      </form>
+      </div>
+      <div class="container">
+      <footer class="navbar-default navbar-fixed-bottom" style="text-align:center;">
+          <span class="container-fluid">
+              OMATAPALO, S.A.
+          </span>
+      </footer>
+      </div>
+      <br><br><br><br>
+      </body>
+      <script>
+        $("#alterar-ano [data-ano]").click(function(event){
+            // pega o ano selecionado pelo evento do clique
+            var value = $(this).data("ano");
+            // executa uma função em ajax direcionando para outra página em PHP que irá trocar a sessão
+            var url = "/omatapalo/ano";
+
+            var currentUrl = window.location.href;
+
+            $.post(url, {ano: value},
+            function(){
+                window.location.href = currentUrl;
+                // window.location.href = "/omatapalo/home";
+            });
+
+            event.preventDefault();
+        });
+
+      </script>
+      <script>
+        $("#alterar-ci [data-ci]").click(function(event){
+            // pega o ano selecionado pelo evento do clique
+            var value = $(this).data("ci");
+            // executa uma função em ajax direcionando para outra página em PHP que irá trocar a sessão
+            var url = "/omatapalo/cind";
+
+            var currentUrl = window.location.href;
+
+            $.post(url, {ci: value},
+            function(){
+                window.location.href = currentUrl;
+                // window.location.href = "/omatapalo/home";
+            });
+
+            event.preventDefault();
+        });
+
+      </script>
+      </html>

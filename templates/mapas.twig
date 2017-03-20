@@ -1,0 +1,249 @@
+{% extends 'layout.twig' %}
+{% block content %}
+<br><br>
+<div class="container">
+
+</div>
+<div id="accordion" role="tablist" aria-multiselectable="true" class="centrar">
+  <div class="card">
+    <div class="card-header" role="tab" id="headingOne">
+      <h5 class="mb-0">
+          <p>
+            <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#DPGMI" aria-expanded="true" aria-controls="DPGMI">
+                Direcção Provincial de Geologia e Minas
+            </a>
+          </p>
+      </h5>
+    </div>
+    <div id="DPGMI" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="card-block">
+        <form action="/omatapalo_v3/mapas/dpgmi/producao" method="post">
+          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Mapa de Produção e Comercialização</button>
+        </form><br>
+        <form action="/omatapalo_v3/mapas/dpgmi/taxas" method="post">
+          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Mapa de Taxas e Impostos</button>
+        </form> <br>
+        <form action="/omatapalo_v3/mapas/dpgmi/forcatrabalho" method="post">
+          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Mapa de Mão-de-Obra</button>
+        </form><br>
+        <form action="/omatapalo_v3/mapas/dpgmi/combustiveis" method="post">
+          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Mapa de Combustiveis</button>
+        </form><br>
+        <form action="/omatapalo_v3/mapas/dpgmi/resumo" method="post">
+          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Mapa Resumo de Custos</button>
+        </form>
+        <!-- subbloco -->
+        <div class="card">
+          <div class="card-header" role="tab" id="headingOne">
+            <h5 class="mb-0">
+                <p>
+                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#FaixasEtarias" aria-expanded="true" aria-controls="FaixasEtarias">
+                      Mapa de Faixas Etárias de Colaboradores
+                  </a>
+                </p>
+            </h5>
+          </div>
+          <div class="centrar" style="width:21em;">
+              <div id="FaixasEtarias" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="card-block">
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/1" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Janeiro</button>
+                    </form>
+                  </div>
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/2" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Fevereiro</button>
+                    </form>
+                  </div>
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/3" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Março</button>
+                    </form>
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/4" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Abril</button>
+                    </form>
+                  </div>
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/5" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Maio</button>
+                    </form>
+                  </div>
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/6" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Junho</button>
+                    </form>
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/7" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Julho</button>
+                    </form>
+                  </div>
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/8" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Agosto</button>
+                    </form>
+                  </div>
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/9" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Setembro</button>
+                    </form>
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/10" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Outubro</button>
+                    </form>
+                  </div>
+                  <div class="" style="float: left;">
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/11" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Novembro</button>
+                    </form>
+                  </div>
+                    <form action="/omatapalo_v3/mapas/dpgmi/faixasEtarias/12" method="post">
+                      <button class="btn btn-default" type="submit" name="button" style="width:7em">Dezembro</button>
+                    </form>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- fim subbloco -->
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-header" role="tab" id="headingTwo">
+      <h5 class="mb-0">
+        <p >
+          <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#PPIAM" aria-expanded="true" aria-controls="PPIAM">
+            PPIAM - Pesquisa da Produção Industrial de Angola Mensal
+          </a>
+        </p>
+      </h5>
+    </div>
+    <div id="PPIAM" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="card-block">
+          <form action="/omatapalo_v3/ppiam" method="post">
+            <button class="btn btn-default" style="width:35em"; type="submit" name="button">Mapa de Produção/Fornecimentos</button>
+          </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" role="tab" id="headingThree">
+      <h5 class="mb-0">
+        <p>
+          <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#MRPF" aria-expanded="true" aria-controls="MRPF">
+            Mapas Resumo Produção e Facturação
+          </a>
+        </p>
+      </h5>
+    </div>
+    <div id="MRPF" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="card-block">
+          <form action="/omatapalo_v3/mapas/mrpf/forninterno" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Fornecimento Interno</button>
+          </form><br>
+          <form action="/omatapalo_v3/mapas/mrpf/rejeitado" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Material Rejeitado</button>
+          </form> <br>
+          <form action="/omatapalo_v3/mapas/mrpf/oferecido" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Material Oferecido</button>
+          </form><br>
+          <form action="/omatapalo_v3/mapas/mrpf/acertos" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Acertos de Stock</button>
+          </form><br>
+          <form action="/omatapalo_v3/mapas/mrpf/fornexternoseco" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Fornecimento Externo - Preço Seco</button>
+          </form><br>
+          <form action="/omatapalo_v3/mapas/mrpf/fornexternovenda" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Fornecimento Externo - Preço Venda</button>
+          </form><br>
+          <form action="/omatapalo_v3/mapas/mrpf/producao" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Produção - Preço Seco</button>
+          </form><br>
+          <form action="/omatapalo_v3/mapas/mrpf/entradas" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Entradas Externas</button>
+          </form><br>
+          <form action="/omatapalo_v3/mapas/mrpf/entradastock" method="post">
+            <button class="btn btn-default" style="width:35em;" type="submit" name="button">Entradas para Stock</button>
+          </form><br>
+        </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" role="tab" id="headingFour">
+      <h5 class="mb-0">
+          <p>
+            <a class="btn btn-primary" style="width:35em;" data-toggle="collapse" href="#NDIM" aria-expanded="true" aria-controls="NDIM">
+                Nota de Débito Interno Mensal
+            </a>
+          </p>
+      </h5>
+    </div>
+    {{teste}}
+    <div class="centrar" style="width:21em;">
+        <div id="NDIM" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+          <div class="card-block">
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/1" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Janeiro</button>
+              </form>
+            </div>
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/2" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Fevereiro</button>
+              </form>
+            </div>
+              <form action="/omatapalo_v3/mapas/ndim/3" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Março</button>
+              </form>
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/4" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Abril</button>
+              </form>
+            </div>
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/5" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Maio</button>
+              </form>
+            </div>
+              <form action="/omatapalo_v3/mapas/ndim/6" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Junho</button>
+              </form>
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/7" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Julho</button>
+              </form>
+            </div>
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/8" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Agosto</button>
+              </form>
+            </div>
+              <form action="/omatapalo_v3/mapas/ndim/9" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Setembro</button>
+              </form>
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/10" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Outubro</button>
+              </form>
+            </div>
+            <div class="" style="float: left;">
+              <form action="/omatapalo_v3/mapas/ndim/11" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Novembro</button>
+              </form>
+            </div>
+              <form action="/omatapalo_v3/mapas/ndim/12" method="post">
+                <button class="btn btn-default" type="submit" name="button" style="width:7em">Dezembro</button>
+              </form>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+</div>
+<br>
+<div class="container">
+    <img src="public/img/panoramica.svg" alt="linha Metso" style="width:100%">
+</div>
+{% endblock %}

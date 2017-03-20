@@ -1,0 +1,167 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<table class="items" id="myTdable" width=100%>
+    {% if label1 is not defined %}
+        <caption>
+            <div class="centrar_titulo">
+                <div class="colorir">
+                    <h2>{{title}}</h2>
+                </div>
+             </div>
+             <div class="al_esquerda">
+                 <p ><b>Ano:</b> {{ session.ano }}</p>
+                 <p><b>Empresa:</b> Omatapalo, S.A. </p>
+             </div>
+             <div class="al_direita" >
+                 <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
+             </div>
+         </caption>
+    {% endif %}
+    <thead>
+        <tr>
+            <th>Mês</th>
+            <th>Gasóleo <br>(litros)</th>
+            <th>Lub. 10W <br>(litros)</th>
+            <th>Lub. 15W40 <br>(litros)</th>
+            <th>Lub. HD80W90 <br>(litros)</th>
+            <th>Lub.  Pneuma <br>(litros)</th>
+            <th>Lub. Azolla <br>(litros)</th>
+
+        </tr>
+    </thead>
+
+    <tfoot>
+        <th>Totais</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+    </tfoot>
+
+    <tbody>
+            <tr>
+                <td>Janeiro</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+
+
+            </tr>
+            <tr>
+                <td>Fevereiro</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Março</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Abril</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Maio</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Junho</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Julho</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Agosto</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Setembro</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Outubro</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Novembro</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+            <tr>
+                <td>Dezembro</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+                <td>N/d</td>
+            </tr>
+
+        </tr>
+    </tbody>
+</table>
+
+<style>
+    td, th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+
+{% endblock %}

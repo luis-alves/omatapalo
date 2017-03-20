@@ -1,0 +1,1205 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="colorird" style="padding:5px;">
+        <h2 style="color:black;text-align:center;">{{title}}</h2>
+     </div>
+    <h3 style="font-size:1.2em;color:darkblue;"><strong>CENTRO OPERACIONAL: {{ codigoCI }} - PEDREIRA DE {{ nomeCI }}</strong></h3>
+</div>
+
+<div class="container" >
+    <table class="table table-bordered table-hover sticky-header" cellpadding="0" cellspacing="0" id="myTable" stylse="width:100%;overflow-x:auto" style="font-size:0.8em">
+        <thead>
+            <tr>
+                <th></th>
+                {% for meses,zeros in meses %}
+                    <th class="text-center">{{ meses }}</th>
+                {% endfor %}
+                <th class="text-center" style="background-color:red">Total Anual</th>
+                <th class="text-center">%</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="red">PROVEITOS OPERACIONAIS</td>
+                {% for i in 1..12 %}
+                    <td class="text-center pequeno">{{ proveitosOperacionais[i]|number_format(2,","," ") }}%</td>
+                {% endfor %}
+                <td class="text-center pequeno total">{{ totalProveitosOperacionais }}%</td>
+                <td class="text-center grey"></td>
+            </tr>
+            <tr class="dr_titulos">
+                <td class="italico">FACTURAÇÃO</td>
+                {% for i in 1..12 %}
+                    <td class="text-center">{{ totalVendas[i]|number_format(0,",",".") }}</td>
+                {% endfor %}
+                <td class="text-center">{{ somatorioTotalVendas|number_format(0,",",".") }}</td>
+                <td class="text-center">{{ percTotalVendas|number_format(0,",",".") }}%</td>
+            </tr>
+            <tr>
+                <td>Vendas</td>
+                {% for i in 1..12 %}
+                    <td class="text-center">{{ vendasExternas[i]|number_format(0,",",".") }}</td>
+                {% endfor %}
+                <td class="text-center total">{{ totalVendasExternas|number_format(0,",",".") }}</td>
+                <td class="text-center total">{{ percVendasExternas|number_format(1,",",".") }}%</td>
+            </tr>
+            <tr>
+                <td>Outros Proveitos</td>
+                {% for i in 1..12 %}
+                    <td class="text-center">0</td>
+                {% endfor %}
+                <td class="text-center total">0</td>
+                <td class="text-center total">0,0%</td>
+            </tr>
+            <tr>
+                <td>Facturação Interna</td>
+                {% for i in 1..12 %}
+                    <td class="text-center">{{ vendasInternas[i]|number_format(0,",",".") }}</td>
+                {% endfor %}
+                <td class="text-center total">{{ totalVendasInternas|number_format(0,",",".") }}</td>
+                <td class="text-center total">{{ percVendasInternas|number_format(1,",",".") }}%</td>
+            </tr>
+            <tr style="color:blue">
+                <td class="italico">PRODUÇÃO e Trab. em curso</td>
+                {% for i in 1..12 %}
+                    <td class="text-center">{{ producoes[i]|number_format(0,",",".") }}</td>
+                {% endfor %}
+                <td class="text-center total">{{ totalProducoes|number_format(0,",",".") }}</td>
+                <td class="text-center total">{{ percTotalProducoes|number_format(0,",",".") }}%</td>
+            </tr>
+            <tr class="dr_total">
+                <td>TOTAL PROVEITOS OPERACIONAIS</td>
+                {% for i in 1..12 %}
+                    <td class="text-center">{{ producoes[i]|number_format(0,",",".") }}</td>
+                {% endfor %}
+                <td class="text-center">{{ totalProducoes|number_format(0,",",".") }}</td>
+                <td class="text-center">{{ percTotalProducoes|number_format(0,",",".") }}%</td>
+            </tr>
+            <tr>
+                <td class="red">CUSTOS OPERACIONAIS</td>
+                {% for i in 1..12 %}
+                    <td class="text-center pequeno">{{ custosOperacionais[i]|number_format(2,","," ") }}%</td>
+                {% endfor %}
+                <td class="text-center pequeno total">100%</td>
+                <td class="text-center total"></td>
+            </tr>
+
+            <tr class="dr_titulos">
+                <td class="italico">COMPRAS MATERIAIS DIVERSOS</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Materiais Diversos'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalMateriaisDiversos == 0 %}
+                    <td class="text-center grey">{{ totalMateriaisDiversos|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ totalMateriaisDiversos|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percMateriaisDiversos == 0 %}
+                    <td class="text-center grey">{{ percMateriaisDiversos|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percMateriaisDiversos|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Compras Materiais Diversos</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Materiais Diversos'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalMateriaisDiversos == 0 %}
+                    <td class="text-center grey total">{{ totalMateriaisDiversos|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalMateriaisDiversos|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percMateriaisDiversos == 0 %}
+                    <td class="text-center grey total">{{ percMateriaisDiversos|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percMateriaisDiversos|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_titulos">
+                <td class="italico">MATÉRIAS-PRIMAS</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Matérias-Primas'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Matérias-Primas']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Matérias-Primas']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalMateriasPrimas == 0 %}
+                    <td class="text-center grey">{{ totalMateriasPrimas|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ totalMateriasPrimas|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percMateriasPrimas == 0 %}
+                    <td class="text-center grey">{{ percMateriasPrimas|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percMateriasPrimas|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Forn. Matérias-Primas C. Industriais</td>
+                {% for i in 1..12 %}
+                        <td class="text-center grey">0</td>
+                {% endfor %}
+                <td class="text-center grey total">0</td>
+                <td class="text-center grey total">0,0%</td>
+            </tr>
+            <tr>
+                <td>Compras Matérias-Primas Externas</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Matérias-Primas'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Matérias-Primas']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Matérias-Primas']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}{% if totalMateriasPrimas == 0 %}
+                    <td class="text-center grey total">{{ totalMateriasPrimas|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalMateriasPrimas|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percMateriasPrimas == 0 %}
+                    <td class="text-center grey total">{{ percMateriasPrimas|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percMateriasPrimas|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_titulos">
+                <td class="italico">EQUIPAMENTO</td>
+                {% for i in 1..12 %}
+                    {% if totalEquipamentoMensal[i] == 0 %}
+                        <td  class="text-center grey">{{ totalEquipamentoMensal[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ totalEquipamentoMensal[i]|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalEquipamento == 0 %}
+                    <td class="text-center grey">{{ totalEquipamento|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ totalEquipamento|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percTotalEquipamento == 0 %}
+                    <td class="text-center grey">{{ percTotalEquipamento|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percTotalEquipamento|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Equipamento Interno</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Equipamento'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Equipamento']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Equipamento']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalEquipamentoInterno == 0 %}
+                    <td class="text-center grey total">{{ totalEquipamentoInterno|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalEquipamentoInterno|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percEquipamentoInterno == 0 %}
+                    <td class="text-center grey total">{{ percEquipamentoInterno|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percEquipamentoInterno|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Equipamento Externo</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Equipamento Externo'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Equipamento Externo']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Equipamento Externo']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalEquipamentoExterno == 0 %}
+                    <td class="text-center grey total">{{ totalEquipamentoExterno|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalEquipamentoExterno|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percEquipamentoExterno == 0 %}
+                    <td class="text-center grey total">{{ percEquipamentoExterno|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percEquipamentoExterno|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_titulos">
+                <td class="italico">TRANSPORTES</td>
+                {% for i in 1..12 %}
+                    {% if totalTransporteMensal[i] == 0 %}
+                        <td class="text-center grey">{{ totalTransporteMensal[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ totalTransporteMensal[i]|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalTransporte == 0 %}
+                    <td class="text-center grey">{{ totalTransporte|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ totalTransporte|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percTotalTransporte == 0 %}
+                    <td class="text-center grey">{{ percTotalTransporte|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percTotalTransporte|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Transportes Internos</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Transportes'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Transportes']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Transportes']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalTransporteInterno == 0 %}
+                    <td class="text-center grey total">{{ totalTransporteInterno|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalTransporteInterno|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percTransporteInterno == 0 %}
+                    <td class="text-center grey total">{{ percTransporteInterno|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percTransporteInterno|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Transportes Externos</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Transportes Externos'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Transportes Externos']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Transportes Externos']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalTransporteExterno == 0 %}
+                    <td class="text-center grey total">{{ totalTransporteExterno|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalTransporteExterno|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percTransporteExterno == 0 %}
+                    <td class="text-center grey total">{{ percTransporteExterno|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percTransporteExterno|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_titulos">
+                <td class="italico">CUSTOS VÁRIOS (F.S.E.)</td>
+                {% for i in 1..12 %}
+                    {% if totalFSEMensal[i] == 0 %}
+                        <td class="text-center grey">{{ totalFSEMensal[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ totalFSEMensal[i]|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if somaTotalFSE == 0 %}
+                    <td class="text-center grey">{{ somaTotalFSE|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ somaTotalFSE|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percFSE == 0 %}
+                    <td class="text-center grey">{{ percFSE|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percFSE|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Subcontratos/ Subempreitadas</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Subcontratos/SubEmpreitadas'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Subcontratos/SubEmpreitadas']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Subcontratos/SubEmpreitadas']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Subcontratos/SubEmpreitadas'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Subcontratos/SubEmpreitadas']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Subcontratos/SubEmpreitadas']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percSubcontratos == 0 %}
+                    <td class="text-center grey total">{{ percSubcontratos|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percSubcontratos|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Electricidade</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Material Eléctrico'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Material Eléctrico']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Material Eléctrico']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Material Eléctrico'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Material Eléctrico']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Material Eléctrico']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percElectricidade == 0 %}
+                    <td class="text-center grey total">{{ percElectricidade|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percElectricidade|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Água</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Água'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Água']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Água']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Água'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Água']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Água']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percAgua == 0 %}
+                    <td class="text-center grey total">{{ percAgua|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percAgua|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Combustiveis/ Lubrificantes</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Combustíveis'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Combustíveis']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Combustíveis']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Combustíveis'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Combustíveis']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Combustíveis']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percComustiveis == 0 %}
+                    <td class="text-center grey total">{{ percComustiveis|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percComustiveis|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Seguros</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Seguros'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Seguros']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Seguros']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Seguros'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Seguros']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Seguros']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percSeguros == 0 %}
+                    <td class="text-center grey total">{{ percSeguros|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percSeguros|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Ferram. e Utens. Desg. Rápido</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Ferram. e Utens. Desg. Rápido'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Ferram. e Utens. Desg. Rápido']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Ferram. e Utens. Desg. Rápido']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Ferram. e Utens. Desg. Rápido'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Ferram. e Utens. Desg. Rápido']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Ferram. e Utens. Desg. Rápido']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percFerramentas == 0 %}
+                    <td class="text-center grey total">{{ percFerramentas|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percFerramentas|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Conservação e Reparação</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Conservação e Reparação'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Conservação e Reparação']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Conservação e Reparação']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Conservação e Reparação'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Conservação e Reparação']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Conservação e Reparação']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percConservacao == 0 %}
+                    <td class="text-center grey total">{{ percConservacao|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percConservacao|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Livros e Documentação Técnica</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Livros e Documentação Técnica'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Livros e Documentação Técnica']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Livros e Documentação Técnica']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Livros e Documentação Técnica'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Livros e Documentação Técnica']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Livros e Documentação Técnica']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percLivros == 0 %}
+                    <td class="text-center grey total">{{ percLivros|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percLivros|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Material de Escritório</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Material de Escritório'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Material de Escritório']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Material de Escritório']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Material de Escritório'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Material de Escritório']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Material de Escritório']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percEscritorio == 0 %}
+                    <td class="text-center grey total">{{ percEscritorio|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percEscritorio|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Material Informático</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Material Informático'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Material Informático']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Material Informático']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Material Informático'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Material Informático']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Material Informático']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percInformatica == 0 %}
+                    <td class="text-center grey total">{{ percInformatica|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percInformatica|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Comunicação (Telm./ Placa Net)</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Comunicação'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Comunicação']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Comunicação']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Comunicação'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Comunicação']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Comunicação']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percComunicacao == 0 %}
+                    <td class="text-center grey total">{{ percComunicacao|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percComunicacao|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Rendas e Alugueres</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Rendas e Alugueres'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Rendas e Alugueres']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Rendas e Alugueres']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Rendas e Alugueres'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Rendas e Alugueres']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Rendas e Alugueres']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percRendas == 0 %}
+                    <td class="text-center grey total">{{ percRendas|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percRendas|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Material Protecção e Segurança</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Material de Protecção e Segurança'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Material de Protecção e Segurança']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Material de Protecção e Segurança']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Material de Protecção e Segurança'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Material de Protecção e Segurança']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Material de Protecção e Segurança']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percProteccao == 0 %}
+                    <td class="text-center grey total">{{ percProteccao|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percProteccao|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Vigilância e Segurança</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Vigilância e Segurança'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Vigilância e Segurança']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Vigilância e Segurança']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Vigilância e Segurança'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Vigilância e Segurança']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Vigilância e Segurança']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percVigilancia == 0 %}
+                    <td class="text-center grey total">{{ percVigilancia|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percVigilancia|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Despesas Representação</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Despesas Representação'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Despesas Representação']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Despesas Representação']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Despesas Representação'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Despesas Representação']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Despesas Representação']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percRepresentacao == 0 %}
+                    <td class="text-center grey total">{{ percRepresentacao|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percRepresentacao|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Deslocações e Estadas</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Deslocações e Estadas'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Deslocações e Estadas']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Deslocações e Estadas']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Deslocações e Estadas'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Deslocações e Estadas']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Deslocações e Estadas']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percEstadas == 0 %}
+                    <td class="text-center grey total">{{ percEstadas|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percEstadas|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Trabalhos Especializados</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Trabalhos Especializados'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Trabalhos Especializados']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Trabalhos Especializados']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Trabalhos Especializados'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Trabalhos Especializados']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Trabalhos Especializados']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percEspecial == 0 %}
+                    <td class="text-center grey total">{{ percEspecial|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percEspecial|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Artigos para Oferta</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Artigos para Oferta'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Artigos para Oferta']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Artigos para Oferta']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Artigos para Oferta'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Artigos para Oferta']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Artigos para Oferta']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percOferta == 0 %}
+                    <td class="text-center grey total">{{ percOferta|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percOferta|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Contencioso e Notariado</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Contecioso e Notariado'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Contecioso e Notariado']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Contecioso e Notariado']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Contecioso e Notariado'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Contecioso e Notariado']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Contecioso e Notariado']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percContencioso == 0 %}
+                    <td class="text-center grey total">{{ percContencioso|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percContencioso|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Publicidade e Propaganda</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Publicidade e Propaganda'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Publicidade e Propaganda']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Publicidade e Propaganda']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Publicidade e Propaganda'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Publicidade e Propaganda']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Publicidade e Propaganda']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percPub == 0 %}
+                    <td class="text-center grey total">{{ percPub|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percPub|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Outros Custos Vários</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Outros Custos Vários'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Outros Custos Vários']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Outros Custos Vários']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalFSE['Outros Custos Vários'] == 0 %}
+                    <td class="text-center grey total">{{ totalFSE['Outros Custos Vários']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalFSE['Outros Custos Vários']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percOutros == 0 %}
+                    <td class="text-center grey total">{{ percOutros|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percOutros|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_titulos">
+                <td class="italico">CUSTOS COM PESSOAL</td>
+                {% for i in 1..12 %}
+                    {% if totalPessoalMensal[i] == 0 %}
+                        <td class="text-center grey">{{ totalPessoalMensal[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ totalPessoalMensal[i]|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if somaTotalPessoal == 0 %}
+                    <td class="text-center grey">{{ somaTotalPessoal|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ somaTotalPessoal|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percTotalPessoal == 0 %}
+                    <td class="text-center grey">{{ percTotalPessoal|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percTotalPessoal|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Ordenados e Salários Nacionais</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Salários Nacionais'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Salários Nacionais']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Salários Nacionais']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalPessoal['Salários Nacionais'] == 0 %}
+                    <td class="text-center grey total">{{ totalPessoal['Salários Nacionais']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalPessoal['Salários Nacionais']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percSalariosNacionais == 0 %}
+                    <td class="text-center grey total">{{ percSalariosNacionais|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percSalariosNacionais|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Ordenados e Salários Expatriados</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Salários Expatriados'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Salários Expatriados']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Salários Expatriados']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalPessoal['Salários Expatriados'] == 0 %}
+                    <td class="text-center grey total">{{ totalPessoal['Salários Expatriados']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalPessoal['Salários Expatriados']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percSalariosExpatriados == 0 %}
+                    <td class="text-center grey total">{{ percSalariosExpatriados|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percSalariosExpatriados|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Alojamento</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Alojamento'] == 0 %}
+                        <td class="text-center grey ">{{ custosGeraisOrd[i]['Alojamento']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center ">{{ custosGeraisOrd[i]['Alojamento']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalPessoal['Alojamento'] == 0 %}
+                    <td class="text-center grey total">{{ totalPessoal['Alojamento']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalPessoal['Alojamento']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percAlojamento == 0 %}
+                    <td class="text-center grey total">{{ percAlojamento|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percAlojamento|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Limpezas/ Tratamento Roupa</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Limpeza. Higiene e Conforto'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Limpeza. Higiene e Conforto']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Limpeza. Higiene e Conforto']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalPessoal['Limpeza. Higiene e Conforto'] == 0 %}
+                    <td class="text-center grey total">{{ totalPessoal['Limpeza. Higiene e Conforto']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalPessoal['Limpeza. Higiene e Conforto']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percLimpeza == 0 %}
+                    <td class="text-center grey total">{{ percLimpeza|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percLimpeza|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Alimentação/ Subsídio Alimentação</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Alimentação'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Alimentação']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Alimentação']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalPessoal['Alimentação'] == 0 %}
+                    <td class="text-center grey total">{{ totalPessoal['Alimentação']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalPessoal['Alimentação']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percAlimentacao == 0 %}
+                    <td class="text-center grey total">{{ percAlimentacao|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percAlimentacao|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Despesas de Saúde</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Despesas de Saúde'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Despesas de Saúde']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Despesas de Saúde']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalPessoal['Despesas de Saúde'] == 0 %}
+                    <td class="text-center grey total">{{ totalPessoal['Despesas de Saúde']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalPessoal['Despesas de Saúde']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percSaude == 0 %}
+                    <td class="text-center grey total">{{ percSaude|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percSaude|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Outros Custos c/ Pessoal</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Horas Extras e Prémios'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Horas Extras e Prémios']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Horas Extras e Prémios']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalPessoal['Horas Extras e Prémios'] == 0 %}
+                    <td class="text-center grey total">{{ totalPessoal['Horas Extras e Prémios']|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center total">{{ totalPessoal['Horas Extras e Prémios']|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percOutrosPessoal == 0 %}
+                    <td class="text-center grey total">{{ percOutrosPessoal|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center total">{{ percOutrosPessoal|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_titulos">
+                <td class="italico">CUSTOS FINANCEIROS</td>
+                {% for i in 1..12 %}
+                    {% if totalCustosFinanceiro[i] == 0 %}
+                        <td class="text-center grey">{{ totalCustosFinanceiro[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center"{{ totalCustosFinanceiro[i]|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if somaTotalCustosFinanceiros == 0 %}
+                    <td class="text-center grey">{{ somaTotalCustosFinanceiros|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ somaTotalCustosFinanceiros|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percCustosFinanceiros == 0 %}
+                    <td class="text-center grey">{{ percCustosFinanceiros|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percCustosFinanceiros|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Impostos</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Impostos'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Impostos']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Impostos']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalImpostos == 0 %}
+                    <td class="text-center grey">{{ totalImpostos|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ totalImpostos|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percImpostos == 0 %}
+                    <td class="text-center grey">{{ percImpostos|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percImpostos|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Amortizações</td>
+                {% for i in 1..12 %}
+                    {% if custosGeraisOrd[i]['Amortizações'] == 0 %}
+                        <td class="text-center grey">{{ custosGeraisOrd[i]['Amortizações']|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ custosGeraisOrd[i]['Amortizações']|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalAmortizacoes == 0 %}
+                    <td class="text-center grey">{{ totalAmortizacoes|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ totalAmortizacoes|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percAmortizacoes == 0 %}
+                    <td class="text-center grey">{{ percAmortizacoes|number_format(1,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percAmortizacoes|number_format(1,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_total">
+                <td>TOTAL CUSTOS OPERACIONAIS</td>
+                {% for i in 1..12 %}
+                    {% if totalCustosOperacionais[i] == 0 %}
+                        <td class="text-center grey">{{ totalCustosOperacionais[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ totalCustosOperacionais[i]|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalOperacional == 0 %}
+                    <td class="text-center grey">{{ totalOperacional|number_format(0,",",".") }}</td>
+                {% else %}
+                    <td class="text-center">{{ totalOperacional|number_format(0,",",".") }}</td>
+                {% endif %}
+                {% if percTotalOperacional == 0 %}
+                    <td class="text-center grey">{{ percTotalOperacional|number_format(0,",",".") }}%</td>
+                {% else %}
+                    <td class="text-center">{{ percTotalOperacional|number_format(0,",",".") }}%</td>
+                {% endif %}
+            </tr>
+
+            <tr class="dr_total">
+                <td>RESULTADOS OPERACIONAIS</td>
+                {% for i in 1..12 %}
+                    {% if resultadosOperacionais[i] < 0 %}
+                        <td class="text-center red">{{ resultadosOperacionais[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        {% if resultadosOperacionais[i] == 0 %}
+                            <td class="text-center grey">{{ resultadosOperacionais[i]|number_format(0,",",".") }}</td>
+                        {% else %}
+                            <td class="text-center">{{ resultadosOperacionais[i]|number_format(0,",",".") }}</td>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if totalResultadosOperacionais < 0 %}
+                    <td class="text-center red">{{ totalResultadosOperacionais|number_format(0,",",".") }}</td>
+                {% else %}
+                    {% if totalResultadosOperacionais == 0 %}
+                        <td class="text-center grey">{{ totalResultadosOperacionais|number_format(0,",",".") }}</td>
+                    {% else %}
+                        <td class="text-center">{{ totalResultadosOperacionais|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endif %}
+                <td class="text-center"></td>
+            </tr>
+
+            <tr class="">
+                <td class="red"><i>MARGEM OPERACIONAL SECA</i></td>
+                {% for i in 1..12 %}
+                    {% if margemOperacionalSeca[i] < 0 %}
+                        <td class="text-center" style="color:red"><i>{{ margemOperacionalSeca[i]|number_format(1,","," ") }}%</i></td>
+                    {% else %}
+                        <td class="text-center"><i>{{ margemOperacionalSeca[i]|number_format(1,","," ") }}%</i></td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalMargemOperacionalSeca < 0 %}
+                    <td class="text-center" style="color:red"><i>{{ totalMargemOperacionalSeca|number_format(1,","," ") }}%</i></td>
+                    {% else %}
+                        <td class="text-center"><i>{{ totalMargemOperacionalSeca|number_format(1,","," ") }}%</i></td>
+                {% endif %}
+                <td class="text-center"></td>
+            </tr>
+
+            <tr class="dr_total">
+                <td>RESULTADOS MEDIANTE FACTURAÇÃO</td>
+                {% for i in 1..12 %}
+                    {% if resultadoMedianteFacturacao[i] < 0 %}
+                        <td class="text-center red fundoCinza">{{ resultadoMedianteFacturacao[i]|number_format(0,",",".") }}</td>
+                    {% else %}
+                        {% if resultadosOperacionais[i] == 0 %}
+                            <td class="text-center grey fundoCinza">{{ resultadoMedianteFacturacao[i]|number_format(0,",",".") }}</td>
+                        {% else %}
+                            <td class="text-center fundoCinza">{{ resultadoMedianteFacturacao[i]|number_format(0,",",".") }}</td>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if totalResultadoMedianteFacturacao < 0 %}
+                    <td class="text-center red">{{ totalResultadoMedianteFacturacao|number_format(0,",",".") }}</td>
+                    {% else %}
+                        {% if totalResultadoMedianteFacturacao == 0 %}
+                            <td class="text-center grey">{{ totalResultadoMedianteFacturacao|number_format(0,",",".") }}</td>
+                        {% else %}
+                            <td class="text-center">{{ totalResultadoMedianteFacturacao|number_format(0,",",".") }}</td>
+                    {% endif %}
+                {% endif %}
+                <td class="text-center"></td>
+            </tr>
+
+            <tr>
+                <td class="dr_total">MARGEM MEDIANTE FACTURAÇÃO</td>
+                {% for i in 1..12 %}
+                    {% if margemMedianteFacturacao[i] < 0 %}
+                        <td class="text-center fundoCinza" style="color:red"><i>{{ margemMedianteFacturacao[i]|number_format(0,",",".") }}%</i></td>
+                    {% else %}
+                            <td class="text-center fundoCinza"><i>{{ margemMedianteFacturacao[i]|number_format(0,",",".") }}%</i></td>
+                    {% endif %}
+                {% endfor %}
+                {% if totalMargemMedianteFacturacao < 0 %}
+                    <td class="text-center fundoAzul" style="color:red"><i>{{ totalMargemMedianteFacturacao|number_format(0,",",".") }}%</i></td>
+                {% else %}
+                    <td class="text-center fundoAzul"><i>{{ totalMargemMedianteFacturacao|number_format(0,",",".") }}%</i></td>
+                {% endif %}
+                <td class="text-center fundoAzul"></td>
+            </tr>
+            <tr>
+                <td>Informação Adicional</td>
+            </tr>
+            <tr>
+                <td class="dr_total italico">TOTAL STOCK A PREÇO SECO</td>
+                    {% for i in 1..12 %}
+                        <td class="text-center italicoAzul"><i>{{ stockMensal[i]|number_format(0,",",".") }}</i></td>
+                    {% endfor %}
+                <td class="text-center italicoAzul"><i>{{ mediaStockAnual|number_format(0,",",".") }}</i></td>
+            </tr>
+            <tr>
+                <td class="dr_total italico">Entradas Externas para Stock</td>
+                {% for i in 1..12 %}
+                    <td class="text-center italicoAzul"><i>{{ entradasExternas[i]|number_format(0,",",".") }}</i></td>
+                {% endfor %}
+                    <td class="text-center italicoAzul"><i>{{ totalEntradasExternas|number_format(0,",",".") }}</i></td>
+            </tr>
+            <tr >
+                <td style="color:red;" class="dr_total italico">Margem Operacional c/ Stcok</td>
+                {% for i in 1..12 %}
+                    <td class="text-center italicoAzul"><i>{{ margemComStock[i]|number_format(0,",",".") }}%</i></td>
+                {% endfor %}
+                {% if margemComStockGlobal < 0 %}
+                    <td class="text-center italicoRed"><i>{{ margemComStockGlobal|number_format(0,",",".") }}%</i></td>
+                {% else %}
+                    <td class="text-center italicoAzul"><i>{{ margemComStockGlobal|number_format(0,",",".") }}%</i></td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<style>
+
+.dr_titulos {
+    background-color:rgb(242,242,242);
+    color:blue;
+    font-weight: bold;
+}
+
+.dr_total {
+    background-color:rgb(197,217,241);
+    color:blue;
+    font-weight: bold;
+}
+
+td, th {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+}
+
+.italico {
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.grey {
+    color:lightgrey;
+}
+
+.red {
+    color:red;
+    font-weight: bold;
+}
+
+.fundoAzul {
+    background-color:rgb(197,217,241);
+}
+
+.italicoAzul {
+    background-color:rgb(197,217,241);
+    font-style: italic;
+    color:blue;
+}
+
+.italicoRed {
+    background-color:rgb(197,217,241);
+    font-style: italic;
+    color: red;
+}
+
+.fundoAzul-red {
+    background-color: rgb(197,217,241);
+    color: red;
+}
+
+.fundoCinza {
+    background-color: rgb(217,217,217);
+}
+
+.total {
+    font-weight: bold;
+}
+
+
+table.floatThead-table {
+    border-top: none;
+    border-bottom: none;
+    background-color: #fff;
+}
+
+thead tr {
+    background-color:rgb(54,96,146);
+    color:white;
+}
+
+.pequeno {
+    font-size: 0.9em;
+}
+</style>
+
+<!-- <script type="text/javascript">
+$('.sticky-header').floatThead({
+	position: 'fixed'
+});
+</script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
