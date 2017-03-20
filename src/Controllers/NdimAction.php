@@ -242,6 +242,3 @@ final class NdimAction extends Action
     }
 
 }
-
-
-?>

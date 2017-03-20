@@ -11,6 +11,3 @@
         require ("dump.php");
         exit;
     }
-
-
-?>

@@ -603,13 +603,3 @@ class DResultadosAction extends Action
         }
     }
 }
-
-
-
-
-
-
-
-
-
- ?>

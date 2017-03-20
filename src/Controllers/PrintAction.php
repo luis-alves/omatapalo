@@ -156,7 +156,7 @@ final class PrintAction
         $variaveis = explode(',', $folha);
 
         $nomeFicheiro = $variaveis[0];
-        
+
         $_SESSION['mes_ndim'] = $variaveis[1];
         $_SESSION['cindus_ndim'] = $variaveis[2];
         $_SESSION['numCindus'] = $variaveis[3];
@@ -193,6 +193,3 @@ final class PrintAction
     }
 
 }
-
-
- ?>

@@ -70,6 +70,3 @@ final class HomeAction extends Action
     }
 
 }
-
-
- ?>

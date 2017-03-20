@@ -60,4 +60,3 @@ final class LoginAction extends Action
     }
 
 }
-?>

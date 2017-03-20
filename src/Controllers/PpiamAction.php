@@ -375,6 +375,3 @@ $vars['print'] = 'printPpiam';
     }
 
 }
-
-
- ?>
