@@ -40,16 +40,16 @@ if ($stmt->rowCount() > 0) {
     // Separar cada uma das linhas da query, por nome do agregado
     foreach ($vars['row'] as $key => $value) {
         foreach ($lista_array_agregados as $agregado => $real) {
-                if ($value->nome === $agregado) {
-                    $array[$real][$value->mes] = [
+            if ($value->nome === $agregado) {
+                $array[$real][$value->mes] = [
                         'nome' => $value->nome,
                         'mes' => $value->mes,
                         'm3' => $value->m3,
                         'pu' => $value->pu,
                         'total' => $value->total,
                     ];
-                }
             }
+        }
     }
 
     // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -72,7 +72,7 @@ if ($stmt->rowCount() > 0) {
         foreach ($producao as $key => $value) {
             foreach ($multiarray_agregados as $agr => $real) {
                 for ($i=1; $i <= 12 ; $i++) {
-                    if ($value[$i]['nome'] === $agr ) {
+                    if ($value[$i]['nome'] === $agr) {
                         $producao[$key][$i]['nome'] = $real[1];
                     }
                 }
@@ -176,7 +176,7 @@ $vars['print'] = 'printResumo';
                     <th>Totais</th>
                     <th></th>
                     <th></th>
-                    <th><?= number_format($rodapeVolExtraido,2,",",".") ?></th>
+                    <th><?= number_format($rodapeVolExtraido, 2, ",", ".") ?></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -191,7 +191,7 @@ $vars['print'] = 'printResumo';
                             <td><?= $lista_meses[$i-1] ?></td>
                             <td>-</td>
                             <td>-</td>
-                            <td><?= number_format($totalExtraido[$i] / $cambio[$_SESSION['ano']][$i-1],2,",",".") ?></td>
+                            <td><?= number_format($totalExtraido[$i] / $cambio[$_SESSION['ano']][$i-1], 2, ",", ".") ?></td>
                             <td>-</td>
                             <td>-</td>
                             <td>-</td>
@@ -207,10 +207,10 @@ $vars['print'] = 'printResumo';
         </div>
         <div class="al_esquerda_footer" style="padding-top:10px;">
             <?php
-                header( 'Content-Type: text/html; charset=iso-8859-1' );
-                setlocale( LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese' );
-                date_default_timezone_set( 'Europe/Lisbon' );
-                echo "Local, " . strftime( '%d de %B de %Y', strtotime( date( 'Y-m-d' ) ) );
+                header('Content-Type: text/html; charset=iso-8859-1');
+                setlocale(LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese');
+                date_default_timezone_set('Europe/Lisbon');
+                echo "Local, " . strftime('%d de %B de %Y', strtotime(date('Y-m-d')));
             ?>
 
         </div>

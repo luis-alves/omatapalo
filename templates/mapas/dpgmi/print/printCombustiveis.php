@@ -178,10 +178,10 @@
     </div>
     <div class="al_esquerda_footer" style="padding-top:10px;">
         <?php
-            header( 'Content-Type: text/html; charset=iso-8859-1' );
-            setlocale( LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese' );
-            date_default_timezone_set( 'Europe/Lisbon' );
-            echo "Local, " . strftime( '%d de %B de %Y', strtotime( date( 'Y-m-d' ) ) );
+            header('Content-Type: text/html; charset=iso-8859-1');
+            setlocale(LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese');
+            date_default_timezone_set('Europe/Lisbon');
+            echo "Local, " . strftime('%d de %B de %Y', strtotime(date('Y-m-d')));
         ?>
 
     </div>

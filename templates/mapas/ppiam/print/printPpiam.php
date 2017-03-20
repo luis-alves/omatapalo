@@ -40,16 +40,16 @@ if ($stmt->rowCount() > 0) {
     // Separar cada uma das linhas da query, por nome do agregado
     foreach ($vars['row'] as $key => $value) {
         foreach ($lista_array_agregados as $agregado => $real) {
-                if ($value->nome === $agregado) {
-                    $array[$real][$value->mes] = [
+            if ($value->nome === $agregado) {
+                $array[$real][$value->mes] = [
                         'nome' => $value->nome,
                         'mes' => $value->mes,
                         'm3' => $value->m3,
                         'pu' => $value->pu,
                         'total' => $value->total,
                     ];
-                }
             }
+        }
     }
 
     // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -72,7 +72,7 @@ if ($stmt->rowCount() > 0) {
         foreach ($producao as $key => $value) {
             foreach ($multiarray_agregados as $agr => $real) {
                 for ($i=1; $i <= 12 ; $i++) {
-                    if ($value[$i]['nome'] === $agr ) {
+                    if ($value[$i]['nome'] === $agr) {
                         $producao[$key][$i]['nome'] = $real[1];
                     }
                 }
@@ -110,22 +110,22 @@ if ($stmt->rowCount() > 0) {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-      $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
         $array = array();
         // Separar cada uma das linhas da query, por nome do agregado
         foreach ($vars['row'] as $key => $value) {
             foreach ($lista_array_agregados as $agregado => $real) {
-                    if ($value->nome === $agregado) {
-                        $array[$real][$value->mes] = [
+                if ($value->nome === $agregado) {
+                    $array[$real][$value->mes] = [
                             'nome' => $value->nome,
                             'mes' => $value->mes,
                             'm3' => $value->m3,
                             'pu' => $value->pu,
                             'total' => $value->total,
                         ];
-                    }
                 }
+            }
         }
 
         // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -147,7 +147,7 @@ if ($stmt->rowCount() > 0) {
             foreach ($vInterna as $key => $value) {
                 foreach ($multiarray_agregados as $agr => $real) {
                     for ($i=1; $i <= 12 ; $i++) {
-                        if ($value[$i]['nome'] === $agr ) {
+                        if ($value[$i]['nome'] === $agr) {
                             $vInterna[$key][$i]['nome'] = $real[1];
                         }
                     }
@@ -191,16 +191,16 @@ if ($stmt->rowCount() > 0) {
         // Separar cada uma das linhas da query, por nome do agregado
         foreach ($vars['row'] as $key => $value) {
             foreach ($lista_array_agregados as $agregado => $real) {
-                    if ($value->nome === $agregado) {
-                        $array[$real][$value->mes] = [
+                if ($value->nome === $agregado) {
+                    $array[$real][$value->mes] = [
                             'nome' => $value->nome,
                             'mes' => $value->mes,
                             'm3' => $value->m3,
                             'pu' => $value->pu,
                             'total' => $value->total,
                         ];
-                    }
                 }
+            }
         }
 
         // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -223,13 +223,12 @@ if ($stmt->rowCount() > 0) {
             foreach ($vExterna as $key => $value) {
                 foreach ($multiarray_agregados as $agr => $real) {
                     for ($i=1; $i <= 12 ; $i++) {
-                        if ($value[$i]['nome'] === $agr ) {
+                        if ($value[$i]['nome'] === $agr) {
                             $vExterna[$key][$i]['nome'] = $real[1];
                         }
                     }
                 }
             }
-
         }
     }
 
@@ -314,20 +313,22 @@ if ($stmt->rowCount() > 0) {
 
     //$pmi = array();
     for ($i=1; $i <= 12 ; $i++) {
-        if ($totalVendasInternas[$i] == 0)
+        if ($totalVendasInternas[$i] == 0) {
             $pmi[$i] = 0;
-        else
+        } else {
             $pmi[$i] = $totalFacturaInterna[$i] / $totalVendasInternas[$i];
+        }
     }
 
     // Preço médio externo
 
     $pme = $totalVendasInternas;
     for ($i=1; $i <= 12 ; $i++) {
-        if ($totalVendasExternas[$i] === 0)
+        if ($totalVendasExternas[$i] === 0) {
             $pme[$i] = 0;
-        else
+        } else {
             $pme[$i] = $totalFacturaExterna[$i] / $totalVendasExternas[$i];
+        }
     }
 
     // Média de preços unitários mensais
@@ -337,7 +338,7 @@ if ($stmt->rowCount() > 0) {
     for ($i = 1; $i <= 12 ; $i++) {
         if ($totalVendasInternas[$i] + $totalVendasExternas[$i] == 0) {
             $mediaPrecos[$i] = 0;
-        }else {
+        } else {
             $mediaPrecos[$i] = ($totalVendasInternas[$i] * $pmi[$i] + $totalVendasExternas[$i] * $pme[$i]) /
                                ($totalVendasInternas[$i] + $totalVendasExternas[$i]);
         }
@@ -352,9 +353,8 @@ if ($stmt->rowCount() > 0) {
         }
     }
 
-    $mediaPrecosGrafico = implode(',',$mediaPrecosGrafico);
+    $mediaPrecosGrafico = implode(',', $mediaPrecosGrafico);
     // dump($mediaPrecosGrafico);
-
 } else {
     $totalVendasInternas = 0;
     $totalVendasExternas = 0;
@@ -495,40 +495,40 @@ if ($stmt->rowCount() > 0) {
                         <tr>
                             <td class="text-center">Preço Médio Interno</td>
                             <?php for ($i = 1; $i <= 12; $i++): ?>
-                                <td class="text-center"><?= number_format($pmi[$i],0,",",".") ?></td>
+                                <td class="text-center"><?= number_format($pmi[$i], 0, ",", ".") ?></td>
                             <?php endfor; ?>
 
                         </tr>
                         <tr>
                             <td class="text-center">Preço Médio Externo</td>
                             <?php for ($i = 1; $i <= 12; $i++): ?>
-                                <td class="text-center"><?= number_format($pme[$i],0,",",".") ?></td>
+                                <td class="text-center"><?= number_format($pme[$i], 0, ",", ".") ?></td>
                             <?php endfor; ?>
                         </tr>
                         <tr>
                             <td class="text-center">Produção</td>
                             <?php for ($i = 1; $i <= 12; $i++): ?>
-                                <td class="text-center"><?= number_format($totalProducao[$i],0,",",".") ?></td>
+                                <td class="text-center"><?= number_format($totalProducao[$i], 0, ",", ".") ?></td>
                             <?php endfor; ?>
                         </tr>
                         <tr>
                             <td class="text-center">Qt. Forn. Internamente</td>
                             <?php for ($i = 1; $i <= 12; $i++): ?>
-                                <td class="text-center"><?= number_format($totalVendasInternas[$i],0,",",".") ?></td>
+                                <td class="text-center"><?= number_format($totalVendasInternas[$i], 0, ",", ".") ?></td>
                             <?php endfor; ?>
                         </tr>
 
                         <tr>
                             <td class="text-center">Qt. Forn. Externamente</td>
                             <?php for ($i = 1; $i <= 12; $i++): ?>
-                                <td class="text-center"><?= number_format($totalVendasExternas[$i],0,",",".") ?></td>
+                                <td class="text-center"><?= number_format($totalVendasExternas[$i], 0, ",", ".") ?></td>
                             <?php endfor; ?>
                         </tr>
 
                         <tr>
                             <td class="text-center">Valor Médio Global de Venda</td>
                             <?php for ($i = 1; $i <= 12; $i++): ?>
-                                <td class="text-center"><?= number_format($mediaPrecos[$i],0,",",".") ?></td>
+                                <td class="text-center"><?= number_format($mediaPrecos[$i], 0, ",", ".") ?></td>
                             <?php endfor; ?>
                         </tr>
                 </tbody>

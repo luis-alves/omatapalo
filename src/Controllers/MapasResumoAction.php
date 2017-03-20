@@ -6,7 +6,6 @@ namespace Src\Controllers;
  */
 final class MapasResumoAction extends Action
 {
-
     public function mapas($request, $response)
     {
         include 'src/Auxiliares/globals.php';
@@ -146,16 +145,16 @@ final class MapasResumoAction extends Action
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
                 foreach ($lista_array_agregados as $agregado => $real) {
-                        if ($value->nome === $agregado) {
-                            $array[$real][$value->mes] = [
+                    if ($value->nome === $agregado) {
+                        $array[$real][$value->mes] = [
                                 'nome' => $value->nome,
                                 'mes' => $value->mes,
                                 'm3' => $value->m3,
                                 'pu' => $value->pu,
                                 'total' => $value->total,
                             ];
-                        }
                     }
+                }
             }
 
             // 1- ordenar, 2- preencher e 3- renomear a cada array de arrayValores
@@ -177,7 +176,7 @@ final class MapasResumoAction extends Action
                 foreach ($arrayValores as $key => $value) {
                     foreach ($multiarray_agregados as $agr => $real) {
                         for ($i=1; $i <= 12 ; $i++) {
-                            if ($value[$i]['nome'] === $agr ) {
+                            if ($value[$i]['nome'] === $agr) {
                                 $arrayValores[$key][$i]['nome'] = $real[1];
                             }
                         }
@@ -189,7 +188,7 @@ final class MapasResumoAction extends Action
             // Agregados existentes na base de dados
             $agregados = array();
             foreach ($arrayValores as $key => $value) {
-                if(in_array($key, $agregados)) {
+                if (in_array($key, $agregados)) {
                     continue;
                 } else {
                     array_push($agregados, $key);
@@ -284,7 +283,7 @@ final class MapasResumoAction extends Action
             if ($qtAnual == 0) {
                 $mediaAnualRodape = 0;
             } else {
-                $mediaAnualRodape = round($factTotalAnual / $qtTotalAnual,2);
+                $mediaAnualRodape = round($factTotalAnual / $qtTotalAnual, 2);
             }
 
             // Formatar valores para inserir no gráfico
@@ -300,7 +299,7 @@ final class MapasResumoAction extends Action
                 if ($factMensal[$i] == 0) {
                     $factMensalGrafico[$i-1] = null;
                 } else {
-                    $factMensalGrafico[$i-1] = round($factMensal[$i],0);
+                    $factMensalGrafico[$i-1] = round($factMensal[$i], 0);
                 }
             }
 
@@ -321,7 +320,6 @@ final class MapasResumoAction extends Action
             $vars['factMensalGrafico'] = $factMensalGrafico;
             $vars['label1'] = $label1;
             $vars['label2'] = $label2;
-
         } else {
             $vars['arrayValores'] = [];
             $vars['qtAnual'] = [];
@@ -344,6 +342,4 @@ final class MapasResumoAction extends Action
 
         return $this->view->render($response, 'mapas/mrpf/' . $vars['page'] .'.twig', $vars);
     }
-
-
 }

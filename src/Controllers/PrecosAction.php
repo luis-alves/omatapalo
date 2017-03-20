@@ -7,7 +7,7 @@ namespace Src\Controllers;
  */
 final class PrecosAction extends Action
 {
-    function getSQL_interno ($cInd, $tipoTabela, $destino, $mesActual, $unidade)
+    public function getSQL_interno($cInd, $tipoTabela, $destino, $mesActual, $unidade)
     {
         include 'src/Auxiliares/globals.php';
 
@@ -46,20 +46,19 @@ final class PrecosAction extends Action
                   ORDER BY `nome_agr_corr`
                  ";
 
-         $rows = $this->db->prepare($query);
-         $rows->execute();
+        $rows = $this->db->prepare($query);
+        $rows->execute();
 
-         $array = array();
+        $array = array();
 
-         if ($rows->rowCount() > 0) {
-             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-         }
+        if ($rows->rowCount() > 0) {
+            $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+        }
 
-         return $vars['row'];
-
+        return $vars['row'];
     }
 
-    function preco ($request, $response)
+    public function preco($request, $response)
     {
         include 'src/Auxiliares/globals.php';
 
@@ -80,7 +79,7 @@ final class PrecosAction extends Action
 
         $listaPrecosArray = array();
         foreach ($listaPrecos as $key => $value) {
-                // dump($value->brita);
+            // dump($value->brita);
                 $listaPrecosArray[] = array('brita' => $value->brita, 'preco' => $value->preco);
         }
 
@@ -102,21 +101,5 @@ final class PrecosAction extends Action
         $vars['destinoCapitais'] = $destinoCapitais;
 
         return $this->view->render($response, 'tabelas/precos/'.$vars['page'].'.twig', $vars);
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
 }

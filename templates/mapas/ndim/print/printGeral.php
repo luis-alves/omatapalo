@@ -37,7 +37,7 @@ if (!$conn->set_charset("utf8")) {
         $totalBritas = 0;
         foreach ($britas as $key => $value) {
             $totalBritas += $value['total'];
-    }
+        }
 
  ?>
 
@@ -138,9 +138,9 @@ if (!$conn->set_charset("utf8")) {
                              <tr>
                                  <td class="cor2" style="width:50%;padding-left:5px;padding-top:7px;"><?= $britas[$i]['nomeBrita'] ?></td>
                                  <td class="cor2" style="width:10%;text-align:center;">m3</td>
-                                 <td class="cor2" style="width:10%;text-align:center;"><?= number_format($britas[$i]['m3'],0,"."," ") ?></td>
-                                 <td class="cor2" style="width:15%;text-align:center;"><?= number_format($britas[$i]['pu'],0,"."," ") ?></td>
-                                 <td class="cor2" style="width:15%;text-align:center;"><?= number_format($britas[$i]['total'],0,"."," ") ?></td>
+                                 <td class="cor2" style="width:10%;text-align:center;"><?= number_format($britas[$i]['m3'], 0, ".", " ") ?></td>
+                                 <td class="cor2" style="width:15%;text-align:center;"><?= number_format($britas[$i]['pu'], 0, ".", " ") ?></td>
+                                 <td class="cor2" style="width:15%;text-align:center;"><?= number_format($britas[$i]['total'], 0, ".", " ") ?></td>
                              </tr>
                          <?php endfor; ?>
                          <?php for ($i = 0; $i < $numeroLinhas; $i++): ?>
@@ -158,7 +158,7 @@ if (!$conn->set_charset("utf8")) {
                          <tr>
                              <td style="width:70%;text-align:right;background-color:lightgrey;padding-top:5px;" colspan="3"></td>
                              <td class="cor3" style="width:15%;text-align:right;background-color:lightgrey;text-align:center;"><b>Total (Akz):</b></td>
-                             <td class="cor3" style="width:15%;background-color:lightgrey;text-align:center;"><?= number_format($totalBritas,0,"."," ") ?></td>
+                             <td class="cor3" style="width:15%;background-color:lightgrey;text-align:center;"><?= number_format($totalBritas, 0, ".", " ") ?></td>
                          </tr>
                      </tfoot>
                  </table>

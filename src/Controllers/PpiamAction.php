@@ -7,7 +7,6 @@ namespace Src\Controllers;
  */
 final class PpiamAction extends Action
 {
-
     public function mapa($request, $response)
     {
         include 'src/Auxiliares/globals.php';
@@ -39,16 +38,16 @@ final class PpiamAction extends Action
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
                 foreach ($lista_array_agregados as $agregado => $real) {
-                        if ($value->nome === $agregado) {
-                            $array[$real][$value->mes] = [
+                    if ($value->nome === $agregado) {
+                        $array[$real][$value->mes] = [
                                 'nome' => $value->nome,
                                 'mes' => $value->mes,
                                 'm3' => $value->m3,
                                 'pu' => $value->pu,
                                 'total' => $value->total,
                             ];
-                        }
                     }
+                }
             }
 
             // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -71,7 +70,7 @@ final class PpiamAction extends Action
                 foreach ($producao as $key => $value) {
                     foreach ($multiarray_agregados as $agr => $real) {
                         for ($i=1; $i <= 12 ; $i++) {
-                            if ($value[$i]['nome'] === $agr ) {
+                            if ($value[$i]['nome'] === $agr) {
                                 $producao[$key][$i]['nome'] = $real[1];
                             }
                         }
@@ -113,16 +112,16 @@ final class PpiamAction extends Action
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
                 foreach ($lista_array_agregados as $agregado => $real) {
-                        if ($value->nome === $agregado) {
-                            $array[$real][$value->mes] = [
+                    if ($value->nome === $agregado) {
+                        $array[$real][$value->mes] = [
                                 'nome' => $value->nome,
                                 'mes' => $value->mes,
                                 'm3' => $value->m3,
                                 'pu' => $value->pu,
                                 'total' => $value->total,
                             ];
-                        }
                     }
+                }
             }
 
             // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -144,7 +143,7 @@ final class PpiamAction extends Action
                 foreach ($vInterna as $key => $value) {
                     foreach ($multiarray_agregados as $agr => $real) {
                         for ($i=1; $i <= 12 ; $i++) {
-                            if ($value[$i]['nome'] === $agr ) {
+                            if ($value[$i]['nome'] === $agr) {
                                 $vInterna[$key][$i]['nome'] = $real[1];
                             }
                         }
@@ -186,16 +185,16 @@ final class PpiamAction extends Action
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
                 foreach ($lista_array_agregados as $agregado => $real) {
-                        if ($value->nome === $agregado) {
-                            $array[$real][$value->mes] = [
+                    if ($value->nome === $agregado) {
+                        $array[$real][$value->mes] = [
                                 'nome' => $value->nome,
                                 'mes' => $value->mes,
                                 'm3' => $value->m3,
                                 'pu' => $value->pu,
                                 'total' => $value->total,
                             ];
-                        }
                     }
+                }
             }
 
             // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -218,13 +217,12 @@ final class PpiamAction extends Action
                 foreach ($vExterna as $key => $value) {
                     foreach ($multiarray_agregados as $agr => $real) {
                         for ($i=1; $i <= 12 ; $i++) {
-                            if ($value[$i]['nome'] === $agr ) {
+                            if ($value[$i]['nome'] === $agr) {
                                 $vExterna[$key][$i]['nome'] = $real[1];
                             }
                         }
                     }
                 }
-
             }
 
 
@@ -244,27 +242,27 @@ final class PpiamAction extends Action
                                      12 => 0
                                     );
 
-        $totalVendasExternas = $totalVendasInternas;
-        $totalProducao = $totalVendasInternas;
-        $pmi = $totalVendasInternas;
-        $pme = $totalVendasInternas;
+            $totalVendasExternas = $totalVendasInternas;
+            $totalProducao = $totalVendasInternas;
+            $pmi = $totalVendasInternas;
+            $pme = $totalVendasInternas;
 
-        for ($i=1; $i <= 12; $i++) {
-            foreach ($vInterna as $key => $value) {
-                $totalVendasInternas[$i] += $value[$i]['m3'];
+            for ($i=1; $i <= 12; $i++) {
+                foreach ($vInterna as $key => $value) {
+                    $totalVendasInternas[$i] += $value[$i]['m3'];
+                }
             }
-        }
 
-        for ($i=1; $i <= 12; $i++) {
-            foreach ($vExterna as $key => $value) {
-                $totalVendasExternas[$i] += $value[$i]['m3'];
+            for ($i=1; $i <= 12; $i++) {
+                foreach ($vExterna as $key => $value) {
+                    $totalVendasExternas[$i] += $value[$i]['m3'];
+                }
             }
-        }
 
-        $totalVendas = array();
-        for ($i=1; $i <= 12 ; $i++) {
-            $totalVendas[$i] = $totalVendasInternas[$i] + $totalVendasExternas[$i];
-        }
+            $totalVendas = array();
+            for ($i=1; $i <= 12 ; $i++) {
+                $totalVendas[$i] = $totalVendasInternas[$i] + $totalVendasExternas[$i];
+            }
 
         // Volume produzido por mês
 
@@ -284,24 +282,24 @@ final class PpiamAction extends Action
         // Valor facturação mensal
 
         $totalFacturaInterna = $totalVendasInternas;
-        $totalFacturaExterna = $totalVendasInternas;
-        $totalFacturacao = $totalVendasInternas;
+            $totalFacturaExterna = $totalVendasInternas;
+            $totalFacturacao = $totalVendasInternas;
 
-        for ($i=1; $i <= 12; $i++) {
-            foreach ($vInterna as $key => $value) {
-                $totalFacturaInterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
+            for ($i=1; $i <= 12; $i++) {
+                foreach ($vInterna as $key => $value) {
+                    $totalFacturaInterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
+                }
             }
-        }
 
-        for ($i=1; $i <= 12; $i++) {
-            foreach ($vExterna as $key => $value) {
-                $totalFacturaExterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
+            for ($i=1; $i <= 12; $i++) {
+                foreach ($vExterna as $key => $value) {
+                    $totalFacturaExterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
+                }
             }
-        }
 
-        for ($i=1; $i <= 12 ; $i++) {
-            $totalFacturacao[$i] = $totalFacturaInterna[$i] + $totalFacturaExterna[$i];
-        }
+            for ($i=1; $i <= 12 ; $i++) {
+                $totalFacturacao[$i] = $totalFacturaInterna[$i] + $totalFacturaExterna[$i];
+            }
 
 
 
@@ -309,34 +307,36 @@ final class PpiamAction extends Action
 
         //$pmi = array();
         for ($i=1; $i <= 12 ; $i++) {
-            if ($totalVendasInternas[$i] == 0)
+            if ($totalVendasInternas[$i] == 0) {
                 $pmi[$i] = 0;
-            else
-                $pmi[$i] = round($totalFacturaInterna[$i] / $totalVendasInternas[$i],2);
+            } else {
+                $pmi[$i] = round($totalFacturaInterna[$i] / $totalVendasInternas[$i], 2);
+            }
         }
 
         // Preço médio externo
 
         $pme = $totalVendasInternas;
-        for ($i=1; $i <= 12 ; $i++) {
-            if ($totalVendasExternas[$i] === 0)
-                $pme[$i] = 0;
-            else
-                $pme[$i] = $totalFacturaExterna[$i] / $totalVendasExternas[$i];
-        }
+            for ($i=1; $i <= 12 ; $i++) {
+                if ($totalVendasExternas[$i] === 0) {
+                    $pme[$i] = 0;
+                } else {
+                    $pme[$i] = $totalFacturaExterna[$i] / $totalVendasExternas[$i];
+                }
+            }
 
         // Média de preços unitários mensais
 
         $mediaPrecos = $totalVendasInternas;
 
-        for ($i = 1; $i <= 12 ; $i++) {
-            if ($totalVendasInternas[$i] + $totalVendasExternas[$i] == 0) {
-                $mediaPrecos[$i] = 0;
-            }else {
-                $mediaPrecos[$i] = round(($totalVendasInternas[$i] * $pmi[$i] + $totalVendasExternas[$i] * $pme[$i]) /
-                                   ($totalVendasInternas[$i] + $totalVendasExternas[$i]),0);
+            for ($i = 1; $i <= 12 ; $i++) {
+                if ($totalVendasInternas[$i] + $totalVendasExternas[$i] == 0) {
+                    $mediaPrecos[$i] = 0;
+                } else {
+                    $mediaPrecos[$i] = round(($totalVendasInternas[$i] * $pmi[$i] + $totalVendasExternas[$i] * $pme[$i]) /
+                                   ($totalVendasInternas[$i] + $totalVendasExternas[$i]), 0);
+                }
             }
-        }
 
         // Formatar valores para inserir no gráfico
         for ($i=0; $i < 12; $i++) {
@@ -348,30 +348,26 @@ final class PpiamAction extends Action
         }
 
 
-    $vars['totalVendasInternas'] = $totalVendasInternas;
-    $vars['totalVendasExternas'] = $totalVendasExternas;
-    $vars['totalProducao'] = $totalProducao;
-    $vars['mediaPrecos'] = $mediaPrecos;
-    $vars['pmi'] = $pmi;
-    $vars['pme'] = $pme;
-    $vars['mediaPrecosGrafico'] = $mediaPrecosGrafico;
+            $vars['totalVendasInternas'] = $totalVendasInternas;
+            $vars['totalVendasExternas'] = $totalVendasExternas;
+            $vars['totalProducao'] = $totalProducao;
+            $vars['mediaPrecos'] = $mediaPrecos;
+            $vars['pmi'] = $pmi;
+            $vars['pme'] = $pme;
+            $vars['mediaPrecosGrafico'] = $mediaPrecosGrafico;
+        } else {
+            $vars['totalVendasInternas'] = 0;
+            $vars['totalVendasExternas'] = 0;
+            $vars['totalProducao'] = 0;
+            $vars['mediaPrecos'] = 0;
+            $vars['pmi'] = 0;
+            $vars['pme'] = 0;
+            $vars['mediaPrecosGrafico'] = 0;
+        }
+        $vars['page'] = 'mapas/ppiam/ppiam';
+        $vars['title'] = 'MAPA RESUMO DE PPIAM';
+        $vars['print'] = 'printPpiam';
 
-
-} else {
-    $vars['totalVendasInternas'] = 0;
-    $vars['totalVendasExternas'] = 0;
-    $vars['totalProducao'] = 0;
-    $vars['mediaPrecos'] = 0;
-    $vars['pmi'] = 0;
-    $vars['pme'] = 0;
-    $vars['mediaPrecosGrafico'] = 0;
-}
-$vars['page'] = 'mapas/ppiam/ppiam';
-$vars['title'] = 'MAPA RESUMO DE PPIAM';
-$vars['print'] = 'printPpiam';
-
-    return $this->view->render($response, 'mapas/ppiam/ppiam.twig', $vars);
-
+        return $this->view->render($response, 'mapas/ppiam/ppiam.twig', $vars);
     }
-
 }

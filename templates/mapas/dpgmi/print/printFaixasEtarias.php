@@ -266,9 +266,9 @@ unset($_SESSION['mes'])
           </div>
           <div class="al_direita">
               <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
-              <?php if(isset($mes)){
-                       print_r ("<p><b>Mês: </b>". $mes ."</p>");
-                    }
+              <?php if (isset($mes)) {
+     print_r("<p><b>Mês: </b>". $mes ."</p>");
+ }
 
               ?>
           </div>
@@ -327,7 +327,7 @@ unset($_SESSION['mes'])
                                 if ($total_N_M === 0) {
                                     echo "<td>0</td>";
                                 } else {
-                                    echo "<td>". number_format(($value['nm'] / $total_N_M) * 100,1,",",".") . "</td>";
+                                    echo "<td>". number_format(($value['nm'] / $total_N_M) * 100, 1, ",", ".") . "</td>";
                                 }
                                 // Homens Expatriado
                                 echo "<td>". $value['em'] . "</td>";
@@ -335,7 +335,7 @@ unset($_SESSION['mes'])
                                 if ($total_E_M === 0) {
                                     echo "<td>0</td>";
                                 } else {
-                                    echo "<td>". number_format(($value['em'] / $total_E_M) * 100,1,",",".") . "</td>";
+                                    echo "<td>". number_format(($value['em'] / $total_E_M) * 100, 1, ",", ".") . "</td>";
                                 }
                                 // Mulheres nacional
                                 echo "<td>". $value['nf'] . "</td>";
@@ -343,7 +343,7 @@ unset($_SESSION['mes'])
                                 if ($total_N_F === 0) {
                                     echo "<td>0</td>";
                                 } else {
-                                    echo "<td>". number_format(($value['nf'] / $total_N_F) * 100,1,",",".") . "</td>";
+                                    echo "<td>". number_format(($value['nf'] / $total_N_F) * 100, 1, ",", ".") . "</td>";
                                 }
                                 // Mulheres Expatriado
                                 echo "<td>". $value['ef'] . "</td>";
@@ -351,7 +351,7 @@ unset($_SESSION['mes'])
                                 if ($total_E_F === 0) {
                                     echo "<td>0</td>";
                                 } else {
-                                    echo "<td>". number_format(($value['ef'] / $total_E_F) * 100,1,",",".") . "</td>";
+                                    echo "<td>". number_format(($value['ef'] / $total_E_F) * 100, 1, ",", ".") . "</td>";
                                 }
                                 // Total parcial
                                 echo "<td>". $parcial_array[$i] . "</td>";
@@ -359,7 +359,7 @@ unset($_SESSION['mes'])
                                 if ($total_array === 0) {
                                     echo "<td>0</td>";
                                 } else {
-                                    echo "<td>". number_format(($parcial_array[$i] / $total_array) * 100,1,",",".") . "</td>";
+                                    echo "<td>". number_format(($parcial_array[$i] / $total_array) * 100, 1, ",", ".") . "</td>";
                                 }
                             echo "</tr>";
                             $i++;
@@ -371,10 +371,10 @@ unset($_SESSION['mes'])
         </div>
         <div class="al_esquerda_footer" style="padding-top:10px;">
             <?php
-                header( 'Content-Type: text/html; charset=iso-8859-1' );
-                setlocale( LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese' );
-                date_default_timezone_set( 'Europe/Lisbon' );
-                echo "Lubango, " . strftime( '%d de %B de %Y', strtotime( date( 'Y-m-d' ) ) );
+                header('Content-Type: text/html; charset=iso-8859-1');
+                setlocale(LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese');
+                date_default_timezone_set('Europe/Lisbon');
+                echo "Lubango, " . strftime('%d de %B de %Y', strtotime(date('Y-m-d')));
             ?>
 
         </div>

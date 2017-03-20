@@ -4,7 +4,7 @@ $app->get('/login', 'Src\Controllers\LoginAction:index');
 $app->post('/login', 'Src\Controllers\LoginAction:logar');
 $app->get('/logout', 'Src\Controllers\LoginAction:logout');
 
-$app->group('', function() {
+$app->group('', function () {
 
     /* Acessos cabeçalho */
 
@@ -88,8 +88,4 @@ $app->group('', function() {
     $this->post('/tabelas/balanca', 'Src\Controllers\TabelasAction:balanca');
     $this->get('/tabelas/balanca', 'Src\Controllers\TabelasAction:balanca');
     $this->get('/tabelas/balanca/form', 'Src\Controllers\TabelasAction:form');
-
-
-
-
 })->add(Src\Middleware\AuthMiddleware::class);

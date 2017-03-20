@@ -7,7 +7,6 @@ namespace Src\Controllers;
  */
 final class NdimAction extends Action
 {
-
     public function geral($request, $response)
     {
         include 'src/Auxiliares/globals.php';
@@ -51,16 +50,13 @@ final class NdimAction extends Action
             $vars['erro'] = null;
 
             return $this->view->render($response, $vars['page'].'.twig', $vars);
-
         } else {
-
             $vars['title'] = 'NDIM - NOTA DE DÉBITO INTERNO MENSAL';
             $vars['erro'] = 'Não existem dados';
             $vars['page'] = 'mapas/ndim/resumo';
 
             return $this->view->render($response, $vars['page'].'.twig', $vars);
         }
-
     }
 
     public function dados($request, $response)
@@ -138,8 +134,6 @@ final class NdimAction extends Action
 
 
             return $this->view->render($response, $vars['page'].'.twig', $vars);
-
-
         } else {
             $vars['page'] = 'mapas/ndim/geral';
             $vars['title'] = 'NDIM - Resumo';
@@ -147,7 +141,6 @@ final class NdimAction extends Action
 
             return $this->view->render($response, $vars['page'].'.twig', $vars);
         }
-
     }
 
     public function detalhado($request, $response)
@@ -226,8 +219,6 @@ final class NdimAction extends Action
 
 
             return $this->view->render($response, $vars['page'].'.twig', $vars);
-
-
         } else {
             $vars['page'] = 'mapas/ndim/detalhado';
             $vars['title'] = 'NDIM - Detalhado';
@@ -235,10 +226,5 @@ final class NdimAction extends Action
 
             return $this->view->render($response, $vars['page'].'.twig', $vars);
         }
-
-
-
-
     }
-
 }

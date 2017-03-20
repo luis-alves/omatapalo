@@ -7,8 +7,7 @@ namespace Src\Controllers;
  */
 final class TabelasAction extends Action
 {
-
-    public function form ($request, $response)
+    public function form($request, $response)
     {
         include 'src/Auxiliares/globals.php';
 
@@ -55,10 +54,9 @@ final class TabelasAction extends Action
         $vars['agregadosDoCi'] = $agregadosDoCi;
 
         return $this->view->render($response, 'tabelas/balanca/form.twig', $vars);
-
     }
 
-    public function toneladas ($request, $response)
+    public function toneladas($request, $response)
     {
         include 'src/Auxiliares/globals.php';
 
@@ -77,7 +75,6 @@ final class TabelasAction extends Action
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
         }
-
     }
 
     public function balanca($request, $response)
@@ -85,9 +82,7 @@ final class TabelasAction extends Action
         $vars['page'] = 'balanca';
         $vars['title'] = 'Mapa Balança';
 
-
-        if (!isset($_POST['data_inicio']) OR !isset($_POST['data_final'])) {
-
+        if (!isset($_POST['data_inicio']) or !isset($_POST['data_final'])) {
             $vars['page'] = 'balanca/form';
             $vars['erro'] = 'Selecione uma data';
             $vars['title'] = 'Formulário Balança';
@@ -112,21 +107,17 @@ final class TabelasAction extends Action
             }
 
             return $response->withRedirect('balanca/form');
-
         } else {
-
             $data_inicial = $_POST['data_inicio'];
             $data_final = $_POST['data_final'];
 
             if (!empty($_POST['check'])) {
                 $check = $_POST['check'];
                 $_SESSION['erro'] = null;
-
             } else {
                 $_SESSION['erro'] = 'Não seleccionou um tipo de documento';
                 return $response->withRedirect('balanca/form');
                 // return $response->withRedirect($this->router->pathFor('view',[], $vars));
-
             }
 
             // reformat data to presente to sql making it like ('GTO', 'GR')
@@ -144,7 +135,7 @@ final class TabelasAction extends Action
                 return $response->withRedirect('balanca/form');
             }
 
-            if (!empty($_POST['check']) && !empty($_POST['agr']) && empty($_POST['data_inicio'])){
+            if (!empty($_POST['check']) && !empty($_POST['agr']) && empty($_POST['data_inicio'])) {
                 $_SESSION['erro'] = 'Não seleccionou uma data';
                 return $response->withRedirect('balanca/form');
             }
@@ -284,8 +275,4 @@ final class TabelasAction extends Action
             return $this->view->render($response, 'tabelas/balanca/balanca.twig', $vars);
         }
     }
-
-
-
-
 }

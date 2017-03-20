@@ -37,7 +37,7 @@ if (!$conn->set_charset("utf8")) {
         $totalBritas = 0;
         foreach ($britas as $key => $value) {
             $totalBritas += $value['total'];
-    }
+        }
 
  ?>
 
@@ -118,7 +118,7 @@ if (!$conn->set_charset("utf8")) {
                              <td class="cor2" style="width:25%;text-align:center;"><?= $britas[$i]['nomeBrita'] ?></td>
                              <td class="cor2" style="width:15%;text-align:center;"><?= $britas[$i]['m3'] ?></td>
                              <td class="cor2" style="width:15%;text-align:center;"><?= $britas[$i]['pu'] ?></td>
-                             <td class="cor2" style="width:15%;text-align:center;"><?= number_format($britas[$i]['total'],2,"."," ") ?></td>
+                             <td class="cor2" style="width:15%;text-align:center;"><?= number_format($britas[$i]['total'], 2, ".", " ") ?></td>
                          </tr>
                          <?php endfor; ?>
 
@@ -128,7 +128,7 @@ if (!$conn->set_charset("utf8")) {
                          <tr>
                              <td style="width:70%;text-align:right;background-color:lightgrey;" colspan="4"></td>
                              <td class="cor3" style="width:15%;text-align:right;background-color:lightgrey;text-align:center;"><b>Total (Akz):</b></td>
-                             <td class="cor3" style="width:15%;background-color:lightgrey;text-align:center;"><?= number_format($totalBritas,2,"."," ") ?></td>
+                             <td class="cor3" style="width:15%;background-color:lightgrey;text-align:center;"><?= number_format($totalBritas, 2, ".", " ") ?></td>
                          </tr>
                      </tfoot>
                  </table>

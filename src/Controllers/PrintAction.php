@@ -1,6 +1,7 @@
 <?php
 
 namespace Src\Controllers;
+
 use \mikehaertl\wkhtmlto\Pdf;
 use Exception;
 
@@ -9,10 +10,8 @@ use Exception;
  */
 final class PrintAction
 {
-
-    public function imprimir ($request, $response)
+    public function imprimir($request, $response)
     {
-
         $folha = $_POST['printit'];
         $variaveis = explode(',', $folha);
 
@@ -21,22 +20,18 @@ final class PrintAction
         $printName = substr($nomeFicheiro, 5);
 
         if (isset($variaveis[2])) {
-
             $_SESSION['mesNumero'] = $variaveis[2];
             $_SESSION['mes'] = $variaveis[1];
-
         } else {
-
             $mesNumero = 0;
             $mes = '';
-
         }
 
         ob_start();
         if ($nomeFicheiro == 'printPpiam') {
-            require ('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/ppiam/print/'.$nomeFicheiro.'.php');
+            require('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/ppiam/print/'.$nomeFicheiro.'.php');
         } else {
-            require ('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/dpgmi/print/'.$nomeFicheiro.'.php');
+            require('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/dpgmi/print/'.$nomeFicheiro.'.php');
         }
         $content = ob_get_clean();
 
@@ -60,12 +55,10 @@ final class PrintAction
         }
 
         $pdf->send($printName.'.pdf');
-
     }
 
-    public function imprimir_preco ($request, $response)
+    public function imprimir_preco($request, $response)
     {
-
         $folha = $_POST['printit'];
         // dump($folha);
         $variaveis = explode(',', $folha);
@@ -78,7 +71,7 @@ final class PrintAction
         setlocale(LC_CTYPE, "pt_PT.UTF-8");
 
         ob_start();
-            require ('C:/xampp/htdocs/omatapalo/resources/views/pages/tabelas/precos/print/'.$nomeFicheiro.'.php');
+        require('C:/xampp/htdocs/omatapalo/resources/views/pages/tabelas/precos/print/'.$nomeFicheiro.'.php');
         $content = ob_get_clean();
 
         // You can pass a filename, a HTML string, an URL or an options array to the constructor
@@ -105,13 +98,10 @@ final class PrintAction
         }
 
         $pdf->send($nomeFicheiro.'.pdf');
-
-
     }
 
-    public function imprimir_ndimGeral ($request, $response)
+    public function imprimir_ndimGeral($request, $response)
     {
-
         $folha = $_POST['printit'];
 
         $variaveis = explode(',', $folha);
@@ -128,7 +118,7 @@ final class PrintAction
 
 
         ob_start();
-            require ('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/ndim/print/'.$nomeFicheiro.'.php');
+        require('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/ndim/print/'.$nomeFicheiro.'.php');
         $content = ob_get_clean();
 
         // You can pass a filename, a HTML string, an URL or an options array to the constructor
@@ -144,13 +134,10 @@ final class PrintAction
         }
 
         $pdf->send($nomeFicheiro.'.pdf');
-
-
     }
 
-    public function imprimir_ndimDetalhado ($request, $response)
+    public function imprimir_ndimDetalhado($request, $response)
     {
-
         $folha = $_POST['printit'];
 
         $variaveis = explode(',', $folha);
@@ -168,7 +155,7 @@ final class PrintAction
 
 
         ob_start();
-            require ('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/ndim/print/'.$nomeFicheiro.'.php');
+        require('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/ndim/print/'.$nomeFicheiro.'.php');
         $content = ob_get_clean();
 
         // You can pass a filename, a HTML string, an URL or an options array to the constructor
@@ -188,8 +175,5 @@ final class PrintAction
         }
 
         $pdf->send($nomeFicheiro.'.pdf');
-
-
     }
-
 }

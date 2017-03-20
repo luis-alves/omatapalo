@@ -74,7 +74,7 @@ if ($stmt->rowCount() > 0) {
         foreach ($producao as $key => $value) {
             foreach ($multiarray_agregados as $agr => $real) {
                 for ($i=1; $i <= 12 ; $i++) {
-                    if ($value[$i]['nome'] === $agr ) {
+                    if ($value[$i]['nome'] === $agr) {
                         $producao[$key][$i]['nome'] = $real[1];
                     }
                 }
@@ -119,16 +119,16 @@ if ($stmt->rowCount() > 0) {
     // Separar cada uma das linhas da query, por nome do agregado
     foreach ($vars['row'] as $key => $value) {
         foreach ($lista_array_agregados as $agregado => $real) {
-                if ($value->nome === $agregado) {
-                    $array[$real][$value->mes] = [
+            if ($value->nome === $agregado) {
+                $array[$real][$value->mes] = [
                         'nome' => $value->nome,
                         'mes' => $value->mes,
                         'm3' => $value->m3,
                         'pu' => $value->pu,
                         'total' => $value->total,
                     ];
-                }
             }
+        }
     }
 
     // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -150,7 +150,7 @@ if ($stmt->rowCount() > 0) {
         foreach ($vInterna as $key => $value) {
             foreach ($multiarray_agregados as $agr => $real) {
                 for ($i=1; $i <= 12 ; $i++) {
-                    if ($value[$i]['nome'] === $agr ) {
+                    if ($value[$i]['nome'] === $agr) {
                         $vInterna[$key][$i]['nome'] = $real[1];
                     }
                 }
@@ -191,20 +191,20 @@ $query = "SELECT `nome_agr` AS `nome`,
     if ($stmt->rowCount() > 0) {
         $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-    $array = array();
+        $array = array();
     // Separar cada uma das linhas da query, por nome do agregado
     foreach ($vars['row'] as $key => $value) {
         foreach ($lista_array_agregados as $agregado => $real) {
-                if ($value->nome === $agregado) {
-                    $array[$real][$value->mes] = [
+            if ($value->nome === $agregado) {
+                $array[$real][$value->mes] = [
                         'nome' => $value->nome,
                         'mes' => $value->mes,
                         'm3' => $value->m3,
                         'pu' => $value->pu,
                         'total' => $value->total,
                     ];
-                }
             }
+        }
     }
 
     // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -227,14 +227,14 @@ $query = "SELECT `nome_agr` AS `nome`,
         foreach ($vExterna as $key => $value) {
             foreach ($multiarray_agregados as $agr => $real) {
                 for ($i=1; $i <= 12 ; $i++) {
-                    if ($value[$i]['nome'] === $agr ) {
+                    if ($value[$i]['nome'] === $agr) {
                         $vExterna[$key][$i]['nome'] = $real[1];
                     }
                 }
             }
         }
     }
-}
+    }
 
 // Cálculo do volume comercializado por mês
 
@@ -321,10 +321,9 @@ $mediaPrecos = $totalVendasInternas;
 for ($i = 1; $i <= 12 ; $i++) {
     if ($totalVendas[$i] == 0) {
         $mediaPrecos[$i] = 0;
-    }else {
+    } else {
         $mediaPrecos[$i] = $totalFacturacao[$i] / $totalVendas[$i];
     }
-
 }
 
 // Rodapé - Total Volume Extraido
@@ -427,11 +426,11 @@ $vars['title'] = 'Relatório Resumo Produção';
                 </thead>
                 <tfoot>
                     <th colspan="2">Totais</th>
-                    <th><?= number_format($rodapeVolExtraido,0,",",".") ?></th>
-                    <th><?= number_format($rodapeVolTrans,0,",",".") ?></th>
-                    <th><?= number_format($rodapeVolComer,0,",",".") ?></th>
-                    <th><?= number_format($rodapePU,0,",",".") ?></th>
-                    <th><?= number_format($rodapeFactura,0,",",".") ?></th>
+                    <th><?= number_format($rodapeVolExtraido, 0, ",", ".") ?></th>
+                    <th><?= number_format($rodapeVolTrans, 0, ",", ".") ?></th>
+                    <th><?= number_format($rodapeVolComer, 0, ",", ".") ?></th>
+                    <th><?= number_format($rodapePU, 0, ",", ".") ?></th>
+                    <th><?= number_format($rodapeFactura, 0, ",", ".") ?></th>
                 </tfoot>
 
                 <tbody>
@@ -445,11 +444,11 @@ $vars['title'] = 'Relatório Resumo Produção';
                         echo "<tr>";
                         echo "<td>". $lista_meses[$i-1] ."</td>";
                         echo "<td>"."P. Arimba"."</td>";
-                        echo "<td>".number_format($totalProducao[$i] / 1.88,0,",",".")."</td>";
-                        echo "<td>".number_format($totalProducao[$i],0,",",".")."</td>";
-                        echo "<td>".number_format($totalVendas[$i],0,",",".")."</td>";
-                        echo "<td>".number_format($mediaPrecos[$i],0,",",".")."</td>";
-                        echo "<td>".number_format($totalFacturacao[$i],0,",",".")."</td>";
+                        echo "<td>".number_format($totalProducao[$i] / 1.88, 0, ",", ".")."</td>";
+                        echo "<td>".number_format($totalProducao[$i], 0, ",", ".")."</td>";
+                        echo "<td>".number_format($totalVendas[$i], 0, ",", ".")."</td>";
+                        echo "<td>".number_format($mediaPrecos[$i], 0, ",", ".")."</td>";
+                        echo "<td>".number_format($totalFacturacao[$i], 0, ",", ".")."</td>";
                         echo "</tr>";
                     }
 
@@ -459,10 +458,10 @@ $vars['title'] = 'Relatório Resumo Produção';
         </div>
         <div class="al_esquerda_footer" style="padding-top:10px;">
             <?php
-                header( 'Content-Type: text/html; charset=iso-8859-1' );
-                setlocale( LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese' );
-                date_default_timezone_set( 'Europe/Lisbon' );
-                echo "Local, " . strftime( '%d de %B de %Y', strtotime( date( 'Y-m-d' ) ) );
+                header('Content-Type: text/html; charset=iso-8859-1');
+                setlocale(LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese');
+                date_default_timezone_set('Europe/Lisbon');
+                echo "Local, " . strftime('%d de %B de %Y', strtotime(date('Y-m-d')));
             ?>
 
         </div>

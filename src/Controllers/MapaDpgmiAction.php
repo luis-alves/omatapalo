@@ -7,8 +7,6 @@ namespace Src\Controllers;
  */
 final class MapaDpgmiAction extends Action
 {
-
-
     public function getSQL($tipoDoc1, $tipoDoc2, $preco)
     {
         include 'src/Auxiliares/globals.php';
@@ -65,16 +63,16 @@ final class MapaDpgmiAction extends Action
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
                 foreach ($lista_array_agregados as $agregado => $real) {
-                        if ($value->nome === $agregado) {
-                            $array[$real][$value->mes] = [
+                    if ($value->nome === $agregado) {
+                        $array[$real][$value->mes] = [
                                 'nome' => $value->nome,
                                 'mes' => $value->mes,
                                 'm3' => $value->m3,
                                 'pu' => $value->pu,
                                 'total' => $value->total,
                             ];
-                        }
                     }
+                }
             }
 
             // 1- ordenar, 2- preencher e 3- renomear a cada array de producao
@@ -96,7 +94,7 @@ final class MapaDpgmiAction extends Action
                 foreach ($arrayAgregados as $key => $value) {
                     foreach ($multiarray_agregados as $agr => $real) {
                         for ($i=1; $i <= 12 ; $i++) {
-                            if ($value[$i]['nome'] === $agr ) {
+                            if ($value[$i]['nome'] === $agr) {
                                 $arrayAgregados[$key][$i]['nome'] = $real[1];
                             }
                         }
@@ -107,7 +105,6 @@ final class MapaDpgmiAction extends Action
             $arrayAgregados = [];
         }
         return $arrayAgregados;
-
     }
 
     public function geral($request, $response)
@@ -163,7 +160,6 @@ final class MapaDpgmiAction extends Action
                 return $this->view->render($response, 'mapas/dpgmi/erro.twig', $this->erro());
                 break;
         }
-
     }
 
     public function producao()
@@ -218,7 +214,6 @@ final class MapaDpgmiAction extends Action
                     $totalProducao[$i] += $value[$i]['m3'];
                 }
             }
-
         } else {
             for ($i=1; $i <= 12; $i++) {
                 $totalProducao[$i] = 0;
@@ -260,10 +255,9 @@ final class MapaDpgmiAction extends Action
         for ($i = 1; $i <= 12 ; $i++) {
             if ($totalVendas[$i] == 0) {
                 $mediaPrecos[$i] = 0;
-            }else {
+            } else {
                 $mediaPrecos[$i] = $totalFacturacao[$i] / $totalVendas[$i];
             }
-
         }
 
         // Rodapé - Total Volume Extraido
@@ -328,7 +322,6 @@ final class MapaDpgmiAction extends Action
         $vars['print'] = 'printProducao';
 
         return $vars;
-
     }
 
     public function taxas()
@@ -399,7 +392,6 @@ final class MapaDpgmiAction extends Action
         $rows->execute();
 
         if ($rows->rowCount() > 0) {
-
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
 
             // Inicializar arrays que conterão o numero de idades
@@ -573,23 +565,21 @@ final class MapaDpgmiAction extends Action
                }
            }
 
-           for ($i=0; $i < 12; $i++) {
-               $nac_duplo[$i] = $nac_masculino[$i] + $nac_feminino[$i];
-               $exp_duplo[$i] = $exp_masculino[$i] + $exp_feminino[$i];
-               $fem_duplo[$i] = $nac_feminino[$i] + $exp_feminino[$i];
-               $mas_duplo[$i] = $nac_masculino[$i] + $exp_masculino[$i];
-               $todos_colaboradores[$i] = $nac_feminino[$i] + $exp_feminino[$i] +
+            for ($i=0; $i < 12; $i++) {
+                $nac_duplo[$i] = $nac_masculino[$i] + $nac_feminino[$i];
+                $exp_duplo[$i] = $exp_masculino[$i] + $exp_feminino[$i];
+                $fem_duplo[$i] = $nac_feminino[$i] + $exp_feminino[$i];
+                $mas_duplo[$i] = $nac_masculino[$i] + $exp_masculino[$i];
+                $todos_colaboradores[$i] = $nac_feminino[$i] + $exp_feminino[$i] +
                                           $nac_masculino[$i] + $exp_masculino[$i];
-           }
+            }
+        } else {
+            $vars['page'] = 'mapas/dpgmi/erro';
+            $vars['title'] = 'ERRO';
+            $vars['print'] = 'erro';
 
-
-       } else {
-           $vars['page'] = 'mapas/dpgmi/erro';
-           $vars['title'] = 'ERRO';
-           $vars['print'] = 'erro';
-
-           return $vars['title'];
-       }
+            return $vars['title'];
+        }
 
         $vars['nac_masculino'] = $nac_masculino;
         $vars['nac_feminino'] = $nac_feminino;
@@ -619,7 +609,6 @@ final class MapaDpgmiAction extends Action
         $vars['print'] = 'printCombustiveis';
 
         return $vars;
-
     }
 
     public function resumo()
@@ -667,7 +656,6 @@ final class MapaDpgmiAction extends Action
         $vars['lista_meses'] = $lista_meses;
 
         return $vars;
-
     }
 
     public function faixas($pagina)
@@ -893,7 +881,7 @@ final class MapaDpgmiAction extends Action
 
 
 
-        switch (true) {
+            switch (true) {
             case $mes == 1:
                 $mes = 'janeiro';
                 break;
@@ -935,25 +923,24 @@ final class MapaDpgmiAction extends Action
                 break;
         }
 
-        $var['mesNumero'] = $mesNumero;
-        $var['mes'] = $mes;
-        $var['faixas_etarias'] = $faixas_etarias;
-        $var['faixas'] = $faixas;
-        $var['parcial_array'] = $parcial_array;
-        $var['total_N_M'] = $total_N_M;
-        $var['total_N_F'] = $total_N_F;
-        $var['total_E_M'] = $total_E_M;
-        $var['total_E_F'] = $total_E_F;
-        $var['total_array'] = $total_array;
+            $var['mesNumero'] = $mesNumero;
+            $var['mes'] = $mes;
+            $var['faixas_etarias'] = $faixas_etarias;
+            $var['faixas'] = $faixas;
+            $var['parcial_array'] = $parcial_array;
+            $var['total_N_M'] = $total_N_M;
+            $var['total_N_F'] = $total_N_F;
+            $var['total_E_M'] = $total_E_M;
+            $var['total_E_F'] = $total_E_F;
+            $var['total_array'] = $total_array;
 
-        $var['page'] = 'mapas/dpgmi/faixasetarias';
-        $var['title'] = 'MAPA RESUMO DE GRUPOS ETÁRIOS';
-        $var['print'] = 'printFaixasEtarias';
+            $var['page'] = 'mapas/dpgmi/faixasetarias';
+            $var['title'] = 'MAPA RESUMO DE GRUPOS ETÁRIOS';
+            $var['print'] = 'printFaixasEtarias';
 
 
 
-        return  $var;
-
+            return  $var;
         } else {
             $vars['page'] = 'mapas/dpgmi/erro';
             $vars['title'] = 'ERRO';
@@ -965,15 +952,10 @@ final class MapaDpgmiAction extends Action
 
     public function erro()
     {
-
         $vars['page'] = 'mapas/dpgmi/erro';
         $vars['title'] = 'ERRO';
         $vars['print'] = 'erro';
 
         return $vars;
     }
-
-
-
-
 }
