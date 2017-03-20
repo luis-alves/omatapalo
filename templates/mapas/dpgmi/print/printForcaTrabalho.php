@@ -1,7 +1,6 @@
 <?php
 
-include 'config/constants.php';
-include 'resources/auxiliar/helpers.php';
+include 'src/Auxiliares/globals.php';
 
 
 // Create connection
@@ -288,7 +287,7 @@ if ($stmt->rowCount() > 0) {
                 </tfoot>
             -->
                 <tbody>
-                    <?php include 'config/constants.php'; ?>
+                    <?php include 'src/Auxiliares/globals.php'; ?>
                     <?php for ($i = 0; $i < 12; $i++): ?>
 
                         <tr>

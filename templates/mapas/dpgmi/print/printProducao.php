@@ -1,6 +1,5 @@
 <?php
-include 'config/constants.php';
-include 'resources/auxiliar/helpers.php';
+include 'src/Auxiliares/globals.php';
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -441,7 +440,6 @@ $vars['title'] = 'Relatório Resumo Produção';
                     $lista_meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril',
                                    'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
                                    'Outubro', 'Novembro', 'Dezembro'];
-                    // include_once 'omatapalo_v3/config/constants.php';
 
                     for ($i = 1; $i <= 12; $i++) {
                         echo "<tr>";

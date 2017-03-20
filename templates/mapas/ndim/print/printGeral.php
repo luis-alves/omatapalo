@@ -1,9 +1,7 @@
 <?php
 
 
-include 'config/constants.php';
-include 'resources/auxiliar/helpers.php';
-include 'config/auxiliares.php';
+include 'src/Auxiliares/globals.php';
 
 $numObra = $_SESSION['numObra'];
 $mes = $_SESSION['mes_ndim'];

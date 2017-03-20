@@ -1,6 +1,5 @@
 <?php
-include 'config/constants.php';
-include 'resources/auxiliar/helpers.php';
+include 'src/Auxiliares/globals.php';
 
 
 // Create connection
@@ -186,7 +185,7 @@ $vars['print'] = 'printResumo';
                 </tfoot>
 
                 <tbody>
-                    <?php include 'config/constants.php'; ?>
+                    <?php include 'src/Auxiliares/globals.php'; ?>
                     <?php for ($i = 1; $i <= 12; $i++): ?>
                         <tr>
                             <td><?= $lista_meses[$i-1] ?></td>

@@ -1,7 +1,6 @@
 <?php
 
-include 'config/constants.php';
-include 'resources/auxiliar/helpers.php';
+include 'src/Auxiliares/globals.php';
 
 
 // Create connection
@@ -194,7 +193,7 @@ $vars['print'] = 'printTaxas';
                 <tbody>
                     <?php for ($i = 1; $i <= 12; $i++): ?>
                         <tr>
-                            <?php include 'config/constants.php'; ?>
+                            <?php include 'src/Auxiliares/globals.php'; ?>
                             <td><?= $lista_meses[$i-1] ?></td>
                             <td>Isento</td>
                             <td>-</td>
