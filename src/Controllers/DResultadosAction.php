@@ -14,7 +14,6 @@ class DResultadosAction extends Action
     public function dresultados($request, $response)
     {
         include 'src/Auxiliares/globals.php';
-        // include 'resources/auxiliar/helpers.php';
 
         $sql = new Query();
 

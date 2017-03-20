@@ -1,7 +1,6 @@
 <?php
 
-include 'c:/xampp/htdocs/omatapalo_v3/config/constants.php';
-include 'c:/xampp/htdocs/omatapalo_v3/resources/auxiliar/helpers.php';
+include 'c:/xampp/htdocs/omatapalo_v3/src/Auxiliares/globals.php';
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

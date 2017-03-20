@@ -12,7 +12,6 @@ final class MapaDpgmiAction extends Action
     public function getSQL($tipoDoc1, $tipoDoc2, $preco)
     {
         include 'src/Auxiliares/globals.php';
-        // include 'resources/auxiliar/helpers.php';
 
         if ($tipoDoc1 === 'PRO') {
             $query = "SELECT `nome_agre` AS `nome`,
@@ -170,7 +169,6 @@ final class MapaDpgmiAction extends Action
     public function producao()
     {
         include 'src/Auxiliares/globals.php';
-        // include_once 'resources/auxiliar/helpers.php';
 
         $producao = $this->getSQL('PRO', 'ENT', 'valor_in_ton');
         $vInterna = $this->getSQL('GTO', 'SPA', 'valor_in_ton');

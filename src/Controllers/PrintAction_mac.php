@@ -12,8 +12,6 @@ final class PrintAction
 
     public function imprimir ($request, $response)
     {
-        // include_once 'config/constants.php';
-        // include_once 'resources/auxiliar/helpers.php';
 
         $folha = $_POST['printit'];
         $variaveis = explode(',', $folha);
