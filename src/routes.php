@@ -18,8 +18,8 @@ $app->group('', function () {
     $this->post('/cind', 'Src\Controllers\HomeAction:cind');
     $this->get('/cind', 'Src\Controllers\HomeAction:cind');
 
-
     $this->get('/import', 'Src\Controllers\Admin\ImportAction:dataImport');
+
 
     /* Mapas */
 
@@ -49,9 +49,6 @@ $app->group('', function () {
 
     /* Relatórios */
 
-    // $this->get('/relatorios/dresultados/{item}', 'Src\Controllers\DResultadosAction:demonstracaoResultados');
-    // $this->post('/relatorios/dresultados/{item}', 'Src\Controllers\DResultadosAction:demonstracaoResultados');
-
     $this->get('/relatorios/mensal/dadosmensais/{item}', 'Src\Controllers\RelatorioMensalAction:dadosMensais');
     $this->post('/relatorios/mensal/dadosmensais/{item}', 'Src\Controllers\RelatorioMensalAction:dadosMensais');
 
@@ -76,7 +73,6 @@ $app->group('', function () {
     # Demonstação de resultados
     $this->get('/relatorios/dresultados', 'Src\Controllers\DResultadosAction:dResultados');
     $this->post('/relatorios/dresultados', 'Src\Controllers\DResultadosAction:dResultados');
-
 
 
     /* Tabelas */
