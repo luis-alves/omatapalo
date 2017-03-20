@@ -41,8 +41,8 @@ $container['view'] = function ($container) {
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
     $pdo = new PDO('mysql:host=localhost;dbname=arimba_bt',
-                   'root',
-                   ''
+                   'luisalves',
+                   'qpwoeiru00'
                 //  . PDO::MYSQL_ATTR_LOCAL_INFILE => true
                   );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
