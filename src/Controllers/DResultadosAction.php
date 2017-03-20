@@ -10,7 +10,6 @@ use Illuminate\Database\Capsule\Manager as DB;
  */
 class DResultadosAction extends Action
 {
-
     public function dresultados($request, $response)
     {
         include 'src/Auxiliares/globals.php';
@@ -164,7 +163,7 @@ class DResultadosAction extends Action
 
         if (!empty($custosGerais)) {
             // Converter objecto para matriz multidimensional
-            $arrayCustosGerais =json_decode(json_encode($custosGerais), TRUE);
+            $arrayCustosGerais =json_decode(json_encode($custosGerais), true);
 
             for ($i=1; $i < 13; $i++) {
                 foreach ($custosGerais as $numero => $value) {
@@ -271,7 +270,6 @@ class DResultadosAction extends Action
             }
 
             for ($i=1; $i < 13; $i++) {
-
             }
 
             # Cálculo de resultados operacionais
@@ -303,9 +301,8 @@ class DResultadosAction extends Action
 
             $margemMedianteFacturacao = array();
             for ($i=1; $i < 13; $i++) {
-                if ($totalVendas[$i] != 0 ) {
+                if ($totalVendas[$i] != 0) {
                     $margemMedianteFacturacao[$i] = $resultadoMedianteFacturacao[$i] / $totalVendas[$i] * 100;
-
                 } else {
                     $margemMedianteFacturacao[$i] = 0;
                 }
@@ -324,7 +321,6 @@ class DResultadosAction extends Action
                     $vendasExternasAcumuladas[$i] = $vendasExternas[$i];
                     $producaoAcumulada[$i] = $producoes[$i];
                 } else {
-
                     $vendasInternasAcumuladas[$i] = $vendasInternas[$i] + $vendasInternasAcumuladas[$i-1];
                     $vendasExternasAcumuladas[$i] = $vendasExternas[$i] + $vendasExternasAcumuladas[$i-1];
                     $producaoAcumulada[$i] = $producoes[$i] + $producaoAcumulada[$i-1];
@@ -532,7 +528,6 @@ class DResultadosAction extends Action
             $vars['percTotalOperacional'] = $percTotalOperacional;
 
             return $this->view->render($response, 'relatorios/dresultados/' . $vars['page'] .'.twig', $vars);
-
         } else {
             $vars['ano'] = $ano;
             $vars['page'] = 'relatorio';

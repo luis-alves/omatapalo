@@ -7,23 +7,18 @@ namespace Src\Controllers;
  */
 final class HomeAction extends Action
 {
-
     public function ano($request, $response)
     {
-
         $_SESSION['ano'] = $_POST['ano'];
         header('Content-Type: application/json');
         echo json_encode(array('status' => true));
-
     }
 
     public function cind($request, $response)
     {
-
         $_SESSION['ci'] = $_POST['ci'];
         header('Content-Type: application/json');
         echo json_encode(array('status' => true));
-
     }
 
     public function index($request, $response)
@@ -38,7 +33,7 @@ final class HomeAction extends Action
         return $this->view->render($response, 'home.twig', $vars);
     }
 
-    public function tabelas ($request, $response)
+    public function tabelas($request, $response)
     {
         include 'src/Auxiliares/globals.php';
 
@@ -50,7 +45,6 @@ final class HomeAction extends Action
         $vars['title'] = 'Tabelas';
 
         return $this->view->render($response, 'tabelas.twig', $vars);
-
     }
 
     public function mapas($request, $response)
@@ -68,5 +62,4 @@ final class HomeAction extends Action
 
         return $this->view->render($response, 'relatorios.twig', $vars);
     }
-
 }
