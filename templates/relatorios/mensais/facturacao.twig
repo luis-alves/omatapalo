@@ -2,66 +2,67 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="colorir" style="background-color:#003686;padding:5px;">
-        <h2 style="color:white;text-align:center;">{{title}}</h2>
+    <div class="container">
+        <div class="colorir" style="background-color:#003686;padding:5px;">
+            <h2 style="color:white;text-align:center;">{{title}}</h2>
+        </div>
+        <br>
     </div>
-    <br>
-</div>
-<div class="container">
-    <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" style="width:100%;overflow-x:auto">
-        <thead>
-            <tr>
-                <th rowspan="2" class="text-center" style="vertical-align:middle;">Agregados</th>
-                {% for item,valor in ci %}
-                    <th colspan="2" class="text-center" style="vertical-align:middle;">{{ item }}</th>
-                {% endfor %}
-                <th colspan="2" class="text-center" style="vertical-align:middle;">Total</th>
-                <th rowspan="2" class="text-center" style="vertical-align:middle;">Resultado <br>Geral</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for numero,mes in meses %}
+    <div class="container">
+        <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" style="width:100%;overflow-x:auto">
+            <thead>
                 <tr>
-                    <td class="text-center">{{ mes }}</td>
-                    {% for centro,codigo in ci %}
+                    <th rowspan="2" class="text-center" style="vertical-align:middle;">Agregados</th>
+                    {% for item, valor in ci %}
+                        <th colspan="2" class="text-center" style="vertical-align:middle;">{{ item }}</th>
+                    {% endfor %}
+                    <th colspan="2" class="text-center" style="vertical-align:middle;">Total</th>
+                    <th rowspan="2" class="text-center" style="vertical-align:middle;">Resultado
+                        <br>Geral</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for numero, mes in meses %}
+                    <tr>
+                        <td class="text-center">{{ mes }}</td>
+                        {% for centro, codigo in ci %}
                             <td class="text-center">{{ fornecimentoInternoTotal[centro][numero+1]|number_format(0,","," ") }}</td>
                             <td class="text-center">{{ fornecimentoExternoTotal[centro][numero+1]|number_format(0,","," ") }}</td>
+                        {% endfor %}
+                        <td class="text-center">{{ totalFI[numero+1]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ totalFE[numero+1]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ totalMes[numero+1]|number_format(0,","," ") }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="text-center">Total Parcial</th>
+                    {% for centro, codigo in ci %}
+                        <th class="text-center">{{ rodapeInterno[centro]|number_format(0,","," ") }}</th>
+                        <th class="text-center">{{ rodapeExterno[centro]|number_format(0,","," ") }}</th>
                     {% endfor %}
-                    <td class="text-center">{{ totalFI[numero+1]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ totalFE[numero+1]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ totalMes[numero+1]|number_format(0,","," ") }}</td>
+                    <th rowspan="2" class="text-center" style="vertical-align:middle;">{{ rodapeTotaisFI|number_format(0,","," ") }}</th>
+                    <th rowspan="2" class="text-center" style="vertical-align:middle;">{{ rodapeTotaisFE|number_format(0,","," ") }}</th>
+                    <th rowspan="2" class="text-center" style="vertical-align:middle;">{{ rodapeTotalGeral|number_format(0,","," ") }}</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th class="text-center">Total Parcial</th>
-                {% for centro,codigo in ci %}
-                <th class="text-center">{{ rodapeInterno[centro]|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeExterno[centro]|number_format(0,","," ") }}</th>
-                {% endfor %}
-                <th rowspan="2" class="text-center" style="vertical-align:middle;">{{ rodapeTotaisFI|number_format(0,","," ") }}</th>
-                <th rowspan="2" class="text-center" style="vertical-align:middle;">{{ rodapeTotaisFE|number_format(0,","," ") }}</th>
-                <th rowspan="2" class="text-center" style="vertical-align:middle;">{{ rodapeTotalGeral|number_format(0,","," ") }}</th>
-            </tr>
-            <tr>
-                <th class="text-center">Total Geral</th>
-                {% for centro,codigo in ci %}
-                    <th colspan="2" class="text-center">{{ totalRodape[centro]|number_format(0,","," ") }}</th>
-                {% endfor %}
-            </tr>
-        </tfoot>
-    </table>
-</div>
+                <tr>
+                    <th class="text-center">Total Geral</th>
+                    {% for centro, codigo in ci %}
+                        <th colspan="2" class="text-center">{{ totalRodape[centro]|number_format(0,","," ") }}</th>
+                    {% endfor %}
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
-<style>
-    td, th {
-        padding-top: 0px !important;
-        padding-bottom: 0px !important;
-    }
-</style>
+    <style>
+        td,
+        th {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
 
-
+    </style>
 
 {% endblock %}

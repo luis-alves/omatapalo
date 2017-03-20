@@ -2,224 +2,247 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="colorir" style="background-color:#003686;padding:5px;">
-        <h2 style="color:white;text-align:center;">{{title}}</h2>
-     </div>
-    <h3><strong></strong>Janeiro a {{mes_titulo}} de {{ session.ano }}</h3>
-</div>
-<div class="container">
+    <div class="container">
+        <div class="colorir" style="background-color:#003686;padding:5px;">
+            <h2 style="color:white;text-align:center;">{{title}}</h2>
+        </div>
+        <h3>
+            <strong></strong>Janeiro a
+            {{mes_titulo}}
+            de
+            {{ session.ano }}</h3>
+    </div>
+    <div class="container">
 
-    <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" stylse="width:100%;overflow-x:auto">
-        <thead>
-            <tr>
-                <th class="text-center" colspan="2">C.I. / Agregados</th>
-                {% for britas,nome in drBritas %}
-                    <th class="text-center" >{{ britas }}</th>
-                {% endfor %}
-                <th class="text-center">Totais</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th class="text-center" style="vertical-align:middle;border-bottom-width:2px;" rowspan="5">Totais</th>
-                <th class="text-center">Stock Inicial</th>
-                {% for brita,nome in drBritas %}
-                    <th class="text-center">{{ rodapeStockInicial[brita]|number_format(0,","," ") }}</th>
-                {% endfor %}
-                <th class="text-center">{{ somaRodapeStockInicial|number_format(0,","," ") }}</th>
-            </tr>
-            <tr>
-                <th class="text-center">Produção</th>
-                {% for brita,nome in drBritas %}
-                    <th class="text-center">{{ rodapeProducao[brita]|number_format(0,","," ") }}</th>
-                {% endfor %}
-                <th class="text-center">{{ somaRodapeProducao|number_format(0,","," ") }}</th>
-            </tr>
-            <tr>
-                <th class="text-center">V. Interna</th>
-                {% for brita,nome in drBritas %}
-                    <th class="text-center">{{ rodapeFInterno[brita]|number_format(0,","," ") }}</th>
-                {% endfor %}
-                <th class="text-center">{{ somaRodapeFInterno|number_format(0,","," ") }}</th>
-            </tr>
-            <tr>
-                <th class="text-center">V. Externa</th>
-                {% for brita,nome in drBritas %}
-                    <th class="text-center">{{ rodapeFExterno[brita]|number_format(0,","," ") }}</th>
-                {% endfor %}
-                <th class="text-center">{{ somaRodapeFExterno|number_format(0,","," ") }}</th>
-            </tr>
-            <tr>
-                <th class="text-center" style=" border-bottom-width:2px;">Stock Final</th>
-                {% for brita,nome in drBritas %}
-                    <th class="text-center" style=" border-bottom-width:2px;">{{ rodapeStockFinal[brita]|number_format(0,","," ") }}</th>
-                {% endfor %}
-                <th class="text-center" style=" border-bottom-width:2px;">{{ somaRodapeStockFinal|number_format(0,","," ") }}</th>
-            </tr>
-
-        </tfoot>
-        <tbody>
-            {% for cIndustrial,value in cisRelatorioMensal %}
-            <td class="text-center" style="vertical-align:middle; border-bottom-width:2px;" rowspan="6"><strong>{{ cIndustrial }}</strong></td>
+        <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" stylse="width:100%;overflow-x:auto">
+            <thead>
                 <tr>
-                    <td class="text-center"><strong>Stock Inicial</strong></td>
-                    {% for brita,nome in drBritas %}
-                        <td class="text-center">{{stockInicial[value][brita]|number_format(0,","," ")}}</td>
+                    <th class="text-center" colspan="2">C.I. / Agregados</th>
+                    {% for britas, nome in drBritas %}
+                        <th class="text-center">{{ britas }}</th>
                     {% endfor %}
-                    <td class="text-center"><b>{{ somaStockInicial[cIndustrial]|number_format(0,","," ") }}</b></td>
-
+                    <th class="text-center">Totais</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th class="text-center" style="vertical-align:middle;border-bottom-width:2px;" rowspan="5">Totais</th>
+                    <th class="text-center">Stock Inicial</th>
+                    {% for brita, nome in drBritas %}
+                        <th class="text-center">{{ rodapeStockInicial[brita]|number_format(0,","," ") }}</th>
+                    {% endfor %}
+                    <th class="text-center">{{ somaRodapeStockInicial|number_format(0,","," ") }}</th>
                 </tr>
                 <tr>
-                    <td class="text-center"><strong>Produção</strong></td>
-                    {% for brita,nome in drBritas %}
-                        <td class="text-center">{{producao[value][brita]|number_format(0,","," ")}}</td>
+                    <th class="text-center">Produção</th>
+                    {% for brita, nome in drBritas %}
+                        <th class="text-center">{{ rodapeProducao[brita]|number_format(0,","," ") }}</th>
                     {% endfor %}
-                    <td class="text-center"><b>{{ somaProducao[cIndustrial]|number_format(0,","," ") }}</b></td>
+                    <th class="text-center">{{ somaRodapeProducao|number_format(0,","," ") }}</th>
                 </tr>
                 <tr>
-                    <td class="text-center"><strong>V. Interna</strong></td>
-                    {% for brita,nome in drBritas %}
-                        <td class="text-center">{{fInterno[value][brita]|number_format(0,","," ")}}</td>
+                    <th class="text-center">V. Interna</th>
+                    {% for brita, nome in drBritas %}
+                        <th class="text-center">{{ rodapeFInterno[brita]|number_format(0,","," ") }}</th>
                     {% endfor %}
-                    <td class="text-center"><b>{{ somaFInterno[cIndustrial]|number_format(0,","," ") }}</b></td>
+                    <th class="text-center">{{ somaRodapeFInterno|number_format(0,","," ") }}</th>
                 </tr>
                 <tr>
-                    <td class="text-center"><strong>V. Externa</strong></td>
-                    {% for brita,nome in drBritas %}
-                        <td class="text-center">{{fExterno[value][brita]|number_format(0,","," ")}}</td>
+                    <th class="text-center">V. Externa</th>
+                    {% for brita, nome in drBritas %}
+                        <th class="text-center">{{ rodapeFExterno[brita]|number_format(0,","," ") }}</th>
                     {% endfor %}
-                    <td class="text-center"><b>{{ somaFExterno[cIndustrial]|number_format(0,","," ") }}</b></td>
+                    <th class="text-center">{{ somaRodapeFExterno|number_format(0,","," ") }}</th>
                 </tr>
                 <tr>
-                    <td class="text-center" style="border-bottom-width:2px;"><strong>Stock Final</strong></td>
-                    {% for brita,nome in drBritas %}
-                        <td class="text-center" style="border-bottom-width:2px;">{{stockFinal[value][brita]|number_format(0,","," ")}}</td>
+                    <th class="text-center" style=" border-bottom-width:2px;">Stock Final</th>
+                    {% for brita, nome in drBritas %}
+                        <th class="text-center" style=" border-bottom-width:2px;">{{ rodapeStockFinal[brita]|number_format(0,","," ") }}</th>
                     {% endfor %}
-                    <td class="text-center" style=" border-bottom-width:2px;"><b>{{ somaStockFinal[cIndustrial]|number_format(0,","," ") }}</b></td>
+                    <th class="text-center" style=" border-bottom-width:2px;">{{ somaRodapeStockFinal|number_format(0,","," ") }}</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
 
-<div class="container"  style="text-align: center">
-<table style="display: inline-block;">
-    <thead>
-        <tr>
-            <th class="text-center"><h3>PRODUÇÃO POR C.I.</h3> </th>
-            <th class="text-center"><h3>VENDA POR DESTINO</h3> </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <div id="container" style="width: 80;float:left;">
-                  <canvas id="myChart" width="600" height="400"></canvas>
-                </div>
-            </td>
-            <td>
-                <div id="container" style="width: 80;float:right;">
-                  <canvas id="myChart2" width="600" height="400"></canvas>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
-</div>
+            </tfoot>
+            <tbody>
+                {% for cIndustrial, value in cisRelatorioMensal %}
+                    <td class="text-center" style="vertical-align:middle; border-bottom-width:2px;" rowspan="6">
+                        <strong>{{ cIndustrial }}</strong>
+                    </td>
+                    <tr>
+                        <td class="text-center">
+                            <strong>Stock Inicial</strong>
+                        </td>
+                        {% for brita, nome in drBritas %}
+                            <td class="text-center">{{stockInicial[value][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                        <td class="text-center">
+                            <b>{{ somaStockInicial[cIndustrial]|number_format(0,","," ") }}</b>
+                        </td>
 
-<script type="text/javascript">
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <strong>Produção</strong>
+                        </td>
+                        {% for brita, nome in drBritas %}
+                            <td class="text-center">{{producao[value][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                        <td class="text-center">
+                            <b>{{ somaProducao[cIndustrial]|number_format(0,","," ") }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <strong>V. Interna</strong>
+                        </td>
+                        {% for brita, nome in drBritas %}
+                            <td class="text-center">{{fInterno[value][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                        <td class="text-center">
+                            <b>{{ somaFInterno[cIndustrial]|number_format(0,","," ") }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <strong>V. Externa</strong>
+                        </td>
+                        {% for brita, nome in drBritas %}
+                            <td class="text-center">{{fExterno[value][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                        <td class="text-center">
+                            <b>{{ somaFExterno[cIndustrial]|number_format(0,","," ") }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" style="border-bottom-width:2px;">
+                            <strong>Stock Final</strong>
+                        </td>
+                        {% for brita, nome in drBritas %}
+                            <td class="text-center" style="border-bottom-width:2px;">{{stockFinal[value][brita]|number_format(0,","," ")}}</td>
+                        {% endfor %}
+                        <td class="text-center" style=" border-bottom-width:2px;">
+                            <b>{{ somaStockFinal[cIndustrial]|number_format(0,","," ") }}</b>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-val1 = {{ somaProducao['arimba']|json_encode|raw }};
-val2 = {{ somaProducao['caraculo']|json_encode|raw }};
-val3 = {{ somaProducao['cassosso']|json_encode|raw }};
+    <div class="container" style="text-align: center">
+        <table style="display: inline-block;">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        <h3>PRODUÇÃO POR C.I.</h3>
+                    </th>
+                    <th class="text-center">
+                        <h3>VENDA POR DESTINO</h3>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="container" style="width: 80;float:left;">
+                            <canvas id="myChart" width="600" height="400"></canvas>
+                        </div>
+                    </td>
+                    <td>
+                        <div id="container" style="width: 80;float:right;">
+                            <canvas id="myChart2" width="600" height="400"></canvas>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-var pieData = {
-  labels: [
-  "Arimba",
-  "Caraculo",
-  "Cassosso"],
-  datasets: [
-    {
-      data: [val1, val2, val3],
-      backgroundColor: [
-          "rgba(95,186,125,0.7)",
-          "rgba(166, 134, 244,0.7)",
-          "rgba(244, 66, 107,0.7)"
-      ]
-  }]
-};
+    <script type="text/javascript">
 
-var ctx = document.getElementById("myChart").getContext("2d");
+        val1 = {{ somaProducao['arimba']|json_encode|raw }};
+        val2 = {{ somaProducao['caraculo']|json_encode|raw }};
+        val3 = {{ somaProducao['cassosso']|json_encode|raw }};
 
-var myPieChart = new Chart(ctx, {
-  type: 'pie',
-  data: pieData,
-  options:{
-      legend:{
-          position:'bottom'
-      }
-  }
-});
+        var pieData = {
+            labels: [
+                "Arimba", "Caraculo", "Cassosso"
+            ],
+            datasets: [
+                {
+                    data: [
+                        val1, val2, val3
+                    ],
+                    backgroundColor: ["rgba(95,186,125,0.7)", "rgba(166, 134, 244,0.7)", "rgba(244, 66, 107,0.7)"]
+                }
+            ]
+        };
 
+        var ctx = document.getElementById("myChart").getContext("2d");
 
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: pieData,
+            options: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+    </script>
 
-</script>
+    <script type="text/javascript">
 
-<script type="text/javascript">
+        var val1 = {{ somaRodapeFInterno|json_encode|raw }};
+        var val2 = {{ somaRodapeFExterno|json_encode|raw }};
 
-var val1 = {{ somaRodapeFInterno|json_encode|raw }};
-var val2 = {{ somaRodapeFExterno|json_encode|raw }};
+        var pieData = {
+            labels: [
+                "Venda Interna", "Venda Externa"
+            ],
+            datasets: [
+                {
+                    data: [
+                        val1, val2
+                    ],
+                    backgroundColor: ["#D4CCC5", "#949FB1"]
+                }
+            ]
+        };
 
-var pieData = {
-  labels: [
-  "Venda Interna",
-  "Venda Externa"],
-  datasets: [
-    {
-      data: [val1, val2],
-      backgroundColor: [
-         "#D4CCC5",
-         "#949FB1"
-      ]
-  }]
-};
+        var ctx = document.getElementById("myChart2").getContext("2d");
 
-var ctx = document.getElementById("myChart2").getContext("2d");
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: pieData,
+            options: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+    </script>
+    <style type="text/css">
+        .chart-legend li span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 10px;
+            list-style-type: none;
+        }
 
-var myPieChart = new Chart(ctx, {
-  type: 'pie',
-  data: pieData,
-  options:{
-      legend:{
-          position:'bottom'
-      }
-  }
-});
+        .chart-legend li {
+            list-style-type: none;
+            display: inline;
+            margin-left: 10px;
+        }
 
+        td,
+        th {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
 
-
-
-</script>
-<style type="text/css">
-    .chart-legend li span{
-        display: inline-block;
-        width: 12px;
-        height: 12px;
-        margin-right: 10px;
-        list-style-type: none;
-    }
-
-    .chart-legend li {
-        list-style-type: none;
-        display: inline;
-        margin-left: 10px;
-    }
-
-    td, th {
-        padding-top: 0px !important;
-        padding-bottom: 0px !important;
-    }
-</style>
+    </style>
 
 {% endblock %}

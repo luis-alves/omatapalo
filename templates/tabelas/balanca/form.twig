@@ -1,138 +1,134 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-<br><br>
-{% if session.erro != null %}
-<div class="container btn-danger">
-    <h3 style="text-align:center">{{ session.erro }}</h3>
-</div>
-<br>
-{% endif %}
+    <br><br>
+    {% if session.erro != null %}
+        <div class="container btn-danger">
+            <h3 style="text-align:center">{{ session.erro }}</h3>
+        </div>
+        <br>
+    {% endif %}
 
-<form action="/omatapalo_v3/tabelas/balanca" method="post">
-    <fieldset>
-        <div class="container">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Seleccione as datas que pretende</h3>
-                </div>
-        <!-- Datetimepicker - inicio -->
+    <form action="/omatapalo_v3/tabelas/balanca" method="post">
+        <fieldset>
+            <div class="container">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Seleccione as datas que pretende</h3>
+                    </div>
+                    <!-- Datetimepicker - inicio -->
 
-                <div class="panel-body" >
-                    <div class='col-md-5'>
-                        <div class="form-group">
-                            <div class='input-group date' id='datainicio'>
-                                <input name='data_inicio' type='text' class="form-control"
-                                        placeholder="Data início" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+                    <div class="panel-body">
+                        <div class='col-md-5'>
+                            <div class="form-group">
+                                <div class='input-group date' id='datainicio'>
+                                    <input name='data_inicio' type='text' class="form-control" placeholder="Data início"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-5'>
+                            <div class="form-group">
+                                <div class='input-group date' id='datafim'>
+                                    <input name='data_final' type='text' class="form-control" placeholder="Data fim"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class='col-md-5'>
-                        <div class="form-group">
-                            <div class='input-group date' id='datafim'>
-                                <input name='data_final' type='text' class="form-control"
-                                        placeholder="Data fim"/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
+                </div>
+                <!-- datetimepicker - fim -->
+
+                <!-- selecção dos tipos de documnentos a serem observados -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Seleccione o(s) tipo(s) de documento(s) que pretende</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="checkbox checkbox-inline"></div>
+                        <div class="checkbox checkbox-inline">
+                            <label><input name="check[]" type="checkbox" value="'PSG'">
+                                Pesagem</label>
                         </div>
+                        <div class="checkbox checkbox-inline">
+                            <label><input name="check[]" type="checkbox" value="'SPA'">
+                                Transferência entre C.I.</label>
+                        </div>
+                        <div class="checkbox checkbox-inline">
+                            <label><input name="check[]" type="checkbox" value="'GTO'">
+                                Vendas Internas</label>
+                        </div>
+                        <div class="checkbox checkbox-inline">
+                            <label><input name="check[]" type="checkbox" value="'GR'">
+                                Vendas Externas com Factura</label>
+                        </div>
+                        <div class="checkbox checkbox-inline">
+                            <label><input name="check[]" type="checkbox" value="'VD'">
+                                Vendas Externas com Venda a Dinheiro</label>
+                        </div>
+
                     </div>
                 </div>
-            </div>
-        <!-- datetimepicker - fim -->
+                <!-- selecção dos agregados a observar -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Seleccione o(s) agregado(s) que pretende listar</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="checkbox checkbox-inline"></div>
+                        {% for brita in agregadosDoCi %}
+                            <div class="checkbox checkbox-inline">
+                                <label><input name="agr[]" type="checkbox" value="'Brita I'" checked>{{ brita }}</label>
+                            </div>
+                        {% endfor %}
 
-        <!-- selecção dos tipos de documnentos a serem observados -->
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Seleccione o(s) tipo(s) de documento(s) que pretende</h3>
-          </div>
-          <div class="panel-body">
-                  <div class="checkbox checkbox-inline">
-                  </div>
-                  <div class="checkbox checkbox-inline">
-                      <label><input name="check[]" type="checkbox" value="'PSG'" >
-                          Pesagem</label>
-                  </div>
-                  <div class="checkbox checkbox-inline">
-                      <label><input name="check[]" type="checkbox" value="'SPA'">
-                          Transferência entre C.I.</label>
-                  </div>
-                  <div class="checkbox checkbox-inline">
-                      <label><input name="check[]" type="checkbox" value="'GTO'">
-                          Vendas Internas</label>
-                  </div>
-                  <div class="checkbox checkbox-inline">
-                      <label><input name="check[]" type="checkbox" value="'GR'">
-                          Vendas Externas com Factura</label>
-                  </div>
-                  <div class="checkbox checkbox-inline">
-                      <label><input name="check[]" type="checkbox" value="'VD'">
-                          Vendas Externas com Venda a Dinheiro</label>
-                  </div>
+                    </div>
+                </div>
 
-          </div>
-        </div>
-        <!-- selecção dos agregados a observar -->
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Seleccione o(s) agregado(s) que pretende listar</h3>
-          </div>
-          <div class="panel-body">
-              <div class="checkbox checkbox-inline">
-              </div>
-              {% for brita in agregadosDoCi %}
-              <div class="checkbox checkbox-inline">
-                  <label><input name="agr[]" type="checkbox" value="'Brita I'" checked>{{ brita }}</label>
-              </div>
-              {% endfor %}
+                <!-- selecção dos cliente externos -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Restringir selecção aos seguintes clientes</h3>
+                    </div>
+                    <div class="panel-body">
+                        <select data-placeholder='Seleccione um ou mais clientes' name='clientes[]' class='chzn-select' multiple='true'>
 
-          </div>
-        </div>
+                            {% for key in clientes %}
+                                <option value="{{key}}">'{{key}}'</option>'
+                            {% endfor %}
 
-        <!-- selecção dos cliente externos -->
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Restringir selecção aos seguintes clientes</h3>
-          </div>
-          <div class="panel-body">
-              <select data-placeholder='Seleccione um ou mais clientes' name='clientes[]' class='chzn-select' multiple='true'>
+                        </select>
+                    </div>
+                </div>
 
-                  {% for key in clientes %}
-                    <option value="{{key}}">'{{key}}'</option>'
-                  {% endfor %}
+                <!-- selecção das obras por cliente -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Restringir selecção às seguintes empreitadas</h3>
+                    </div>
+                    <div class="panel-body">
+                        <select data-placeholder='Seleccione um ou mais clientes' name='obras[]' class='chzn-select' multiple='true'>
 
-              </select>
-          </div>
-        </div>
+                            {% for key in obras %}
+                                <option value="{{key}}">'{{key}}'</option>'
+                            {% endfor %}
 
-        <!-- selecção das obras por cliente -->
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Restringir selecção às seguintes empreitadas</h3>
-          </div>
-          <div class="panel-body">
-              <select data-placeholder='Seleccione um ou mais clientes' name='obras[]' class='chzn-select' multiple='true'>
+                        </select>
+                    </div>
+                </div>
 
-              {% for key in obras %}
-                <option value="{{key}}">'{{key}}'</option>'
-              {% endfor %}
-
-              </select>
-          </div>
-        </div>
-
-        <br><br>
-        <div class="form-group">
-            <button class="btn btn-success" type="submit">
-                <span aria-hidden="true" class="glyphicon glyphicon"></span>
-                Pesquisar
-            </button>
-        </div>
-    </fieldset>
-</form>
-<br><br><br><br>
-{% endblock %}
+                <br><br>
+                <div class="form-group">
+                    <button class="btn btn-success" type="submit">
+                        <span aria-hidden="true" class="glyphicon glyphicon"></span>
+                        Pesquisar
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+        <br><br><br><br>
+    {% endblock %}

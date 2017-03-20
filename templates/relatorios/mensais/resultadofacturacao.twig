@@ -2,268 +2,292 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="colorir" style="background-color:#003686;padding:5px;">
-        <h2 style="color:white;text-align:center;">{{title}}</h2>
-     </div>
-    <h3><strong></strong>{{mes_titulo}} de {{ session.ano }}</h3>
-</div>
-<div class="container">
+    <div class="container">
+        <div class="colorir" style="background-color:#003686;padding:5px;">
+            <h2 style="color:white;text-align:center;">{{title}}</h2>
+        </div>
+        <h3>
+            <strong></strong>{{mes_titulo}}
+            de
+            {{ session.ano }}</h3>
+    </div>
+    <div class="container">
 
-    <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" style="width:100%;overflow-x:auto">
-        <thead>
-            <tr>
-                <th class="text-center" style="vertical-align:middle;" rowspan="3">CI / Dados</th>
-                <th class="text-center" colspan="9">Valores Corrente Mês</th>
-            </tr>
-            <tr>
-                <th class="text-center">Volume<br>Vendido</th>
-                <th class="text-center">Média<br>Venda</th>
-                <th class="text-center" style="vertical-align:middle;" colspan="5">Facturação</th>
-                <th class="text-center">Resultado Mediante<br>Facturação</th>
-                <th class="text-center"  style="vertical-align:middle;">CI.F</th>
-            </tr>
-            <tr>
-                <th class="text-center">m3</th>
-                <th class="text-center">USD/m3</th>
-                <th class="text-center">Interna</th>
-                <th class="text-center">%</th>
-                <th class="text-center">Externa</th>
-                <th class="text-center">%</th>
-                <th class="text-center">Total</th>
-                <th class="text-center">Mensal</th>
-                <th class="text-center">Mensal</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th class="text-center">TOTAIS</th>
-                <th class="text-center">{{ rodapeVolumeVendido|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeMediaVenda|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeFI|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapePercentagemFI|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeFE|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapePercentagemFE|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeTotal|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeResultado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeCIF|number_format(1,","," ") }}</th>
-            </tr>
-        </tfoot>
-        <tbody>
-            {% for ci,value in cisRelatorioMensal %}
+        <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" style="width:100%;overflow-x:auto">
+            <thead>
                 <tr>
-                    <td class="text-center">{{ ci }}</td>
-                    <td class="text-center">{{ volumeVendido[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ media[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ somaFI[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ percentagemFI[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ somaFE[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ percentagemFE[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ totalFornecimento[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ resultadoFacturacao[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ CIFacturacao[ci]|number_format(1,","," ") }}</td>
+                    <th class="text-center" style="vertical-align:middle;" rowspan="3">CI / Dados</th>
+                    <th class="text-center" colspan="9">Valores Corrente Mês</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-
-<div class="container">
-    <h3><strong></strong>Janeiro a {{mes_titulo}} de {{ session.ano }}</h3>
-</div>
-<div class="container">
-
-    <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" stylse="width:100%;overflow-x:auto">
-        <thead>
-            <tr>
-                <th class="text-center" style="vertical-align:middle;" rowspan="3">CI / Dados</th>
-                <th class="text-center" colspan="9">Valores Acumulados</th>
-            </tr>
-            <tr>
-                <th class="text-center">Volume<br>Vendido</th>
-                <th class="text-center">Média<br>Venda</th>
-                <th class="text-center" style="vertical-align:middle;" colspan="5">Facturação</th>
-                <th class="text-center">Resultado Mediante<br>Facturação</th>
-                <th class="text-center"  style="vertical-align:middle;">CI.F</th>
-            </tr>
-            <tr>
-                <th class="text-center">m3</th>
-                <th class="text-center">USD/m3</th>
-                <th class="text-center">Interna</th>
-                <th class="text-center">%</th>
-                <th class="text-center">Externa</th>
-                <th class="text-center">%</th>
-                <th class="text-center">Total</th>
-                <th class="text-center">Mensal</th>
-                <th class="text-center">Mensal</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th class="text-center">TOTAIS</th>
-                <th class="text-center">{{ rodapeVolumeVendidoAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeMediaVendaAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeFIAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapePercentagemFIAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeFEAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapePercentagemFEAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeTotalAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeResultadoAcumulado|number_format(0,","," ") }}</th>
-                <th class="text-center">{{ rodapeCIFAcumulado|number_format(1,","," ") }}</th>
-            </tr>
-        </tfoot>
-        <tbody>
-            {% for ci,value in cisRelatorioMensal %}
                 <tr>
-                    <td class="text-center">{{ ci }}</td>
-                    <td class="text-center">{{ volumeVendidoAcumulado[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ mediaAcumulada[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ somaFIAcumulado[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ percentagemAcumuladaFI[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ somaFEAcumulado[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ percentagemAcumuladaFE[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ totalFornecimentoAcumulado[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ resultadoFacturacaoAcumulado[ci]|number_format(0,","," ") }}</td>
-                    <td class="text-center">{{ CIFacturacaoAcumulado[ci]|number_format(1,","," ") }}</td>
+                    <th class="text-center">Volume<br>Vendido</th>
+                    <th class="text-center">Média<br>Venda</th>
+                    <th class="text-center" style="vertical-align:middle;" colspan="5">Facturação</th>
+                    <th class="text-center">Resultado Mediante<br>Facturação</th>
+                    <th class="text-center" style="vertical-align:middle;">CI.F</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+                <tr>
+                    <th class="text-center">m3</th>
+                    <th class="text-center">USD/m3</th>
+                    <th class="text-center">Interna</th>
+                    <th class="text-center">%</th>
+                    <th class="text-center">Externa</th>
+                    <th class="text-center">%</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">Mensal</th>
+                    <th class="text-center">Mensal</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th class="text-center">TOTAIS</th>
+                    <th class="text-center">{{ rodapeVolumeVendido|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeMediaVenda|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeFI|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapePercentagemFI|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeFE|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapePercentagemFE|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeTotal|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeResultado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeCIF|number_format(1,","," ") }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for ci, value in cisRelatorioMensal %}
+                    <tr>
+                        <td class="text-center">{{ ci }}</td>
+                        <td class="text-center">{{ volumeVendido[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ media[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ somaFI[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ percentagemFI[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ somaFE[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ percentagemFE[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ totalFornecimento[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ resultadoFacturacao[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ CIFacturacao[ci]|number_format(1,","," ") }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-<div id="container" style="width: 80;">
-  <div><h2><span class="label label-primary">Gráfico de {{ title_grafico }}</span></h2></div>
-  <canvas id="myChart" height="200" width="800"></canvas>
-</div>
+    <div class="container">
+        <h3>
+            <strong></strong>Janeiro a
+            {{mes_titulo}}
+            de
+            {{ session.ano }}</h3>
+    </div>
+    <div class="container">
 
-<div id="container" style="width: 80;">
-  <div><h2><span class="label label-primary">Gráfico de Resultado Mediante a Facturação</span></h2></div>
-  <canvas id="myChart2" height="200" width="800"></canvas>
-</div>
+        <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" stylse="width:100%;overflow-x:auto">
+            <thead>
+                <tr>
+                    <th class="text-center" style="vertical-align:middle;" rowspan="3">CI / Dados</th>
+                    <th class="text-center" colspan="9">Valores Acumulados</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Volume<br>Vendido</th>
+                    <th class="text-center">Média<br>Venda</th>
+                    <th class="text-center" style="vertical-align:middle;" colspan="5">Facturação</th>
+                    <th class="text-center">Resultado Mediante<br>Facturação</th>
+                    <th class="text-center" style="vertical-align:middle;">CI.F</th>
+                </tr>
+                <tr>
+                    <th class="text-center">m3</th>
+                    <th class="text-center">USD/m3</th>
+                    <th class="text-center">Interna</th>
+                    <th class="text-center">%</th>
+                    <th class="text-center">Externa</th>
+                    <th class="text-center">%</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">Mensal</th>
+                    <th class="text-center">Mensal</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th class="text-center">TOTAIS</th>
+                    <th class="text-center">{{ rodapeVolumeVendidoAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeMediaVendaAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeFIAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapePercentagemFIAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeFEAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapePercentagemFEAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeTotalAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeResultadoAcumulado|number_format(0,","," ") }}</th>
+                    <th class="text-center">{{ rodapeCIFAcumulado|number_format(1,","," ") }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for ci, value in cisRelatorioMensal %}
+                    <tr>
+                        <td class="text-center">{{ ci }}</td>
+                        <td class="text-center">{{ volumeVendidoAcumulado[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ mediaAcumulada[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ somaFIAcumulado[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ percentagemAcumuladaFI[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ somaFEAcumulado[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ percentagemAcumuladaFE[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ totalFornecimentoAcumulado[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ resultadoFacturacaoAcumulado[ci]|number_format(0,","," ") }}</td>
+                        <td class="text-center">{{ CIFacturacaoAcumulado[ci]|number_format(1,","," ") }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-<script type="text/javascript">
-    var titulo1 = {{ label1|json_encode|raw }}
-    var titulo2 = {{ label2|json_encode|raw }}
-    var titulo3 = {{ label3|json_encode|raw }}
-    var data = {
-        labels : ["Janeiro","Fevereiro","Março",
-                  "Abril","Maio","Junho",
-                  "Julho","Agosto","Setembro",
-                  "Outubro","Novembro","Dezembro"],
-        datasets : [
-            {
-            label : titulo3,
-            backgroundColor : "rgba(244, 66, 107,0.3)",
-            borderColor : "rgba(244, 66, 107,1)",
-            pointBorderColor : "rgba(244, 66, 107,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(244, 66, 107,1)",
-            data : {{ cassossoGraficoCI|json_encode|raw }}
-            },
-            {
-            label : titulo1,
-            backgroundColor : "rgba(95,186,125,0.3)",
-            borderColor : "rgba(95,186,125,1)",
-            pointBorderColor : "rgba(95,186,125,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(95,186,125,1)",
-            data : {{ arimbaGraficoCI|json_encode|raw }}
-            },
-            {
-            label : titulo2,
-            backgroundColor : "rgba(166, 134, 244,0.3)",
-            borderColor : "rgba(166, 134, 244,1)",
-            pointBorderColor : "rgba(166, 134, 244,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(166, 134, 244,1)",
-            data : {{ caraculoGraficoCI|json_encode|raw }}
-            }
+    <div id="container" style="width: 80;">
+        <div>
+            <h2>
+                <span class="label label-primary">Gráfico de
+                    {{ title_grafico }}</span>
+            </h2>
+        </div>
+        <canvas id="myChart" height="200" width="800"></canvas>
+    </div>
 
-        ]
-    }
+    <div id="container" style="width: 80;">
+        <div>
+            <h2>
+                <span class="label label-primary">Gráfico de Resultado Mediante a Facturação</span>
+            </h2>
+        </div>
+        <canvas id="myChart2" height="200" width="800"></canvas>
+    </div>
 
+    <script type="text/javascript">
+        var titulo1 = {{ label1|json_encode|raw }}
+        var titulo2 = {{ label2|json_encode|raw }}
+        var titulo3 = {{ label3|json_encode|raw }}
+        var data = {
+            labels: [
+                "Janeiro",
+                "Fevereiro",
+                "Março",
+                "Abril",
+                "Maio",
+                "Junho",
+                "Julho",
+                "Agosto",
+                "Setembro",
+                "Outubro",
+                "Novembro",
+                "Dezembro"
+            ],
+            datasets: [
+                {
+                    label: titulo3,
+                    backgroundColor: "rgba(244, 66, 107,0.3)",
+                    borderColor: "rgba(244, 66, 107,1)",
+                    pointBorderColor: "rgba(244, 66, 107,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(244, 66, 107,1)",
+                    data: {{ cassossoGraficoCI|json_encode|raw }}
+                }, {
+                    label: titulo1,
+                    backgroundColor: "rgba(95,186,125,0.3)",
+                    borderColor: "rgba(95,186,125,1)",
+                    pointBorderColor: "rgba(95,186,125,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(95,186,125,1)",
+                    data: {{ arimbaGraficoCI|json_encode|raw }}
+                }, {
+                    label: titulo2,
+                    backgroundColor: "rgba(166, 134, 244,0.3)",
+                    borderColor: "rgba(166, 134, 244,1)",
+                    pointBorderColor: "rgba(166, 134, 244,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(166, 134, 244,1)",
+                    data: {{ caraculoGraficoCI|json_encode|raw }}
+                }
 
-
-
-    //Get context with jQuery - using jQuery's .get() method.
-    var ctx = $("#myChart").get(0).getContext("2d");
-    new Chart(ctx, {
-        type:'line',
-        data:data,
-        options:{
-            legend:{
-                position:'bottom'
-            }
+            ]
         }
-    });
 
-</script>
-
-<script type="text/javascript">
-    var titulo1 = {{ label1|json_encode|raw }}
-    var titulo2 = {{ label2|json_encode|raw }}
-    var titulo3 = {{ label3|json_encode|raw }}
-    var data = {
-        labels : ["Janeiro","Fevereiro","Março",
-                  "Abril","Maio","Junho",
-                  "Julho","Agosto","Setembro",
-                  "Outubro","Novembro","Dezembro"],
-        datasets : [
-            {
-            label : titulo3,
-            backgroundColor : "rgba(244, 66, 107,0.3)",
-            borderColor : "rgba(244, 66, 107,1)",
-            pointBorderColor : "rgba(244, 66, 107,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(244, 66, 107,1)",
-            data : {{ cassossoGraficoStock|json_encode|raw }}
-        },
-            {
-            label : titulo1,
-            backgroundColor : "rgba(95,186,125,0.3)",
-            borderColor : "rgba(95,186,125,1)",
-            pointBorderColor : "rgba(95,186,125,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(95,186,125,1)",
-            data : {{ arimbaGraficoStock|json_encode|raw }}
-            },
-            {
-            label : titulo2,
-            backgroundColor : "rgba(166, 134, 244,0.3)",
-            borderColor : "rgba(166, 134, 244,1)",
-            pointBorderColor : "rgba(166, 134, 244,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(166, 134, 244,1)",
-            data : {{ caraculoGraficoStock|json_encode|raw }}
+        //Get context with jQuery - using jQuery's .get() method.
+        var ctx = $("#myChart").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                legend: {
+                    position: 'bottom'
+                }
             }
+        });
+    </script>
 
-        ]
-    }
+    <script type="text/javascript">
+        var titulo1 = {{ label1|json_encode|raw }}
+        var titulo2 = {{ label2|json_encode|raw }}
+        var titulo3 = {{ label3|json_encode|raw }}
+        var data = {
+            labels: [
+                "Janeiro",
+                "Fevereiro",
+                "Março",
+                "Abril",
+                "Maio",
+                "Junho",
+                "Julho",
+                "Agosto",
+                "Setembro",
+                "Outubro",
+                "Novembro",
+                "Dezembro"
+            ],
+            datasets: [
+                {
+                    label: titulo3,
+                    backgroundColor: "rgba(244, 66, 107,0.3)",
+                    borderColor: "rgba(244, 66, 107,1)",
+                    pointBorderColor: "rgba(244, 66, 107,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(244, 66, 107,1)",
+                    data: {{ cassossoGraficoStock|json_encode|raw }}
+                }, {
+                    label: titulo1,
+                    backgroundColor: "rgba(95,186,125,0.3)",
+                    borderColor: "rgba(95,186,125,1)",
+                    pointBorderColor: "rgba(95,186,125,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(95,186,125,1)",
+                    data: {{ arimbaGraficoStock|json_encode|raw }}
+                }, {
+                    label: titulo2,
+                    backgroundColor: "rgba(166, 134, 244,0.3)",
+                    borderColor: "rgba(166, 134, 244,1)",
+                    pointBorderColor: "rgba(166, 134, 244,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(166, 134, 244,1)",
+                    data: {{ caraculoGraficoStock|json_encode|raw }}
+                }
 
-
-
-
-    //Get context with jQuery - using jQuery's .get() method.
-    var ctx = $("#myChart2").get(0).getContext("2d");
-    new Chart(ctx, {
-        type:'line',
-        data:data,
-        options:{
-            legend:{
-                position:'bottom'
-            }
+            ]
         }
-    });
 
-</script>
+        //Get context with jQuery - using jQuery's .get() method.
+        var ctx = $("#myChart2").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+    </script>
 
-<style>
-    td, th {
-        padding-top: 0px !important;
-        padding-bottom: 0px !important;
-    }
-</style>
+    <style>
+        td,
+        th {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
 
+    </style>
 
 {% endblock %}

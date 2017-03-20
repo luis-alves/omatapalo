@@ -1,7 +1,7 @@
 {% extends 'layout.twig' %}
 {% block content %}
 
-<!-- <div class="container-fluid"> -->
+    <!-- <div class="container-fluid"> -->
 
     <table class="items" id="myTdable" width=100%>
         {% if label1 is not defined %}
@@ -10,25 +10,37 @@
                     <div class="colorir">
                         <h2>{{title}}</h2>
                     </div>
-                 </div>
-                 <div class="al_esquerda">
-                     <p ><b>Ano:</b> {{ session.ano }}</p>
-                     <p><b>Empresa:</b> Omatapalo, S.A. </p>
-                 </div>
-                 <div class="al_direita" >
-                     <p><b>Tipo de Recurso Mineral:</b> Agregado britado granitico</p>
-                 </div>
-             </caption>
+                </div>
+                <div class="al_esquerda">
+                    <p >
+                        <b>Ano:</b>
+                        {{ session.ano }}</p>
+                    <p>
+                        <b>Empresa:</b>
+                        Omatapalo, S.A.
+                    </p>
+                </div>
+                <div class="al_direita">
+                    <p>
+                        <b>Tipo de Recurso Mineral:</b>
+                        Agregado britado granitico</p>
+                </div>
+            </caption>
         {% endif %}
         <thead>
             <tr>
                 <th>Mês</th>
                 <th>Local</th>
-                <th class="text-center sum">V. Extraido <br>(m3)</th>
-                <th class="text-center sum">V. Transf. <br>(m3)</th>
-                <th class="text-center sum">V. Comercial. <br>(m3)</th>
-                <th class="text-center">Preço Médio <br>(Akz/m3)</th>
-                <th class="text-center sum">Receita Bruta <br>(Akz)</th>
+                <th class="text-center sum">V. Extraido
+                    <br>(m3)</th>
+                <th class="text-center sum">V. Transf.
+                    <br>(m3)</th>
+                <th class="text-center sum">V. Comercial.
+                    <br>(m3)</th>
+                <th class="text-center">Preço Médio
+                    <br>(Akz/m3)</th>
+                <th class="text-center sum">Receita Bruta
+                    <br>(Akz)</th>
             </tr>
         </thead>
         <tfoot>
@@ -56,12 +68,13 @@
         </tbody>
     </table>
 
+    <style>
+        td,
+        th {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
 
-<style>
-    td, th {
-        padding-top: 0px !important;
-        padding-bottom: 0px !important;
-    }
-</style>
+    </style>
 
 {% endblock %}

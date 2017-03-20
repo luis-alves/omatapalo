@@ -1,221 +1,225 @@
 {% extends 'layout.twig' %}
 {% block content %}
-  <table  class="items" style="overflow-x: hidden;margin-top:auto;">
-    <div><h2><span class="label label-primary">{{ title }}</span></h2></div>
-      <thead>
-        <tr>
-          <th class="text-center" rowspan="2"style="vertical-align:middle;">Agregado</th>
-          <th class="text-center" colspan="3">Janeiro</th>
-          <th class="text-center" colspan="3">Fevereiro</th>
-          <th class="text-center" colspan="3">Março</th>
-          <th class="text-center" colspan="3">Abril</th>
-          <th class="text-center" colspan="3">Maio</th>
-          <th class="text-center" colspan="3">Junho</th>
-          <th class="text-center" colspan="3">Totais</th>
-        </tr>
+    <table class="items" style="overflow-x: hidden;margin-top:auto;">
+        <div>
+            <h2>
+                <span class="label label-primary">{{ title }}</span>
+            </h2>
+        </div>
+        <thead>
+            <tr>
+                <th class="text-center" rowspan="2" style="vertical-align:middle;">Agregado</th>
+                <th class="text-center" colspan="3">Janeiro</th>
+                <th class="text-center" colspan="3">Fevereiro</th>
+                <th class="text-center" colspan="3">Março</th>
+                <th class="text-center" colspan="3">Abril</th>
+                <th class="text-center" colspan="3">Maio</th>
+                <th class="text-center" colspan="3">Junho</th>
+                <th class="text-center" colspan="3">Totais</th>
+            </tr>
 
-        <tr>
-            {% for item in 0..6 %}
-                <th class="text-center sum">Qt</th>
-                <th class="text-center">PU</th>
-                <th class="text-center sum">Total</th>
-            {% endfor %}
-        </tr>
-      </thead>
+            <tr>
+                {% for item in 0..6 %}
+                    <th class="text-center sum">Qt</th>
+                    <th class="text-center">PU</th>
+                    <th class="text-center sum">Total</th>
+                {% endfor %}
+            </tr>
+        </thead>
 
-      <tfoot>
-        <tr>
-          <th class="text-center">Total/ média</th>
-          {% if qtMensal is defined %}
-              {% for item in 1..6 %}
-                  <th class="text-center">{{ qtMensal[loop.index]|number_format(0,",",".") }}</th>
-                  <th class="text-center">{{ media_precos[loop.index]|number_format(2,",",".") }}</th>
-                  <th class="text-center">{{ factMensal[loop.index]|number_format(0,",",".") }}</th>
-              {% endfor %}
-          {% else %}
-              {% for item in 1..6 %}
-                  <th class="text-center"><?= 0 ?></th>
-                  <th class="text-center"><?= 0 ?></th>
-                  <th class="text-center"><?= 0 ?></th>
-              {% endfor %}
-          {% endif %}
-              <th class="text-center">{{ qtTotalAnual|number_format(0,",",".") }}</th>
-              <th class="text-center">{{ mediaAnualRodape|number_format(2,",",".") }}</th>
-              <th class="text-center">{{ factTotalAnual|number_format(0,",",".") }}</th>
-        </tr>
-    </tfoot>
+        <tfoot>
+            <tr>
+                <th class="text-center">Total/ média</th>
+                {% if qtMensal is defined %}
+                    {% for item in 1..6 %}
+                        <th class="text-center">{{ qtMensal[loop.index]|number_format(0,",",".") }}</th>
+                        <th class="text-center">{{ media_precos[loop.index]|number_format(2,",",".") }}</th>
+                        <th class="text-center">{{ factMensal[loop.index]|number_format(0,",",".") }}</th>
+                    {% endfor %}
+                {% else %}
+                    {% for item in 1..6 %}
+                        <th class="text-center"><?= 0 ?></th>
+                        <th class="text-center"><?= 0 ?></th>
+                        <th class="text-center"><?= 0 ?></th>
+                    {% endfor %}
+                {% endif %}
+                <th class="text-center">{{ qtTotalAnual|number_format(0,",",".") }}</th>
+                <th class="text-center">{{ mediaAnualRodape|number_format(2,",",".") }}</th>
+                <th class="text-center">{{ factTotalAnual|number_format(0,",",".") }}</th>
+            </tr>
+        </tfoot>
 
-    <tbody>
-      {% if agrCorrectos is defined %}
-          {% for key,value in agrCorrectos %}
-              <tr>
-                  <td class="text-center">{{ key }}</td>
-                  {% for item in 1..6 %}
-                      <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,",",".") }}</td>
-                      <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
-                      <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,",",".") }}</td>
-                  {% endfor %}
-                  <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,",",".") }}</td>
-                  <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
-                  <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,",",".") }}</td>
-              </tr>
-          {% endfor %}
-      {% endif %}
-    </tbody>
-  </table>
+        <tbody>
+            {% if agrCorrectos is defined %}
+                {% for key, value in agrCorrectos %}
+                    <tr>
+                        <td class="text-center">{{ key }}</td>
+                        {% for item in 1..6 %}
+                            <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,",",".") }}</td>
+                            <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
+                            <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,",",".") }}</td>
+                        {% endfor %}
+                        <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,",",".") }}</td>
+                        <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
+                        <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,",",".") }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
 
-  <table  class="items" style="overflow-x: hidden;margin-top:auto;">
-      <thead>
-        <tr>
-          <th class="text-center" rowspan="2"style="vertical-align:middle;">Agregado</th>
-          <th class="text-center" colspan="3">Julho</th>
-          <th class="text-center" colspan="3">Agosto</th>
-          <th class="text-center" colspan="3">Setembro</th>
-          <th class="text-center" colspan="3">Outubro</th>
-          <th class="text-center" colspan="3">Novembro</th>
-          <th class="text-center" colspan="3">Dezembro</th>
-          <th class="text-center" colspan="3">Totais</th>
-        </tr>
+    <table class="items" style="overflow-x: hidden;margin-top:auto;">
+        <thead>
+            <tr>
+                <th class="text-center" rowspan="2" style="vertical-align:middle;">Agregado</th>
+                <th class="text-center" colspan="3">Julho</th>
+                <th class="text-center" colspan="3">Agosto</th>
+                <th class="text-center" colspan="3">Setembro</th>
+                <th class="text-center" colspan="3">Outubro</th>
+                <th class="text-center" colspan="3">Novembro</th>
+                <th class="text-center" colspan="3">Dezembro</th>
+                <th class="text-center" colspan="3">Totais</th>
+            </tr>
 
-        <tr>
-            {% for item in 6..12 %}
-                <th class="text-center sum">Qt</th>
-                <th class="text-center">PU</th>
-                <th class="text-center sum">Total</th>
-            {% endfor %}
-        </tr>
-      </thead>
+            <tr>
+                {% for item in 6..12 %}
+                    <th class="text-center sum">Qt</th>
+                    <th class="text-center">PU</th>
+                    <th class="text-center sum">Total</th>
+                {% endfor %}
+            </tr>
+        </thead>
 
-      <tfoot>
-        <tr>
-          <th class="text-center">Total/ média</th>
-          {% if qtMensal is defined %}
-              {% for item in 7..12 %}
-                  <th class="text-center">{{ qtMensal[loop.index]|number_format(0,",",".") }}</th>
-                  <th class="text-center">{{ media_precos[loop.index]|number_format(2,",",".") }}</th>
-                  <th class="text-center">{{ factMensal[loop.index]|number_format(0,",",".") }}</th>
-              {% endfor %}
-          {% else %}
-              {% for item in 7..12 %}
-                  <th class="text-center"><?= 0 ?></th>
-                  <th class="text-center"><?= 0 ?></th>
-                  <th class="text-center"><?= 0 ?></th>
-              {% endfor %}
-          {% endif %}
-              <th class="text-center">{{ qtTotalAnual|number_format(0,",",".") }}</th>
-              <th class="text-center">{{ mediaAnualRodape|number_format(2,",",".") }}</th>
-              <th class="text-center">{{ factTotalAnual|number_format(0,",",".") }}</th>
-        </tr>
-    </tfoot>
+        <tfoot>
+            <tr>
+                <th class="text-center">Total/ média</th>
+                {% if qtMensal is defined %}
+                    {% for item in 7..12 %}
+                        <th class="text-center">{{ qtMensal[loop.index]|number_format(0,",",".") }}</th>
+                        <th class="text-center">{{ media_precos[loop.index]|number_format(2,",",".") }}</th>
+                        <th class="text-center">{{ factMensal[loop.index]|number_format(0,",",".") }}</th>
+                    {% endfor %}
+                {% else %}
+                    {% for item in 7..12 %}
+                        <th class="text-center"><?= 0 ?></th>
+                        <th class="text-center"><?= 0 ?></th>
+                        <th class="text-center"><?= 0 ?></th>
+                    {% endfor %}
+                {% endif %}
+                <th class="text-center">{{ qtTotalAnual|number_format(0,",",".") }}</th>
+                <th class="text-center">{{ mediaAnualRodape|number_format(2,",",".") }}</th>
+                <th class="text-center">{{ factTotalAnual|number_format(0,",",".") }}</th>
+            </tr>
+        </tfoot>
 
-    <tbody>
-      {% if agrCorrectos is defined %}
-          {% for key,value in agrCorrectos %}
-              <tr>
-                  <td class="text-center">{{ key }}</td>
-                  {% for item in 7..12 %}
-                      <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,",",".") }}</td>
-                      <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
-                      <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,",",".") }}</td>
-                  {% endfor %}
-                  <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,",",".") }}</td>
-                  <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
-                  <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,",",".") }}</td>
-              </tr>
-          {% endfor %}
-      {% endif %}
-    </tbody>
-  </table>
+        <tbody>
+            {% if agrCorrectos is defined %}
+                {% for key, value in agrCorrectos %}
+                    <tr>
+                        <td class="text-center">{{ key }}</td>
+                        {% for item in 7..12 %}
+                            <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,",",".") }}</td>
+                            <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
+                            <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,",",".") }}</td>
+                        {% endfor %}
+                        <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,",",".") }}</td>
+                        <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
+                        <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,",",".") }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
 
-  <div id="container">
-    <div><h2><span class="label label-primary">GRÁFICO DO {{ title }} - Anual</span></h2></div>
-    <div id="maximo">
-        <canvas id="myChart" height="400" width="1366"></canvas>
+    <div id="container">
+        <div>
+            <h2>
+                <span class="label label-primary">GRÁFICO DO
+                    {{ title }}
+                    - Anual</span>
+            </h2>
+        </div>
+        <div id="maximo">
+            <canvas id="myChart" height="400" width="1366"></canvas>
+        </div>
     </div>
-  </div>
 
+    <style media="screen">
 
-<style media="screen">
-
-    @media (max-width:1366px) {
-        td {
-            padding-left: 6px !important;
-            padding-right: 6px !important;
-        }
-    }
-
-    @media (max-width:1024px) {
-        #conteudo {
-            font-size: 0.94em !important;
-        }
-
-        #maximo {
-            max-width:1024px;
-            max-height:400px;
-        }
-
-        th, td {
-            padding-left: 2px !important;
-            padding-right: 2px !important;
-            padding-top: 1px !important;
-            padding-bottom: 1px !important;
-        }
-    }
-
-</style>
-
-
-
-
-<script type="text/javascript">
-    var titulo1 = {{ label1|json_encode|raw }}
-    var titulo2 = {{ label2|json_encode|raw }}
-    var data = {
-        labels : ["Janeiro","Fevereiro","Março",
-                  "Abril","Maio","Junho",
-                  "Julho","Agosto","Setembro",
-                  "Outubro","Novembro","Dezembro"],
-        datasets : [
-            {
-            label : titulo1,
-            backgroundColor : "rgba(95,186,125,0.3)",
-            borderColor : "rgba(95,186,125,1)",
-            pointBorderColor : "rgba(95,186,125,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(95,186,125,1)",
-            data : {{ qtMensalGrafico|json_encode|raw }}
-            },
-            {
-            label : titulo2,
-            backgroundColor : "rgba(252,233,79,0.3)",
-            borderColor : "rgba(82,75,25,1)",
-            pointBorderColor : "rgba(166,152,51,1)",
-            pointBackgroundColor : "#fff",
-            pointHoverBackgroundColor: "rgba(252,233,79,1)",
-            data : {{ factMensalGrafico|json_encode|raw }}
+        @media (max-width:1366px) {
+            td {
+                padding-left: 6px !important;
+                padding-right: 6px !important;
             }
-        ]
-    }
-
-    //Get context with jQuery - using jQuery's .get() method.
-    var ctx = $("#myChart").get(0).getContext("2d");
-    new Chart(ctx,{
-            type:'line',
-            data:data,
-            options:{
-                legend:{
-                    position:'bottom'
-                },
-
+        }
+        @media (max-width:1024px) {
+            #conteudo {
+                font-size: 0.94em !important;
             }
-    });
 
+            #maximo {
+                max-width: 1024px;
+                max-height: 400px;
+            }
 
+            td,
+            th {
+                padding: 1px 2px !important;
+            }
+        }
 
+    </style>
 
-</script>
+    <script type="text/javascript">
+        var titulo1 = {{ label1|json_encode|raw }}
+        var titulo2 = {{ label2|json_encode|raw }}
+        var data = {
+            labels: [
+                "Janeiro",
+                "Fevereiro",
+                "Março",
+                "Abril",
+                "Maio",
+                "Junho",
+                "Julho",
+                "Agosto",
+                "Setembro",
+                "Outubro",
+                "Novembro",
+                "Dezembro"
+            ],
+            datasets: [
+                {
+                    label: titulo1,
+                    backgroundColor: "rgba(95,186,125,0.3)",
+                    borderColor: "rgba(95,186,125,1)",
+                    pointBorderColor: "rgba(95,186,125,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(95,186,125,1)",
+                    data: {{ qtMensalGrafico|json_encode|raw }}
+                }, {
+                    label: titulo2,
+                    backgroundColor: "rgba(252,233,79,0.3)",
+                    borderColor: "rgba(82,75,25,1)",
+                    pointBorderColor: "rgba(166,152,51,1)",
+                    pointBackgroundColor: "#fff",
+                    pointHoverBackgroundColor: "rgba(252,233,79,1)",
+                    data: {{ factMensalGrafico|json_encode|raw }}
+                }
+            ]
+        }
 
-
-
+        //Get context with jQuery - using jQuery's .get() method.
+        var ctx = $("#myChart").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+    </script>
 
 {% endblock %}

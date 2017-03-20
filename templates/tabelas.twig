@@ -1,178 +1,177 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-<br><br>
-<div id="accordion" role="tablist" aria-multiselectable="true" class="centrar">
-  <div class="card">
-    <div class="card-header" role="tab" id="headingOne">
-      <h5 class="mb-0">
-          <p>
-            <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#precos" aria-expanded="true" aria-controls="precos">
-                Preços Venda Interna
-            </a>
-          </p>
-      </h5>
-    </div>
-  </div>
-
-  <div id="precos" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-    <div class="card-block">
-
-      <div class="card">
-        <div class="card-header" role="tab" id="headingOne">
-          <h5 class="mb-0">
-            <p>
-              <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#FaixasEtarias" aria-expanded="true" aria-controls="FaixasEtarias">
-                  Preço em Toneladas
-              </a>
-            </p>
-          </h5>
-        </div>
-        <div class="centrar" style="width:35em;">
-          <div id="FaixasEtarias" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-            <div class="card-block">
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/internos/toneladas/aoa" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em AOA</button>
-                </form>
-                <br>
-              </div>
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/internos/toneladas/usd" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em USD</button>
-                </form>
-              </div>
+    <br><br>
+    <div id="accordion" role="tablist" aria-multiselectable="true" class="centrar">
+        <div class="card">
+            <div class="card-header" role="tab" id="headingOne">
+                <h5 class="mb-0">
+                    <p>
+                        <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#precos" aria-expanded="true" aria-controls="precos">
+                            Preços Venda Interna
+                        </a>
+                    </p>
+                </h5>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header" role="tab" id="headingOne">
-          <h5 class="mb-0">
-            <p>
-              <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#FaixasEtarias2" aria-expanded="true" aria-controls="FaixasEtarias">
-                Preço em m3
-              </a>
-           </p>
-          </h5>
-        </div>
-        <div class="centrar" style="width:35em;">
-          <div id="FaixasEtarias2" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+
+        <div id="precos" class="collapse" role="tabpanel" aria-labelledby="headingOne">
             <div class="card-block">
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/internos/m3/aoa" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em AOA</button>
-              </form><br>
-              </div>
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/internos/m3/aoa" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em USD</button>
-                </form>
-              </div>
+
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingOne">
+                        <h5 class="mb-0">
+                            <p>
+                                <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#FaixasEtarias" aria-expanded="true" aria-controls="FaixasEtarias">
+                                    Preço em Toneladas
+                                </a>
+                            </p>
+                        </h5>
+                    </div>
+                    <div class="centrar" style="width:35em;">
+                        <div id="FaixasEtarias" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="card-block">
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/internos/toneladas/aoa" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em AOA</button>
+                                    </form>
+                                    <br>
+                                </div>
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/internos/toneladas/usd" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em USD</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingOne">
+                        <h5 class="mb-0">
+                            <p>
+                                <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#FaixasEtarias2" aria-expanded="true" aria-controls="FaixasEtarias">
+                                    Preço em m3
+                                </a>
+                            </p>
+                        </h5>
+                    </div>
+                    <div class="centrar" style="width:35em;">
+                        <div id="FaixasEtarias2" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="card-block">
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/internos/m3/aoa" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em AOA</button>
+                                    </form><br>
+                                </div>
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/internos/m3/aoa" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em USD</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="card">
-    <div class="card-header" role="tab" id="headingThree">
-      <h5 class="mb-0">
-          <p>
-            <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#externa" aria-expanded="true" aria-controls="externa">
-                Preços Venda Externa
-            </a>
-          </p>
-      </h5>
-    </div>
-  </div>
-
-  <div id="externa" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-    <div class="card-block">
-
-      <div class="card">
-        <div class="card-header" role="tab" id="headingThree">
-          <h5 class="mb-0">
-            <p>
-              <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#externa2" aria-expanded="true" aria-controls="externa">
-                  Preço em Toneladas
-              </a>
-            </p>
-          </h5>
+        <div class="card">
+            <div class="card-header" role="tab" id="headingThree">
+                <h5 class="mb-0">
+                    <p>
+                        <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#externa" aria-expanded="true" aria-controls="externa">
+                            Preços Venda Externa
+                        </a>
+                    </p>
+                </h5>
+            </div>
         </div>
-        <div class="centrar" style="width:35em;">
-          <div id="externa2" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+
+        <div id="externa" class="collapse" role="tabpanel" aria-labelledby="headingThree">
             <div class="card-block">
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/externos/toneladas/aoa" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em AOA</button>
-                </form>
-                <br>
-              </div>
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/externos/toneladas/usd" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em USD</button>
-                </form>
-              </div>
+
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingThree">
+                        <h5 class="mb-0">
+                            <p>
+                                <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#externa2" aria-expanded="true" aria-controls="externa">
+                                    Preço em Toneladas
+                                </a>
+                            </p>
+                        </h5>
+                    </div>
+                    <div class="centrar" style="width:35em;">
+                        <div id="externa2" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="card-block">
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/externos/toneladas/aoa" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em AOA</button>
+                                    </form>
+                                    <br>
+                                </div>
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/externos/toneladas/usd" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preço em USD</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingThree">
+                        <h5 class="mb-0">
+                            <p>
+                                <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#externa3" aria-expanded="true" aria-controls="externa">
+                                    Preço em m3
+                                </a>
+                            </p>
+                        </h5>
+                    </div>
+                    <div class="centrar" style="width:35em;">
+                        <div id="externa3" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="card-block">
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/externos/m3/aoa" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em AOA</button>
+                                    </form><br>
+                                </div>
+                                <div class="" style="float: left;">
+                                    <form action="/omatapalo_v3/tabelas/precos/externos/m3/aoa" method="post">
+                                        <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em USD</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header" role="tab" id="headingThree">
-          <h5 class="mb-0">
-            <p>
-              <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#externa3" aria-expanded="true" aria-controls="externa">
-                Preço em m3
-              </a>
-           </p>
-          </h5>
-        </div>
-        <div class="centrar" style="width:35em;">
-          <div id="externa3" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-            <div class="card-block">
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/externos/m3/aoa" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em AOA</button>
-              </form><br>
-              </div>
-              <div class="" style="float: left;">
-                <form action="/omatapalo_v3/tabelas/precos/externos/m3/aoa" method="post">
-                  <button class="btn btn-default" type="submit" name="button" style="width:35em">Preços em USD</button>
-                </form>
-              </div>
+
+        <div class="card">
+            <div class="card-header" role="tab" id="headingTwo">
+                <h5 class="mb-0">
+                    <p >
+                        <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#balanca" aria-expanded="true" aria-controls="balanca">
+                            Balança
+                        </a>
+                    </p>
+                </h5>
             </div>
-          </div>
+            <div id="balanca" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="card-block">
+                    <form action="/omatapalo_v3/tabelas/balanca" method="post">
+                        <button class="btn btn-default" style="width:35em" ; type="submit" name="button">Volume de fornecimento com preços de venda</button>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
+
     </div>
-  </div>
 
-
-  <div class="card">
-    <div class="card-header" role="tab" id="headingTwo">
-      <h5 class="mb-0">
-        <p >
-          <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#balanca" aria-expanded="true" aria-controls="balanca">
-            Balança
-          </a>
-        </p>
-      </h5>
+    <br>
+    <div class="container">
+        <img src="public/img/panoramica.svg" alt="linha Metso" style="width:100%">
     </div>
-    <div id="balanca" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="card-block">
-        <form action="/omatapalo_v3/tabelas/balanca" method="post">
-          <button class="btn btn-default" style="width:35em"; type="submit" name="button">Volume de fornecimento com preços de venda</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<br>
-<div class="container">
-    <img src="public/img/panoramica.svg" alt="linha Metso" style="width:100%">
-</div>
 {% endblock %}

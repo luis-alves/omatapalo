@@ -2,130 +2,154 @@
 
 {% block content %}
 
-{% if erro == null %}
+    {% if erro == null %}
 
-<div class="container" style="margin-top:20px">
+        <div class="container" style="margin-top:20px">
 
-    <img id="image" style="width:125px;float:right;block:in-line" src="/omatapalo_v3/public/img/oma.svg" alt="logo">
+            <img id="image" style="width:125px;float:right;block:in-line" src="/omatapalo_v3/public/img/oma.svg" alt="logo">
 
+            <!-- <div class="leftFloat"> -->
+            <h3 style="text-align:center">NOTA DE DÉBITO INTERNO
+                <br>
+                MENSAL</h3>
+            <h4 style="text-align:center">Centro de Britagem de
+                {{cAnalitico}}</h4>
+            <!-- </div> -->
 
-        <!-- <div class="leftFloat"> -->
-    <h3 style="text-align:center">NOTA DE DÉBITO INTERNO <br> MENSAL</h3>
-    <h4  style="text-align:center">Centro de Britagem de {{cAnalitico}}</h4>
-        <!-- </div> -->
+            <div class=" cabecalho" style="margin-top:50px;">
+                <table table class="tablee" id="myTablee" style="width:100%;overflow-x:auto">
+                    <tbody>
+                        <tr style="">
+                            <td class="cab1" style="width:10%;background-color:lightgrey;padding:5px;text-align:center;">
+                                <b>Data emissão:</b>
+                            </td>
+                            <td style="width:0.4%;"></td>
+                            <td class="cab1" style="width:10%;background-color:lightgrey;text-align:center;">{{'now'|date('d/m/Y')}}</td>
+                            <td class="" style="width:55%;" colspan="3"></td>
+                            <td class="cab1" style="width:4%;background-color:lightgrey;text-align:center;">
+                                <b>N.º:</b>
+                            </td>
+                            <td style="width:0.4%;"></td>
+                            <td class="cab1" style="width:20%;background-color:lightgrey;text-align:center;">{{ cindus }}.{{ mes }}/{{ obra }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="" style="margin-top:5px;">
+                <table table class="tablee" id="myTablee" style="width:100%;">
+                    <tbody>
+                        <tr>
+                            <td class="cab3" style="width:10%;background-color:lightgrey;padding:5px;text-align:center;">Origem</td>
+                            <td style="width:0.4%;"></td>
+                            <td class="cab2" style="width:15%;background-color:lightgrey;text-align:center;">
+                                <b>N.º Centro Analítico:</b>
+                            </td>
+                            <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;">{{ cindus }}</td>
+                            <td style="width:0.4%;"></td>
+                            <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;">
+                                <b>Designação:</b>
+                            </td>
+                            <td class="cab2" style="width:54.2%;background-color:lightgrey;padding-left:5px;">Centro de Britagem de
+                                {{ cAnalitico }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <div class=" cabecalho" style="margin-top:50px;">
-        <table table class="tablee" id="myTablee" style="width:100%;overflow-x:auto">
-            <tbody>
-                <tr style="">
-                    <td class="cab1" style="width:10%;background-color:lightgrey;padding:5px;text-align:center;"><b>Data emissão:</b></td>
-                    <td style="width:0.4%;"></td>
-                    <td class="cab1"  style="width:10%;background-color:lightgrey;text-align:center;">{{'now'|date('d/m/Y')}}</td>
-                    <td class=""  style="width:55%;" colspan="3"></td>
-                    <td class="cab1"  style="width:4%;background-color:lightgrey;text-align:center;"><b>N.º:</b></td>
-                    <td style="width:0.4%;"></td>
-                    <td class="cab1" style="width:20%;background-color:lightgrey;text-align:center;">{{ cindus }}.{{ mes }}/{{ obra }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="" style="margin-top:5px;">
-        <table table class="tablee" id="myTablee" style="width:100%;">
-            <tbody>
-                <tr>
-                    <td class="cab3" style="width:10%;background-color:lightgrey;padding:5px;text-align:center;">Origem</td>
-                    <td style="width:0.4%;"></td>
-                    <td class="cab2" style="width:15%;background-color:lightgrey;text-align:center;"><b>N.º Centro Analítico:</b></td>
-                    <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;">{{ cindus }}</td>
-                    <td style="width:0.4%;"></td>
-                    <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;"><b>Designação:</b></td>
-                    <td  class="cab2" style="width:54.2%;background-color:lightgrey;padding-left:5px;">Centro de Britagem de {{ cAnalitico }} </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <div class="" style="margin-top:5px;">
+                <table table class="tablee" id="myTablee" style="width:100%">
+                    <tbody>
+                        <tr style="margin-top:10px">
+                            <td class="cab3" style="width:10%;background-color:lightgrey;padding:5px;text-align:center;">Cliente</td>
+                            <td style="width:0.4%;"></td>
+                            <td class="cab2" style="width:15%;background-color:lightgrey;text-align:center;">
+                                <b>N.º Centro de Custo:</b>
+                            </td>
+                            <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;">{{ obra }}</td>
+                            <td style="width:0.4%;"></td>
+                            <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;">
+                                <b>Designação:</b>
+                            </td>
+                            <td class="cab2" style="width:54.2%;background-color:lightgrey;;padding-left:5px;">{{ nomeObra }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <div class="" style="margin-top:5px;">
-        <table table class="tablee" id="myTablee" style="width:100%">
-            <tbody>
-                <tr style="margin-top:10px">
-                    <td class="cab3" style="width:10%;background-color:lightgrey;padding:5px;text-align:center;">Cliente</td>
-                    <td style="width:0.4%;"></td>
-                    <td class="cab2" style="width:15%;background-color:lightgrey;text-align:center;"><b>N.º Centro de Custo:</b></td>
-                    <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;">{{ obra }}</td>
-                    <td style="width:0.4%;"></td>
-                    <td class="cab2" style="width:10%;background-color:lightgrey;text-align:center;"><b>Designação:</b></td>
-                    <td  class="cab2" style="width:54.2%;background-color:lightgrey;;padding-left:5px;">{{ nomeObra }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <div class="" style="margin-top:7px;">
+                <table class="tableCabecalho3" style="width:100%">
+                    <tbody>
+                        <tr style="background-color:lightblue;">
+                            <td class="cab3" style="text-align:right;" width=85% colspan="5">
+                                <b>Periodo Facturação:&nbsp
+                                </b>
+                            </td>
+                            <td class="cab3" style="text-align:left;" width=15% colspan="2">1/{{ mes }}/{{ ano_ndim }}
+                                a
+                                {{ numeroDiasMes }}/{{ mes }}/{{ ano_ndim }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <div class="" style="margin-top:7px;">
-        <table class="tableCabecalho3" style="width:100%">
-            <tbody>
-                <tr style="background-color:lightblue;">
-                    <td class="cab3" style="text-align:right;" width=85% colspan="5"><b>Periodo Facturação:&nbsp </b></td>
-                    <td class="cab3" style="text-align:left;" width=15% colspan="2">1/{{ mes }}/{{ ano_ndim }} a {{ numeroDiasMes }}/{{ mes }}/{{ ano_ndim }} </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <div class="cabecalho" style="margin-top:7px;">
+                <table class="tableCorpo1" style="width:100%" border="1px solid black">
+                    <thead>
+                        <tr>
+                            <th class="cor1" style="width:50%;background-color:darkgrey;padding-left:5px;color:white">Designação</th>
+                            <th class="cor1" style="width:10%;text-align:center;background-color:darkgrey;color:white">Un.</th>
+                            <th class="cor1" style="width:10%;text-align:center;background-color:darkgrey;color:white">QT.</th>
+                            <th class="cor1" style="width:15%;text-align:center;background-color:darkgrey;color:white">V. Unitário (Akz)</th>
+                            <th class="cor1" style="width:15%;text-align:center;background-color:darkgrey;color:white">Valor total (Akz)</th>
+                        </tr>
+                    </thead>
 
-    <div class="cabecalho" style="margin-top:7px;">
-        <table class="tableCorpo1" style="width:100%" border="1px solid black">
-            <thead>
-                <tr>
-                    <th class="cor1" style="width:50%;background-color:darkgrey;padding-left:5px;color:white">Designação</th>
-                    <th class="cor1" style="width:10%;text-align:center;background-color:darkgrey;color:white">Un.</th>
-                    <th class="cor1" style="width:10%;text-align:center;background-color:darkgrey;color:white">QT.</th>
-                    <th class="cor1" style="width:15%;text-align:center;background-color:darkgrey;color:white">V. Unitário (Akz)</th>
-                    <th class="cor1" style="width:15%;text-align:center;background-color:darkgrey;color:white">Valor total (Akz)</th>
-                </tr>
-            </thead>
+                    <tbody>
 
-            <tbody>
+                        {% for i in 0..quantBritas - 1 %}
+                            <tr>
+                                <td class="cor2" style="width:50%;padding-left:5px;">{{ britas[i]['nomeBrita'] }}</td>
+                                <td class="cor2" style="width:10%;text-align:center;">m3</td>
+                                <td class="cor2" style="width:10%;text-align:center;">{{ britas[i]['m3']|number_format(0,","," ") }}</td>
+                                <td class="cor2" style="width:15%;text-align:center;">{{ britas[i]['pu']|number_format(0,","," ") }}</td>
+                                <td class="cor2" style="width:15%;text-align:center;">{{ britas[i]['total']|number_format(2,","," ") }}</td>
+                            </tr>
+                        {% endfor %}
 
-                {% for i in 0..quantBritas-1 %}
-                <tr>
-                    <td class="cor2" style="width:50%;padding-left:5px;">{{ britas[i]['nomeBrita'] }}</td>
-                    <td class="cor2" style="width:10%;text-align:center;">m3</td>
-                    <td class="cor2" style="width:10%;text-align:center;">{{ britas[i]['m3']|number_format(0,","," ") }}</td>
-                    <td class="cor2" style="width:15%;text-align:center;">{{ britas[i]['pu']|number_format(0,","," ") }}</td>
-                    <td class="cor2" style="width:15%;text-align:center;">{{ britas[i]['total']|number_format(2,","," ") }}</td>
-                </tr>
-                {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td style="width:70%;background-color:lightgrey;" colspan="3"></td>
+                            <td class="cor3" style="width:15%;text-align:right;background-color:lightgrey;text-align:center;">
+                                <b>Total (Akz):</b>
+                            </td>
+                            <td class="cor3" style="width:15%;background-color:lightgrey;text-align:center;">{{ totalBritas|number_format(2,","," ") }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="" style="margin-top:20px">
+            <form action="/omatapalo_v3/mapas/geral/ndim/imprimir" method="post">
+                <button name="printit" type="submit" value="{{print}},{{mes}},{{cAnalitico}},{{cindus}},{{obra}},{{nomeObra}},{{numeroDiasMes}},{{ano_ndim}},{{britas}},{{quantBritas}}">Imprimir</button>
+            </form>
+        </div>
 
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td style="width:70%;background-color:lightgrey;" colspan="3"></td>
-                    <td class="cor3" style="width:15%;text-align:right;background-color:lightgrey;text-align:center;"><b>Total (Akz):</b></td>
-                    <td class="cor3" style="width:15%;background-color:lightgrey;text-align:center;">{{ totalBritas|number_format(2,","," ") }}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-</div>
-<div class="" style="margin-top:20px">
-    <form action="/omatapalo_v3/mapas/geral/ndim/imprimir" method="post">
-        <button name="printit" type="submit" value="{{print}},{{mes}},{{cAnalitico}},{{cindus}},{{obra}},{{nomeObra}},{{numeroDiasMes}},{{ano_ndim}},{{britas}},{{quantBritas}}">Imprimir</button>
-    </form>
-</div>
+    {% else %}
 
-{% else %}
+        <div class="container" style="margin-top:100px">
 
-<div class="container" style="margin-top:100px">
-
-    <div class="alert alert-danger" role="alert" style="width:15.5em;
+            <div class="alert alert-danger" role="alert" style="width:15.5em;
     display:block;margin-left:auto;margin-right:auto;">
-    <h4 style="text-align:center;">Sem dados</h4><br>
-                                    <p style="text-align:center">Retornar a
-    <a href="/omatapalo_v3/mapas" class="alert-link">Mapas</a></p></div>
-</div>
+                <h4 style="text-align:center;">Sem dados</h4><br>
+                <p style="text-align:center">Retornar a
+                    <a href="/omatapalo_v3/mapas" class="alert-link">Mapas</a>
+                </p>
+            </div>
+        </div>
 
-{% endif %}
-
-
+    {% endif %}
 
 {% endblock %}

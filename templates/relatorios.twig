@@ -1,696 +1,697 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-<br>
-<!-- Primeiro botão sumário -->
-<div id="accordion" role="tablist" aria-multiselectable="true" class="centrar">
-  <div class="card">
-    <div class="card-header" role="tab" id="headingOne">
-      <h5 class="mb-0">
-          <p>
-            <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#DR" aria-expanded="true" aria-controls="DPGMI">
-                Demonstração de Resultados
-            </a>
-          </p>
-      </h5>
-    </div>
-    <!-- Butões internos -->
-    <div id="DR" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="card-block">
-        <form action="/omatapalo_v3/relatorios/dresultados" method="post">
-          <button class="btn btn-success" style="width:35em;" type="submit" name="button">Demonstração de Resultados</button>
-        </form><br>
-        <form action="/omatapalo_v3/relatorios/dresultados/rejeitado" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Facturação</button>
-        </form> <br>
-        <form action="/omatapalo_v3/relatorios/dresultados/oferecido" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Produção</button>
-        </form><br>
-        <form action="/omatapalo_v3/relatorios/dresultados/acertos" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Matérias Primas</button>
-        </form><br>
-        <form action="/omatapalo_v3/relatorios/dresultados/fornexternoseco" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Materiais</button>
-        </form><br>
-        <form action="/omatapalo_v3/relatorios/dresultados/fornexternovenda" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Equipamento e Transporte</button>
-        </form><br>
-        <form action="/omatapalo_v3_v3/relatorios/dresultados/producao" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Pessoal</button>
-        </form><br>
-        <form action="/omatapalo_v3_v3/relatorios/dresultados/entradas" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">F.S.E.</button>
-        </form><br>
-        <form action="/omatapalo_v3_v3/relatorios/dresultados/entradastock" method="post">
-          <button class="btn btn-default" style="width:35em;" type="submit" name="button">Outros Custos</button>
-        </form><br>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header" role="tab" id="headingTwo">
-      <h5 class="mb-0">
-        <p >
-          <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#RPF" aria-expanded="true" aria-controls="PPIAM">
-            Relatório Mensal de Produção e Fornecimento
-          </a>
-        </p>
-      </h5>
-    </div>
-    <div id="RPF" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="card-block">
+    <br>
+    <!-- Primeiro botão sumário -->
+    <div id="accordion" role="tablist" aria-multiselectable="true" class="centrar">
         <div class="card">
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Janeiro" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Janeiro
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Janeiro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/1" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/1" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/1" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/1" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/1" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/1" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/1" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
+            <div class="card-header" role="tab" id="headingOne">
+                <h5 class="mb-0">
+                    <p>
+                        <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#DR" aria-expanded="true" aria-controls="DPGMI">
+                            Demonstração de Resultados
+                        </a>
+                    </p>
+                </h5>
             </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Fevereiro" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Fevereiro
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Fevereiro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+            <!-- Butões internos -->
+            <div id="DR" class="collapse" role="tabpanel" aria-labelledby="headingOne">
                 <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/2" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                    <form action="/omatapalo_v3/relatorios/dresultados" method="post">
+                        <button class="btn btn-success" style="width:35em;" type="submit" name="button">Demonstração de Resultados</button>
+                    </form><br>
+                    <form action="/omatapalo_v3/relatorios/dresultados/rejeitado" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">Facturação</button>
                     </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/2" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/2" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/2" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/2" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/2" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/2" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
+                    <br>
+                    <form action="/omatapalo_v3/relatorios/dresultados/oferecido" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">Produção</button>
+                    </form><br>
+                    <form action="/omatapalo_v3/relatorios/dresultados/acertos" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">Matérias Primas</button>
+                    </form><br>
+                    <form action="/omatapalo_v3/relatorios/dresultados/fornexternoseco" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">Materiais</button>
+                    </form><br>
+                    <form action="/omatapalo_v3/relatorios/dresultados/fornexternovenda" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">Equipamento e Transporte</button>
+                    </form><br>
+                    <form action="/omatapalo_v3_v3/relatorios/dresultados/producao" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">Pessoal</button>
+                    </form><br>
+                    <form action="/omatapalo_v3_v3/relatorios/dresultados/entradas" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">F.S.E.</button>
+                    </form><br>
+                    <form action="/omatapalo_v3_v3/relatorios/dresultados/entradastock" method="post">
+                        <button class="btn btn-default" style="width:35em;" type="submit" name="button">Outros Custos</button>
+                    </form><br>
                 </div>
-              </div>
             </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Marco" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Março
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Marco" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/3" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/3" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/3" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/3" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/3" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/3" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/3" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Abril" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Abril
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Abril" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/4" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/4" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/4" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/4" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/4" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/4" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/4" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Maio" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Maio
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Maio" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/5" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/5" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/5" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/5" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/5" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/5" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/5" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Junho" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Junho
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Junho" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/6" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/6" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/6" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/6" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/6" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/6" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/6" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Julho" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Julho
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Julho" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/7" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/7" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/7" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/7" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/7" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/7" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/7" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Agosto" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Agosto
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Agosto" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/8" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/8" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/8" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/8" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/8" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/8" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/8" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Setembro" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Setembro
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Setembro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/9" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/9" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/9" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/9" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/9" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/9" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/9" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Outubro" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Outubro
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Outubro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/10" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/10" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/10" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/10" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/10" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/10" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/10" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Novembro" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Novembro
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Novembro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/11" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/11" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/11" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/11" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/11" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/11" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/11" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
-          <!-- subbloco -->
-          <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-                <p>
-                  <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Dezembro" aria-expanded="true" aria-controls="FaixasEtarias">
-                      Dezembro
-                  </a>
-                </p>
-            </h5>
-            <div class="centrar" style="width:35em;">
-              <div id="Dezembro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/12" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/12" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/custos/12" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/operacional/12" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/facturacao/12" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/resultado/12" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
-                    </form>
-                  </div><br>
-                  <div class="" style="width:35em;">
-                    <form action="/omatapalo_v3/relatorios/mensal/vendas/12" method="post">
-                      <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- fim sub-bloco -->
         </div>
-      </div>
+
+        <div class="card">
+            <div class="card-header" role="tab" id="headingTwo">
+                <h5 class="mb-0">
+                    <p >
+                        <a class="btn btn-primary" style="width:35em;height:3em;" data-toggle="collapse" href="#RPF" aria-expanded="true" aria-controls="PPIAM">
+                            Relatório Mensal de Produção e Fornecimento
+                        </a>
+                    </p>
+                </h5>
+            </div>
+            <div id="RPF" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="card-block">
+                    <div class="card">
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Janeiro" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Janeiro
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Janeiro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/1" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/1" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/1" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/1" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/1" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/1" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/1" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Fevereiro" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Fevereiro
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Fevereiro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/2" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/2" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/2" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/2" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/2" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/2" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/2" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Marco" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Março
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Marco" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/3" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/3" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/3" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/3" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/3" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/3" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/3" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Abril" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Abril
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Abril" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/4" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/4" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/4" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/4" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/4" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/4" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/4" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Maio" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Maio
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Maio" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/5" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/5" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/5" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/5" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/5" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/5" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/5" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Junho" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Junho
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Junho" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/6" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/6" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/6" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/6" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/6" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/6" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/6" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Julho" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Julho
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Julho" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/7" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/7" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/7" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/7" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/7" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/7" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/7" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Agosto" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Agosto
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Agosto" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/8" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/8" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/8" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/8" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/8" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/8" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/8" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Setembro" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Setembro
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Setembro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/9" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/9" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/9" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/9" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/9" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/9" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/9" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Outubro" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Outubro
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Outubro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/10" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/10" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/10" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/10" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/10" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/10" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/10" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Novembro" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Novembro
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Novembro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/11" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/11" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/11" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/11" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/11" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/11" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/11" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                        <!-- subbloco -->
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <p>
+                                    <a class="btn btn-info" style="width:35em;" data-toggle="collapse" href="#Dezembro" aria-expanded="true" aria-controls="FaixasEtarias">
+                                        Dezembro
+                                    </a>
+                                </p>
+                            </h5>
+                            <div class="centrar" style="width:35em;">
+                                <div id="Dezembro" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-block">
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosmensais/12" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Produção / Fornecimento - Mensal</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/dadosacumulados/12" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Produção / Fornecimento - Acumulado</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/custos/12" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Custos</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/operacional/12" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Resultado Operacional</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/facturacao/12" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em;">Mapa de Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/resultado/12" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Resultado Mediante Facturação</button>
+                                            </form>
+                                        </div><br>
+                                        <div class="" style="width:35em;">
+                                            <form action="/omatapalo_v3/relatorios/mensal/vendas/12" method="post">
+                                                <button class="btn btn-default" type="submit" name="button" style="width:35em">Facturação a Clientes Externos</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fim sub-bloco -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="container">
+        <img src="public/img/nevenodundo.svg" alt="linha Metso">
     </div>
-  </div>
-</div><br>
-<div class="container">
-    <img src="public/img/nevenodundo.svg" alt="linha Metso" >
-</div>
 {% endblock %}
