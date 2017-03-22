@@ -3,8 +3,8 @@
 {% block content %}
 
     <div class="container">
-        <div class="colorird" style="padding:5px;">
-            <h2 style="color:black;text-align:center;">{{title}}</h2>
+        <div class="colorir" style="padding:5px;">
+            <h2 style="color:white;text-align:center;">{{title}}</h2>
         </div>
         <h3 style="font-size:1.2em;color:darkblue;">
             <strong>CENTRO OPERACIONAL:
@@ -36,7 +36,9 @@
                     <td class="text-center grey"></td>
                 </tr>
                 <tr class="dr_titulos">
-                    <td class="italico">FACTURAÇÃO</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/facturacao/dresultados">FACTURAÇÃO</a>
+                    </td>
                     {% for i in 1..12 %}
                         <td class="text-center">{{ totalVendas[i]|number_format(0,",",".") }}</td>
                     {% endfor %}
