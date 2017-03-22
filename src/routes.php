@@ -73,7 +73,9 @@ $app->group('', function () {
     # Demonstação de resultados
     $this->get('/relatorios/dresultados', 'Src\Controllers\DResultadosAction:dResultados');
     $this->post('/relatorios/dresultados', 'Src\Controllers\DResultadosAction:dResultados');
-
+    // Mapas por naturezas da demonstração de resultados
+    $this->get('/relatorios/facturacao/dresultados', 'Src\Controllers\DResultadosAction:facturacao');
+    $this->post('/relatorios/facturacao/dresultados', 'Src\Controllers\DResultadosAction:facturacao');
 
     /* Tabelas */
 
