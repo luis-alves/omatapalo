@@ -18,6 +18,16 @@ $container['logger'] = function ($c) {
     return $logger;
 };
 
+// Eloquent
+$capsule = new Illuminate\Database\Capsule\Manager;
+$capsule->addConnection($container['settings']['db']);
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+
+$container['dbe'] = function ($container) use ($capsule) {
+    return $capsule;
+};
+
 // Twig
 // Register component on container
 $container['view'] = function ($container) {
@@ -41,8 +51,8 @@ $container['view'] = function ($container) {
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
     $pdo = new PDO('mysql:host=localhost;dbname=arimba_bt',
-                   'luisalves',
-                   'qpwoeiru00'
+                   'root',
+                   ''
                 //  . PDO::MYSQL_ATTR_LOCAL_INFILE => true
                   );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
