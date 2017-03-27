@@ -3,14 +3,50 @@
 namespace Src\Controllers;
 
 use Src\Auxiliares\Query as Query;
-use Illuminate\Database\Capsule\Manager as DB;
+use Src\Models\VendasArimba as VendasArimba;
+use Src\Models\Compras as Compras;
+use Src\Models\MaoDeObra as MaoDeObra;
 
 /**
  *
  */
 class DResultadosAction extends Action
 {
-    public function dresultados($request, $response)
+    private $fse = array( "Combustíveis",
+                          "Conservação e Reparação",
+                          "Contecioso e Notariado",
+                          "Ferram. e Utens. Desg. Rápido",
+                          "Material de Protecção e Segurança",
+                          "Material Eléctrico",
+                          "Outros Custos Vários",
+                          "Publicidade e Propaganda",
+                          "Subcontratos/SubEmpreitadas",
+                          "Comunicação",
+                          "Deslocações e Estadas",
+                          "Material de Escritório",
+                          "Material Informático",
+                          "Vigilância e Segurança",
+                          "Rendas e Alugueres",
+                          "Água",
+                          "Seguros",
+                          "Livros e Documentação Técnica",
+                          "Despesas Representação",
+                          "Trabalhos Especializados",
+                          "Artigos para Oferta",
+                        );
+
+    // Familias pertencentes a Pessoal
+    private $pessoal = array( "Alimentação",
+                              "Despesas de Saúde",
+                              "Limpeza. Higiene e Conforto",
+                              "Alojamento",
+                              "Salários Expatriados",
+                              "Salários Nacionais",
+                              "Trabalhos Especializados",
+                              "Horas Extras e Prémios",
+                        );
+
+    public function DResultados($request, $response)
     {
         include 'src/Auxiliares/globals.php';
 
@@ -119,41 +155,7 @@ class DResultadosAction extends Action
 
                                 );
 
-        // Familias pertencentes a FSE
-        $fse = array( "Combustíveis" => 0,
-                      "Conservação e Reparação" => 0,
-                      "Contecioso e Notariado" => 0,
-                      "Ferram. e Utens. Desg. Rápido" => 0,
-                      "Material de Protecção e Segurança" => 0,
-                      "Material Eléctrico" => 0,
-                      "Outros Custos Vários" => 0,
-                      "Publicidade e Propaganda" => 0,
-                      "Subcontratos/SubEmpreitadas" => 0,
-                      "Comunicação" => 0,
-                      "Deslocações e Estadas" => 0,
-                      "Material de Escritório" => 0,
-                      "Material Informático" => 0,
-                      "Vigilância e Segurança" => 0,
-                      "Rendas e Alugueres" => 0,
-                      "Água" => 0,
-                      "Seguros" => 0,
-                      "Livros e Documentação Técnica" => 0,
-                      "Despesas Representação" => 0,
-                      "Trabalhos Especializados" => 0,
-                      "Artigos para Oferta" => 0,
-                    );
 
-        // Familias pertencentes a Pessoal
-        $pessoal = array( "Alimentação" => 0,
-                          "Despesas de Saúde" => 0,
-                          "Limpeza. Higiene e Conforto" => 0,
-                          "Alojamento" => 0,
-                          "Salários Expatriados" => 0,
-                          "Salários Nacionais" => 0,
-                          "Trabalhos Especializados" => 0,
-                          "Horas Extras e Prémios" => 0,
-
-                    );
 
         $custosGeraisOrd = array(1=>array());
 
@@ -172,7 +174,7 @@ class DResultadosAction extends Action
                     }
                 }
             }
-
+            // dump($custosGeraisOrd);
             // Somatórios de todos artigos (linhas)
             $totalMateriaisDiversos = 0;
             $totalMateriasPrimas = 0;
@@ -185,14 +187,14 @@ class DResultadosAction extends Action
             $totalAmortizacoes = 0;
             $totalTransporteMensal = array();
             $totalCustosFinanceiro = array();
-            foreach ($fse as $key => $value) {
+            foreach ($this->fse as $key) {
                 $totalFSE[$key] = 0;
             }
 
 
             for ($i=1; $i < 13; $i++) {
                 $totalFSEMensal[$i] = 0;
-                $totalMateriaisDiversos += round($custosGeraisOrd[$i]['Materiais Diversos']);
+                $totalMateriaisDiversos += $custosGeraisOrd[$i]['Materiais Diversos'];
                 $totalMateriasPrimas += round($custosGeraisOrd[$i]['Matérias-Primas']);
                 $totalEquipamentoInterno += round($custosGeraisOrd[$i]['Equipamento']);
                 $totalEquipamentoExterno += round($custosGeraisOrd[$i]['Equipamento Externo']);
@@ -204,14 +206,17 @@ class DResultadosAction extends Action
                 $totalImpostos += round($custosGeraisOrd[$i]['Impostos']);
                 $totalAmortizacoes += round($custosGeraisOrd[$i]['Amortizações']);
                 // Somatórios do grupo de Custos FSE
-                foreach ($fse as $key => $value) {
-                    $totalFSEMensal[$i] += round($custosGeraisOrd[$i][$key]);
-                }
-                foreach ($totalFSE as $key => $value) {
-                    $totalFSE[$key] += round($custosGeraisOrd[$i][$key]);
+                foreach ($this->fse as $key) {
+                    $totalFSEMensal[$i] += $custosGeraisOrd[$i][$key];
                 }
             }
 
+            foreach ($totalFSE as $key => $value) {
+                for ($i = 1; $i < 13; $i++) {
+                    $totalFSE[$key] += $custosGeraisOrd[$i][$key];
+                }
+            }
+            // dump($totalFSE);
             $somaTotalCustosFinanceiros = $totalImpostos + $totalAmortizacoes;
 
             $totalEquipamento = 0;
@@ -221,8 +226,8 @@ class DResultadosAction extends Action
             $totalTransporte += round($totalTransporteInterno + $totalTransporteExterno);
 
             $somaTotalFSE = 0;
-            foreach ($totalFSE as $key => $value) {
-                $somaTotalFSE += round($totalFSE[$key]);
+            foreach ($totalFSEMensal as $key => $value) {
+                $somaTotalFSE += $totalFSEMensal[$key];
             }
 
             $maoObraNacional = $sql::getSQL_MaoDeObra("N");
@@ -235,14 +240,14 @@ class DResultadosAction extends Action
                 $custosGeraisOrd[$i]["Salários Nacionais"] += round($maoObraNacional[$i]);
             }
 
-            foreach ($pessoal as $key => $value) {
+            foreach ($this->pessoal as $key) {
                 $totalPessoal[$key] = 0;
             }
 
             for ($i=1; $i < 13; $i++) {
                 $totalPessoalMensal[$i] = 0;
                 # Somatórios do grupo de Mão de Obra
-                foreach ($pessoal as $key => $value) {
+                foreach ($this->pessoal as $key) {
                     $totalPessoalMensal[$i] += round($custosGeraisOrd[$i][$key]);
                 }
                 foreach ($totalPessoal as $key => $value) {
@@ -312,7 +317,7 @@ class DResultadosAction extends Action
 
             # Calcular o stock mensal
 
-            $valorStockInicial = $sql::getstock();
+            $valorStockInicial = $sql::getStock();
 
 
             for ($i=1; $i < 13; $i++) {
@@ -596,5 +601,229 @@ class DResultadosAction extends Action
 
             return $this->view->render($response, 'relatorios/dresultados/' . $vars['page'] .'.twig', $vars);
         }
+    }
+
+    /*
+     *  Retorna todas as vendas efectuadas no ano em questão
+    */
+    public function facturacao($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        $vendasInternas = Query::getSQLDRVendas('GTO', 'SPA');
+        $vendasExternas = Query::getSQLDRVendas('VD', 'GR');
+
+        # Eloquent ORM é demaseado lento
+        // $vendas = VendasArimba::selectRaw('*,
+        //                                    round(peso / baridade,2) as m3,
+        //                                    round(valor_in_ton * baridade,1) as preco_m3,
+        //                                    round(valor_ex_ton * baridade,1) as preco_vd,
+        //                                    round(valor_in_ton * peso,2) as total_m3,
+        //                                    round(valor_ex_ton * peso,2) as total_v_m3
+        //                                    ')
+        //                         ->leftjoin('agregados', 'nome_agre', '=', 'nome_agr')
+        //                         ->leftjoin('baridades', 'agregado_id', '=', 'agr_id')
+        //                         ->leftjoin('obras', 'id_obra', '=', 'obra')
+        //                         ->leftjoin('valorun_interno_ton', 'agr_bar_id', '=', 'agr_id')
+        //                         ->leftjoin('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agr_id')
+        //                         ->whereIn('tipo_doc', ['GR', 'VD', 'SPA', 'GTO'])
+        //                         ->whereIn('nome_agr', $lista_agregados_array)
+        //                         ->whereYear('data', $ano)
+        //                         ->get();
+
+        $vars['page'] = 'facturacao';
+        $vars['title'] = 'Vendas';
+        $vars['vendasInternas'] = $vendasInternas;
+        $vars['vendasExternas'] = $vendasExternas;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna o valor da produção efectuadas no ano em questão
+    */
+    public function producao($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        $producoes = Query::getSQLDRProducao();
+
+        # Eloquent ORM é demaseado lento
+        // $vendas = VendasArimba::selectRaw('*,
+        //                                    round(peso / baridade,2) as m3,
+        //                                    round(valor_in_ton * baridade,1) as preco_m3,
+        //                                    round(valor_ex_ton * baridade,1) as preco_vd,
+        //                                    round(valor_in_ton * peso,2) as total_m3,
+        //                                    round(valor_ex_ton * peso,2) as total_v_m3
+        //                                    ')
+        //                         ->leftjoin('agregados', 'nome_agre', '=', 'nome_agr')
+        //                         ->leftjoin('baridades', 'agregado_id', '=', 'agr_id')
+        //                         ->leftjoin('obras', 'id_obra', '=', 'obra')
+        //                         ->leftjoin('valorun_interno_ton', 'agr_bar_id', '=', 'agr_id')
+        //                         ->leftjoin('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agr_id')
+        //                         ->whereIn('tipo_doc', ['GR', 'VD', 'SPA', 'GTO'])
+        //                         ->whereIn('nome_agr', $lista_agregados_array)
+        //                         ->whereYear('data', $ano)
+        //                         ->get();
+
+        $vars['page'] = 'producao';
+        $vars['title'] = 'DR - Produção';
+        $vars['producoes'] = $producoes;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna todas as comparas de materiais diversos efectuadas no ano em questão
+    */
+    public function matDiversos($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        # Eloquent ORM
+        $custosDiversos = Compras::where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                ->where('familia', '=', 'Materiais Diversos')
+                                ->whereYear('data', $ano)
+                                ->get();
+
+        $vars['page'] = 'custosDR';
+        $vars['title'] = 'DR - Materiais Diversos';
+        $vars['listaCustos'] = $custosDiversos;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna todas as compras de matérias primas efectuadas no ano em questão
+    */
+    public function matPrimas($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        # Eloquent ORM
+        $custosDiversos = Compras::where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                ->where('familia', '=', 'Matérias-Primas')
+                                ->whereYear('data', $ano)
+                                ->get();
+
+        $vars['page'] = 'custosDR';
+        $vars['title'] = 'DR - Materias Primas';
+        $vars['listaCustos'] = $custosDiversos;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna todas os custos com equipamentos efectuados no ano em questão
+    */
+    public function equipamentos($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        # Eloquent ORM
+        $fields = ['Equipamento', 'Equipamento Externo'];
+        $custosDiversos = Compras::where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                ->whereIn('familia', $fields)
+                                ->whereYear('data', $ano)
+                                ->get();
+
+        $vars['page'] = 'custosDR';
+        $vars['title'] = 'DR - Equipamento';
+        $vars['listaCustos'] = $custosDiversos;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna todas os custos com transportes efectuados no ano em questão
+    */
+    public function transportes($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        # Eloquent ORM
+        $fields = ['Transportes', 'Transportes Externos'];
+        $custosDiversos = Compras::where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                ->whereIn('familia', $fields)
+                                ->whereYear('data', $ano)
+                                ->get();
+
+        $vars['page'] = 'custosDR';
+        $vars['title'] = 'DR - Transportes';
+        $vars['listaCustos'] = $custosDiversos;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna todas os custos FSE efectuados no ano em questão
+    */
+    public function custosFse($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        # Eloquent ORM
+        $custosDiversos = Compras::where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                ->whereIn('familia', $this->fse)
+                                ->whereYear('data', $ano)
+                                // ->whereMonth('data', 5)
+                                ->get();
+
+        $vars['page'] = 'custosDR';
+        $vars['title'] = 'DR - FSE';
+        $vars['listaCustos'] = $custosDiversos;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna todas os custos com pessoal efectuados no ano em questão
+    */
+    public function custosPessoal($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        # Eloquent ORM
+        $custosDiversos = Compras::selectRaw('custos.id, artigo, valor')
+                                   ->where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                   ->whereIn('familia', $this->pessoal)
+                                   ->whereYear('data', $ano);
+
+                                  //  $custosSalarios = MaoDeObra::selectRaw('data, nome_col as artigo, (h_normais * ? + h_extras * ?) as valor')
+
+        $custosSalarios = MaoDeObra::selectRaw('folha_ponto.id, nome_col as artigo, (h_normais * ano_2016 + h_extras * ano_2016) as valor')
+                                   ->leftjoin('colaboradores', 'num_mec', '=', 'n_mec')
+                                   ->where('cind', '=', '?')
+                                   ->whereYear('data', '?')
+                                   ->setBindings([ $cisRelatorioMensal[$cAnalitico], $ano]);
+
+        $resultado = $custosDiversos->union($custosSalarios)->get();
+
+        $vars['page'] = 'custosDR';
+        $vars['title'] = 'DR - Custos Pessoal';
+        $vars['listaCustos'] = $resultado;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
+    }
+
+    /*
+     *  Retorna todas os custos financeiros efectuados no ano em questão
+    */
+    public function financeiro($request, $response)
+    {
+        require 'src/Auxiliares/globals.php';
+        require 'src/Auxiliares/helpers.php';
+
+        # Eloquent ORM
+        $fields = ['Impostos', 'Amortizações'];
+        $custosDiversos = Compras::where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                ->whereIn('familia', $fields)
+                                ->whereYear('data', $ano)
+                                ->get();
+
+        $vars['page'] = 'custosDR';
+        $vars['title'] = 'DR - Financeiro';
+        $vars['listaCustos'] = $custosDiversos;
+        return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
 }

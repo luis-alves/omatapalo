@@ -2,14 +2,6 @@
 
 include 'src/Auxiliares/globals.php';
 
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 $query = "SELECT `nome_col`,
                  `data_nasc`,
                  MONTH(`data`) AS data,
@@ -22,7 +14,6 @@ $query = "SELECT `nome_col`,
           ";
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
@@ -231,7 +222,7 @@ if ($stmt->rowCount() > 0) {
              </div>
           </div>
           <div class="al_esquerda">
-              <p><b>Ano:</b> 2016</p>
+              <p><b>Ano:</b> <?= $ano ?></p>
               <p><b>Empresa:</b> <?php echo $nome_empresa; ?> </p>
           </div>
           <div class="al_direita">

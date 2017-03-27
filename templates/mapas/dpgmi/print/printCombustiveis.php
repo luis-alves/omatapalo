@@ -28,7 +28,7 @@
             </div>
          </div>
          <div class="al_esquerda">
-             <p><b>Ano:</b> 2016</p>
+             <p><b>Ano:</b> <?= $ano ?></p>
              <p><b>Empresa:</b> <?php echo $nome_empresa; ?> </p>
          </div>
          <div class="al_direita">

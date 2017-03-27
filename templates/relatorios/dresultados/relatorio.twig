@@ -32,7 +32,7 @@
                     {% for i in 1..12 %}
                         <td class="text-center pequeno">{{ proveitosOperacionais[i]|number_format(2,","," ") }}%</td>
                     {% endfor %}
-                    <td class="text-center pequeno total">{{ totalProveitosOperacionais }}%</td>
+                    <td class="text-center pequeno total">{{ totalProveitosOperacionais|number_format(0,",",".") }}%</td>
                     <td class="text-center grey"></td>
                 </tr>
                 <tr class="dr_titulos">
@@ -40,9 +40,9 @@
                         <a href="/omatapalo_v3/relatorios/facturacao/dresultados">FACTURAÇÃO</a>
                     </td>
                     {% for i in 1..12 %}
-                        <td class="text-center">{{ totalVendas[i]|number_format(0,",",".") }}</td>
+                        <td class="text-center">{{ totalVendas[i]|number_format(1,",",".") }}</td>
                     {% endfor %}
-                    <td class="text-center">{{ somatorioTotalVendas|number_format(0,",",".") }}</td>
+                    <td class="text-center">{{ somatorioTotalVendas|number_format(1,",",".") }}</td>
                     <td class="text-center">{{ percTotalVendas|number_format(0,",",".") }}%</td>
                 </tr>
                 <tr>
@@ -70,11 +70,13 @@
                     <td class="text-center total">{{ percVendasInternas|number_format(1,",",".") }}%</td>
                 </tr>
                 <tr style="color:blue">
-                    <td class="italico">PRODUÇÃO e Trab. em curso</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/producao/dresultados">PRODUÇÃO e Trab. em curso</a>
+                    </td>
                     {% for i in 1..12 %}
-                        <td class="text-center">{{ producoes[i]|number_format(0,",",".") }}</td>
+                        <td class="text-center">{{ producoes[i]|number_format(1,",",".") }}</td>
                     {% endfor %}
-                    <td class="text-center total">{{ totalProducoes|number_format(0,",",".") }}</td>
+                    <td class="text-center total">{{ totalProducoes|number_format(1,",",".") }}</td>
                     <td class="text-center total">{{ percTotalProducoes|number_format(0,",",".") }}%</td>
                 </tr>
                 <tr class="dr_total">
@@ -88,19 +90,21 @@
                 <tr>
                     <td class="red">CUSTOS OPERACIONAIS</td>
                     {% for i in 1..12 %}
-                        <td class="text-center pequeno">{{ custosOperacionais[i]|number_format(2,","," ") }}%</td>
+                        <td class="text-center pequeno">{{ custosOperacionais[i]|number_format(2,",",".") }}%</td>
                     {% endfor %}
                     <td class="text-center pequeno total">100%</td>
                     <td class="text-center total"></td>
                 </tr>
 
                 <tr class="dr_titulos">
-                    <td class="italico">COMPRAS MATERIAIS DIVERSOS</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/matdiversos/dresultados">COMPRAS MATERIAIS DIVERSOS</a>
+                    </td>
                     {% for i in 1..12 %}
                         {% if custosGeraisOrd[i]['Materiais Diversos'] == 0 %}
-                            <td class="text-center grey">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(0,",",".") }}</td>
+                            <td class="text-center grey">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(1,",",".") }}</td>
                         {% else %}
-                            <td class="text-center">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(0,",",".") }}</td>
+                            <td class="text-center">{{ custosGeraisOrd[i]['Materiais Diversos']|number_format(1,",",".") }}</td>
                         {% endif %}
                     {% endfor %}
                     {% if totalMateriaisDiversos == 0 %}
@@ -136,7 +140,9 @@
                 </tr>
 
                 <tr class="dr_titulos">
-                    <td class="italico">MATÉRIAS-PRIMAS</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/matprimas/dresultados">MATÉRIAS-PRIMAS</a>
+                    </td>
                     {% for i in 1..12 %}
                         {% if custosGeraisOrd[i]['Matérias-Primas'] == 0 %}
                             <td class="text-center grey">{{ custosGeraisOrd[i]['Matérias-Primas']|number_format(0,",",".") }}</td>
@@ -185,12 +191,14 @@
                 </tr>
 
                 <tr class="dr_titulos">
-                    <td class="italico">EQUIPAMENTO</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/equipamentos/dresultados">EQUIPAMENTO</a>
+                    </td>
                     {% for i in 1..12 %}
                         {% if totalEquipamentoMensal[i] == 0 %}
-                            <td class="text-center grey">{{ totalEquipamentoMensal[i]|number_format(0,",",".") }}</td>
+                            <td class="text-center grey">{{ totalEquipamentoMensal[i]|number_format(1,",",".") }}</td>
                         {% else %}
-                            <td class="text-center">{{ totalEquipamentoMensal[i]|number_format(0,",",".") }}</td>
+                            <td class="text-center">{{ totalEquipamentoMensal[i]|number_format(1,",",".") }}</td>
                         {% endif %}
                     {% endfor %}
                     {% if totalEquipamento == 0 %}
@@ -246,12 +254,14 @@
                 </tr>
 
                 <tr class="dr_titulos">
-                    <td class="italico">TRANSPORTES</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/transportes/dresultados">TRANSPORTES</a>
+                    </td>
                     {% for i in 1..12 %}
                         {% if totalTransporteMensal[i] == 0 %}
-                            <td class="text-center grey">{{ totalTransporteMensal[i]|number_format(0,",",".") }}</td>
+                            <td class="text-center grey">{{ totalTransporteMensal[i]|number_format(1,",",".") }}</td>
                         {% else %}
-                            <td class="text-center">{{ totalTransporteMensal[i]|number_format(0,",",".") }}</td>
+                            <td class="text-center">{{ totalTransporteMensal[i]|number_format(1,",",".") }}</td>
                         {% endif %}
                     {% endfor %}
                     {% if totalTransporte == 0 %}
@@ -307,12 +317,14 @@
                 </tr>
 
                 <tr class="dr_titulos">
-                    <td class="italico">CUSTOS VÁRIOS (F.S.E.)</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/fse/dresultados">CUSTOS VÁRIOS (F.S.E.)</a>
+                    </td>
                     {% for i in 1..12 %}
                         {% if totalFSEMensal[i] == 0 %}
-                            <td class="text-center grey">{{ totalFSEMensal[i]|number_format(0,",",".") }}</td>
+                            <td class="text-center grey">{{ totalFSEMensal[i]|number_format(1,",",".") }}</td>
                         {% else %}
-                            <td class="text-center">{{ totalFSEMensal[i]|number_format(0,",",".") }}</td>
+                            <td class="text-center">{{ totalFSEMensal[i]|number_format(1,",",".") }}</td>
                         {% endif %}
                     {% endfor %}
                     {% if somaTotalFSE == 0 %}
@@ -748,7 +760,9 @@
                 </tr>
 
                 <tr class="dr_titulos">
-                    <td class="italico">CUSTOS COM PESSOAL</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/pessoal/dresultados">CUSTOS COM PESSOAL</a>
+                    </td>
                     {% for i in 1..12 %}
                         {% if totalPessoalMensal[i] == 0 %}
                             <td class="text-center grey">{{ totalPessoalMensal[i]|number_format(0,",",".") }}</td>
@@ -909,7 +923,9 @@
                 </tr>
 
                 <tr class="dr_titulos">
-                    <td class="italico">CUSTOS FINANCEIROS</td>
+                    <td class="italico">
+                        <a href="/omatapalo_v3/relatorios/financeiro/dresultados">CUSTOS FINANCEIROS</a>
+                    </td>
                     {% for i in 1..12 %}
                         {% if totalCustosFinanceiro[i] == 0 %}
                             <td class="text-center grey">{{ totalCustosFinanceiro[i]|number_format(0,",",".") }}</td>
@@ -1046,6 +1062,7 @@
                         {% else %}
                             {% if resultadosOperacionais[i] == 0 %}
                                 <td class="text-center grey fundoCinza">{{ resultadoMedianteFacturacao[i]|number_format(0,",",".") }}</td>
+
                             {% else %}
                                 <td class="text-center fundoCinza">{{ resultadoMedianteFacturacao[i]|number_format(0,",",".") }}</td>
                             {% endif %}
@@ -1131,6 +1148,11 @@
                 </tr>
             </tbody>
         </table>
+        <span>
+            <i>Nota: Pode ver detalhadamente as
+                <strong>naturezas</strong>
+                clicando nos títulos sublinhados.</i>
+        </span>
 
     </div>
 

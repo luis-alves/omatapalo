@@ -1,14 +1,6 @@
 <?php
 include 'src/Auxiliares/globals.php';
 
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-// dump($mesNumero);
 $mesNumero = $_SESSION['mesNumero'];
 $mes = $_SESSION['mes'];
 
@@ -261,7 +253,7 @@ unset($_SESSION['mes'])
              </div>
           </div>
           <div class="al_esquerda">
-              <p><b>Ano:</b> 2016</p>
+              <p><b>Ano:</b> <?= $ano ?></p>
               <p><b>Empresa:</b> <?php echo $nome_empresa; ?> </p>
           </div>
           <div class="al_direita">

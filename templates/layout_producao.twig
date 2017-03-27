@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
         <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW, NOARCHIVE">
         <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE"/>
-        <link rel='favicon icon' href='/omatapalo_v3/public/img/favicon.ico' type='image/x-icon'/>
+
+        <link rel='favicon icon' href='img/favicon.ico' type='image/x-icon'/>
 
         {% if title %}
             <title>
@@ -19,43 +21,48 @@
 
         <!--  CSS -->
         <!-- twiter bootstrap -->
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/css/bootstrap.min.css" rel="stylesheet"/>
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/css/bootstrap-theme.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
         <!-- chosen selector -->
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/css/chosen.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
         <!-- jquery -->
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/css/jquery-ui.css">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         <!-- date picker -->
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/css/bootstrap-datetimepicker.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
         <!-- datatables -->
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/js/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/css/fixedHeader.dataTables.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/dataTables.bootstrap.min.css"/>
+        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.2/css/fixedHeader.dataTables.min.css"/> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"/>
+
         <!-- Personalizados -->
-        <link rel="stylesheet" type="text/css" href="/omatapalo_v3/public/css/style.css"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
 
         <!-- JAVASCRIPT -->
         <!-- jquery -->
-        <script src="/omatapalo_v3/public/js/jquery-1.11.3.min.js"></script>
-        <script src="/omatapalo_v3/public/js/jquery.floatThead.js"></script>
-        <script src="/omatapalo_v3/public/js/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/2.0.3/jquery.floatThead.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
         <!-- bootstrap -->
-        <script src="/omatapalo_v3/public/js/bootstrap.min.js"></script>
-        <script src="/omatapalo_v3/public/js/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
         <!-- chart.js -->
-        <script src="/omatapalo_v3/public/js/Chart2.5.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js" type="text/javascript"></script>
         <!-- date picker -->
-        <script src="/omatapalo_v3/public/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
         <!-- chosen selector -->
-        <script src="/omatapalo_v3/public/js/chosen.jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
         <!-- datatables -->
-        <script src="/omatapalo_v3/public/js/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
-        <script src="/omatapalo_v3/public/js/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script>
-        <script src="/omatapalo_v3/public/js/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/fixedheader/3.1.2/js/dataTables.fixedHeader.min.js"></script>
+
         <!-- Personalizados -->
-        <script src="/omatapalo_v3/public/js/scripts.js"></script>
+        <script src="js/scripts.js"></script>
+
     </head>
     <?php flush(); ?>
     <body>
+
         <!-- Fixed navbar -->
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
@@ -67,7 +74,8 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <img alt="Logo" src="/omatapalo_v3/public/img/oma.svg" style="width:50px">
+                    <img alt="Logo" src="img/oma.svg" style="width:50px">
+                    <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo_v3/public/img/logo.svg" style="width:50px"> -->
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -209,6 +217,7 @@
                 ano: value
             }, function() {
                 window.location.href = currentUrl;
+                // window.location.href = "/omatapalo_v3/home";
             });
 
             event.preventDefault();

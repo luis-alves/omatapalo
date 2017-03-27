@@ -30,13 +30,13 @@ final class LoginAction extends Action
 
                 return $response->withRedirect('/omatapalo_v3/home');
             } else {
-                $vars['erro'] = 'As credenciais estão erradas';
-                return $this->view->render($response, 'login.twig');
+                $vars['erroLogin'] = 'As credenciais estão erradas';
+                return $this->view->render($response, 'login.twig', $vars);
             }
         } else {
-            $vars['erro'] = 'Preencha todos os campos.';
+            $vars['erroLogin'] = 'Preencha todos os campos.';
 
-            return $this->container->view->render($response, 'login.twig');
+            return $this->container->view->render($response, 'login.twig', $vars);
         }
     }
 

@@ -17,3 +17,6 @@ require __DIR__ . '/../src/middleware.php';
 
 // Register routes
 require __DIR__ . '/../src/routes.php';
+
+// Register global variables and constants
+require __DIR__ . '/../src/Auxiliares/globals.php';

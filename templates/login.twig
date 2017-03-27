@@ -2,16 +2,15 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+        <link rel='favicon icon' href='/omatapalo_v3/public/img/favicon.ico' type='image/x-icon'/>
         <style media="screen">
             body {
-                padding-top: 40px;
+                padding-top: 120px;
                 padding-bottom: 40px;
                 background-color: #eee;
             }
-
             .form-signin {
-                max-width: 330px;
+                max-width: 430px;
                 padding: 15px;
                 margin: 0 auto;
             }
@@ -44,27 +43,63 @@
                 border-top-left-radius: 0;
                 border-top-right-radius: 0;
             }
+            .form-signin-heading {
+                text-align: center;
+            }
+            .form-signin-alert {
+                text-align: center;
+                color: red;
+            }
+            img {
+                width: 270px;
+                height: 270px;
+            }
+            .pai {
+                width: 100%;
+                margin: 0 auto;
+                padding-left: 20%;
+                padding-right: 20%;
+            }
+            .esquerda {
+                width: 50%;
+                float: left;
+                text-align: center;
+            }
+            .direita {
+                width: 50%;
+                float: left;
+                text-align: center;
+            }
 
         </style>
         <meta charset="utf-8">
         <title>Login</title>
     </head>
     <body>
-        <div class="container">
-            <form class="form-signin" action="/omatapalo_v3/login" method="post">
-                <h2 class="form-signin-heading">Introduza os seus dados</h2>
-                <label for="inputEmail" class="sr-only">Endereço E-mail</label>
-                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                <label for="inputPassword" class="sr-only">Palavra-passe</label>
-                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                <div class="checkbox">
+        <div class="contasiner pai">
+            <div class="esquerda">
+                <img src="/omatapalo_v3/public/img/oma.svg" alt="logotipo">
+            </div>
+            <div class="direita">
+                <form class="form-signin" action="/omatapalo_v3/login" method="post">
+                    <h2 class="form-signin-heading">Introduza os seus dados</h2>
+                    {% if erroLogin is defined %}
+                        <h3 class="form-signin-alert">Utilizador ou palavra passe errada</h3>
+                    {% endif %}
+                    <label for="inputEmail" class="sr-only">Endereço Electrónico</label>
+                    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                    <label for="inputPassword" class="sr-only">Palavra-passe</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                    <!-- <div class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me">
                         Lembrar-me
                     </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            </form>
+                </div> -->
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                </form>
+            </div>
         </div>
     </body>
+
 </html>

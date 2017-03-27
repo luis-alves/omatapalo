@@ -75,7 +75,14 @@ $app->group('', function () {
     $this->post('/relatorios/dresultados', 'Src\Controllers\DResultadosAction:dResultados');
     // Mapas por naturezas da demonstração de resultados
     $this->get('/relatorios/facturacao/dresultados', 'Src\Controllers\DResultadosAction:facturacao');
-    $this->post('/relatorios/facturacao/dresultados', 'Src\Controllers\DResultadosAction:facturacao');
+    $this->get('/relatorios/producao/dresultados', 'Src\Controllers\DResultadosAction:producao');
+    $this->get('/relatorios/matdiversos/dresultados', 'Src\Controllers\DResultadosAction:matDiversos');
+    $this->get('/relatorios/matprimas/dresultados', 'Src\Controllers\DResultadosAction:matPrimas');
+    $this->get('/relatorios/equipamentos/dresultados', 'Src\Controllers\DResultadosAction:equipamentos');
+    $this->get('/relatorios/transportes/dresultados', 'Src\Controllers\DResultadosAction:transportes');
+    $this->get('/relatorios/fse/dresultados', 'Src\Controllers\DResultadosAction:custosFse');
+    $this->get('/relatorios/pessoal/dresultados', 'Src\Controllers\DResultadosAction:custosPessoal');
+    $this->get('/relatorios/financeiro/dresultados', 'Src\Controllers\DResultadosAction:financeiro');
 
     /* Tabelas */
 

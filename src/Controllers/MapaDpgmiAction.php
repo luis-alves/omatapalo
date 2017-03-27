@@ -150,7 +150,7 @@ final class MapaDpgmiAction extends Action
                 if ($this->faixas($mes) == 'ERRO') {
                     return $this->view->render($response, 'mapas/dpgmi/erro.twig', $this->erro());
                 } else {
-                    return $this->view->render($response, 'mapas/dpgmi/faixasEtarias.twig', $this->faixas($mes));
+                    return $this->view->render($response, 'mapas/dpgmi/faixasetarias.twig', $this->faixas($mes));
                 }
 
                 break;

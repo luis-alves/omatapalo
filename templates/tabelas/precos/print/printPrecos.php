@@ -20,17 +20,8 @@
 
     $cInd = $cAnalitico;
 
-
-// dump($cindList);
     $cIndCapitais = strtoupper($cInd);
     $destinoCapitais = strtoupper($destino);
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
 
     $query = "SELECT `nome_agr_corr` AS `brita`,
                     CASE
@@ -65,23 +56,22 @@
              ";
 
      $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
      $stmt = $conn->prepare($query);
      $stmt->execute();
 
      if ($stmt->rowCount() > 0) {
          $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
-        $listaPrecos = $vars['row'];
+         $listaPrecos = $vars['row'];
 
-        $numeroPrecos = count($listaPrecos);
+         $numeroPrecos = count($listaPrecos);
 
-        $listaPrecosArray = array();
-        foreach ($listaPrecos as $key => $value) {
-                // dump($value->brita);
+         $listaPrecosArray = array();
+         foreach ($listaPrecos as $key => $value) {
+             // dump($value->brita);
                 $listaPrecosArray[] = array('brita' => $value->brita, 'preco' => $value->preco);
-        }
-    }
+         }
+     }
     // dump($listaPrecosArray);
 
 

@@ -2,13 +2,7 @@
 
 include 'c:/xampp/htdocs/omatapalo_v3/src/Auxiliares/globals.php';
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-$ano = 2016;
+$anoAnalise = $ano;
 $query = "SELECT `nome_agr` AS `nome`,
                   MONTH(`data`) AS `mes`,
                   (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
@@ -23,13 +17,12 @@ $query = "SELECT `nome_agr` AS `nome`,
           ON `agr_id` = `agregado_id`
           JOIN `valorun_interno_ton`
           ON `agr_bar_id` = `agregado_id`
-          WHERE `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
+          WHERE `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$anoAnalise')
           GROUP BY `nome_agr_corr`, MONTH(`data`)
           ORDER by `nome_agr_corr`
           ";
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
@@ -105,7 +98,6 @@ if ($stmt->rowCount() > 0) {
               ";
 
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $stmt = $conn->prepare($query);
     $stmt->execute();
 
@@ -180,7 +172,6 @@ if ($stmt->rowCount() > 0) {
               ";
 
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $stmt = $conn->prepare($query);
     $stmt->execute();
 

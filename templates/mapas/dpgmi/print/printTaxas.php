@@ -2,14 +2,6 @@
 
 include 'src/Auxiliares/globals.php';
 
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 $query = "SELECT `nome_agr` AS `nome`,
                   MONTH(`data`) AS `mes`,
                   (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
@@ -24,14 +16,13 @@ $query = "SELECT `nome_agr` AS `nome`,
           ON `agr_id` = `agregado_id`
           JOIN `valorun_interno_ton`
           ON `agr_bar_id` = `agregado_id`
-          WHERE  `tipo_doc` IN ('PRO', 'ENT') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('2016')
+          WHERE  `tipo_doc` IN ('PRO', 'ENT') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
           GROUP BY `nome_agr_corr`, MONTH(`data`)
           ORDER by `nome_agr_corr`
           ";
 
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
@@ -149,7 +140,7 @@ $vars['print'] = 'printTaxas';
              </div>
           </div>
           <div class="al_esquerda">
-              <p><b>Ano:</b> 2016</p>
+              <p><b>Ano:</b> <?= $ano ?></p>
               <p><b>Empresa:</b> <?php echo $nome_empresa; ?> </p>
           </div>
           <div class="al_direita">

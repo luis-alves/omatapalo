@@ -88,6 +88,8 @@ final class RelatorioMensalAction extends Action
                   ON `agr_bar_id` = `agr_id`
                   LEFT JOIN `valorun_externo_ton`
                   ON `agr_bar_ton_id` = `agr_id`
+                  LEFT JOIN `obras`
+                  ON `id_obra` = `obra`
                   WHERE  `tipo_doc` IN ('$op1', '$op2') AND `nome_agr` IN ($lista_agregados)
                   AND YEAR(`data`) IN ('$ano') AND MONTH(`data`) BETWEEN $mesInicial AND $mesActual
                   GROUP BY `cliente`
@@ -196,7 +198,7 @@ final class RelatorioMensalAction extends Action
 
         $query = "SELECT MONTH(`data`) AS mes,
                          `cind`,
-	                     SUM(`h_normais` * `2016` + `h_extras` * `2016`) AS `custo_un`
+	                     SUM(`h_normais` * `$ano` + `h_extras` * `$ano`) AS `custo_un`
                   FROM `folha_ponto`
                   LEFT JOIN `colaboradores`
                   ON `num_mec` = `n_mec`
