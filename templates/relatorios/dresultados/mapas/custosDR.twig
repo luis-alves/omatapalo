@@ -83,7 +83,7 @@
                         var colNo = colNumber[i];
                         var pageTotal = api.column(colNo, {page: 'current'}).data().reduce(function(a, b) {
                             var x = parseFloat(a) + parseFloat(b);
-                            var y = x.toFixed(0)
+                            var y = x.toFixed(2)
                             return y
                         }, 0);
 
@@ -95,7 +95,7 @@
                         var colNo = colNumber[i];
                         var total = api.column(colNo).data().reduce(function(a, b) {
                             var x = parseFloat(a) + parseFloat(b);
-                            var y = x.toFixed(0)
+                            var y = x.toFixed(2)
                             return y
                         }, 0);
                         $("tr:eq(1) td:eq(" + colNo + ")", api.table().footer()).html(total).css("font-weight", "bold");

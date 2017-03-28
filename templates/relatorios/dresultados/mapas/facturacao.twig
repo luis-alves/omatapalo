@@ -71,8 +71,8 @@
                         <td class="text-center">{{ venda.no_obra }}</td>
                         <td class="text-center">{{ venda.nome_agr_corr }}</td>
                         <td class="text-center">{{ venda.m3 }}</td>
-                        <td class="text-center">{{ venda.preco_m3|number_format(2,",",".") }}</td>
-                        <td class="text-center">{{ venda.total|number_format(0,",",".") }}</td>
+                        <td class="text-center">{{ venda.preco_m3 }}</td>
+                        <td class="text-center">{{ venda.total }}</td>
                     </tr>
                 {% endfor %}
 
@@ -151,8 +151,8 @@
                         <td class="text-center">{{ venda.no_obra }}</td>
                         <td class="text-center">{{ venda.nome_agr_corr }}</td>
                         <td class="text-center">{{ venda.m3 }}</td>
-                        <td class="text-center">{{ venda.preco_m3|number_format(2,",",".") }}</td>
-                        <td class="text-center">{{ venda.total|number_format(0,",",".") }}</td>
+                        <td class="text-center">{{ venda.preco_m3 }}</td>
+                        <td class="text-center">{{ venda.total }}</td>
                     </tr>
                 {% endfor %}
 
@@ -193,19 +193,16 @@
                     var colNumber = [7, 9];
                     var colMedia = [8];
 
+                    // Remove the formatting to get integer data for summation
                     var intVal = function(i) {
-                        return typeof i === 'string'
-                            ? i.replace(/[, $]|(\.\d{2})/g, "") * 1
-                            : typeof i === 'number'
-                                ? i
-                                : 0;
+                        return parseFloat(i);
                     };
 
                     // Média da página
                     for (i = 0; i < colMedia.length; i++) {
                         var colNo = colMedia[i];
                         var pageMedia = api.column(colNo, {page: 'current'}).data().reduce(function(a, b) {
-                            var x = parseFloat(a) + parseFloat(b);
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
                             var y = x.toFixed(2)
                             return y
                         }, 0) / (end - start);
@@ -216,7 +213,7 @@
                     for (i = 0; i < colMedia.length; i++) {
                         var colNo = colMedia[i];
                         var pageMediaTotal = api.column(colNo).data().reduce(function(a, b) {
-                            var x = parseFloat(a) + parseFloat(b);
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
                             var y = x.toFixed(2)
                             return y
                         }, 0) / data.length;
@@ -227,7 +224,7 @@
                     for (i = 0; i < colNumber.length; i++) {
                         var colNo = colNumber[i];
                         var pageTotal = api.column(colNo, {page: 'current'}).data().reduce(function(a, b) {
-                            var x = parseFloat(a) + parseFloat(b);
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
                             var y = x.toFixed(0)
                             return y
                         }, 0);
@@ -238,7 +235,7 @@
                     for (i = 0; i < colNumber.length; i++) {
                         var colNo = colNumber[i];
                         var total = api.column(colNo).data().reduce(function(a, b) {
-                            var x = parseFloat(a) + parseFloat(b);
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
                             var y = x.toFixed(0)
                             return y
                         }, 0);
@@ -279,7 +276,9 @@
                     for (i = 0; i < colMedia.length; i++) {
                         var colNo = colMedia[i];
                         var pageMedia = api.column(colNo, {page: 'current'}).data().reduce(function(a, b) {
-                            return (parseFloat(a) + parseFloat(b));
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
+                            var y = x.toFixed(2)
+                            return y
                         }, 0) / (end - start);
                         $("tr:eq(0) td:eq(" + colNo + ")", api.table().footer()).html(pageMedia.toFixed(2)).css("font-weight", "bold");
                     }
@@ -288,7 +287,9 @@
                     for (i = 0; i < colMedia.length; i++) {
                         var colNo = colMedia[i];
                         var pageMediaTotal = api.column(colNo).data().reduce(function(a, b) {
-                            return (parseFloat(a) + parseFloat(b));
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
+                            var y = x.toFixed(2)
+                            return y
                         }, 0) / data.length;
                         $("tr:eq(1) td:eq(" + colNo + ")", api.table().footer()).html(pageMediaTotal.toFixed(2)).css("font-weight", "bold");
                     }
@@ -297,7 +298,9 @@
                     for (i = 0; i < colNumber.length; i++) {
                         var colNo = colNumber[i];
                         var pageTotal = api.column(colNo, {page: 'current'}).data().reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
+                            var y = x.toFixed(0)
+                            return y
                         }, 0);
                         $("tr:eq(0) td:eq(" + colNo + ")", api.table().footer()).html(pageTotal).css("font-weight", "bold");
                     }
@@ -306,7 +309,9 @@
                     for (i = 0; i < colNumber.length; i++) {
                         var colNo = colNumber[i];
                         var total = api.column(colNo).data().reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
+                            var x = parseFloat(intVal(a)) + parseFloat(intVal(b));
+                            var y = x.toFixed(0)
+                            return y
                         }, 0);
                         $("tr:eq(1) td:eq(" + colNo + ")", api.table().footer()).html(total).css("font-weight", "bold");
                     }

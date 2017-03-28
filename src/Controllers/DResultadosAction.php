@@ -49,16 +49,47 @@ class DResultadosAction extends Action
     public function DResultados($request, $response)
     {
         include 'src/Auxiliares/globals.php';
+        // include 'src/Auxiliares/helpers.php';
 
         $sql = new Query();
 
         $vendasExternas = $sql::getSQLVendas("GR", "VD");
-
         $vendasInternas = $sql::getSQLVendas("GTO", "SPA");
+
+        # Agrupar por meses
+        for ($i = 1; $i < 13; $i++) {
+            $vendasInternasOrd[$i] = 0;
+            foreach ($vendasInternas as $indice=> $objecto) {
+                if ($objecto->mes == $i) {
+                    $vendasInternasOrd[$i] += $objecto->total;
+                }
+            }
+        }
+
+        for ($i=1; $i <= 12; $i++) {
+            if (empty($vendasInternasOrd[$i])) {
+                $vendasInternasOrd[$i] = 0;
+            }
+        }
+
+        for ($i = 1; $i < 13; $i++) {
+            $vendasExternasOrd[$i] = 0;
+            foreach ($vendasExternas as $indice=> $objecto) {
+                if ($objecto->mes == $i) {
+                    $vendasExternasOrd[$i] += $objecto->total;
+                }
+            }
+        }
+
+        for ($i=1; $i <= 12; $i++) {
+            if (empty($vendasExternasOrd[$i])) {
+                $vendasExternasOrd[$i] = 0;
+            }
+        }
 
         # Total vendido (interno + externo)
         for ($i=1; $i < 13; $i++) {
-            $totalVendas[$i] = $vendasExternas[$i] + $vendasInternas[$i];
+            $totalVendas[$i] = $vendasExternasOrd[$i] + $vendasInternasOrd[$i];
         }
 
         $somatorioTotalVendas = 0;
@@ -69,8 +100,8 @@ class DResultadosAction extends Action
         $totalVendasExternas = 0;
         $totalVendasInternas = 0;
         for ($i=1; $i < 13; $i++) {
-            $totalVendasExternas += $vendasExternas[$i];
-            $totalVendasInternas += $vendasInternas[$i];
+            $totalVendasExternas += $vendasExternasOrd[$i];
+            $totalVendasInternas += $vendasInternasOrd[$i];
         }
 
         # Percentagens das vendas
@@ -86,7 +117,26 @@ class DResultadosAction extends Action
 
 
         # Dados da produção
-        $producoes = $sql::getSQLProducoes("PRO", "ENT");
+        $producoesOrd = $sql::getSQLProducoes("PRO", "ENT");
+
+        # Ordenar por array de meses (On^2)
+        #
+        for ($i=0; $i < 12; $i++) {
+            $producoes[$i+1] = 0;
+            foreach ($producoesOrd as $key => $value) {
+                if ($value->mes - 1 == $i) {
+                    $producoes[$value->mes] += $value->total;
+                }
+            }
+        }
+
+        # Inserir meses sem valores (O n.n^2)
+        #
+        for ($i=1; $i <= 12; $i++) {
+            if (empty($producoes[$i])) {
+                $producoes[$i] = 0;
+            }
+        }
 
         $totalProducoes = 0;
         $proveitosOperacionais = array();
@@ -152,10 +202,7 @@ class DResultadosAction extends Action
                                 "Artigos para Oferta" => 0,
                                 "Amortizações" => 0,
                                 "Impostos" => 0,
-
                                 );
-
-
 
         $custosGeraisOrd = array(1=>array());
 
@@ -174,7 +221,7 @@ class DResultadosAction extends Action
                     }
                 }
             }
-            // dump($custosGeraisOrd);
+
             // Somatórios de todos artigos (linhas)
             $totalMateriaisDiversos = 0;
             $totalMateriasPrimas = 0;
@@ -230,14 +277,30 @@ class DResultadosAction extends Action
                 $somaTotalFSE += $totalFSEMensal[$key];
             }
 
+            # Mão de obra
             $maoObraNacional = $sql::getSQL_MaoDeObra("N");
+            // $maoObraNacionalOrd = MaoDeObra::selectRaw('month(data) as mes, data, nome_col as artigo, sum(h_normais * ano_2016 + h_extras * ano_2016) as valor')
+            //                            ->leftjoin('colaboradores', 'num_mec', '=', 'n_mec')
+            //                            ->where('cind', '=', '?')
+            //                            ->where('ano_2016', '>', '?')
+            //                            ->where('nacional', '=', '?')
+            //                            ->whereYear('data', '?')
+            //                            ->groupBy('mes')
+            //                            ->setBindings([ $cisRelatorioMensal[$cAnalitico], 0, 'N', $ano])
+            //                            ->get();
+            //
+            // foreach ($maoObraNacionalOrd as $key => $value) {
+            //     $maoObraNacional[$value->mes] = $value->valor;
+            // }
+            //
+            // dump($maoObraNacional);
 
             $maoObraExpatriada = $sql::getSQL_MaoDeObra("E");
 
             # Adicionar a mao de obra ao array dos custos
             for ($i=1; $i < 13; $i++) {
-                $custosGeraisOrd[$i]["Salários Expatriados"] += round($maoObraExpatriada[$i]);
-                $custosGeraisOrd[$i]["Salários Nacionais"] += round($maoObraNacional[$i]);
+                $custosGeraisOrd[$i]["Salários Expatriados"] += $maoObraExpatriada[$i];
+                $custosGeraisOrd[$i]["Salários Nacionais"] += $maoObraNacional[$i];
             }
 
             foreach ($this->pessoal as $key) {
@@ -248,16 +311,16 @@ class DResultadosAction extends Action
                 $totalPessoalMensal[$i] = 0;
                 # Somatórios do grupo de Mão de Obra
                 foreach ($this->pessoal as $key) {
-                    $totalPessoalMensal[$i] += round($custosGeraisOrd[$i][$key]);
+                    $totalPessoalMensal[$i] += $custosGeraisOrd[$i][$key];
                 }
                 foreach ($totalPessoal as $key => $value) {
-                    $totalPessoal[$key] += round($custosGeraisOrd[$i][$key]);
+                    $totalPessoal[$key] += $custosGeraisOrd[$i][$key];
                 }
             }
 
             $somaTotalPessoal = 0;
             foreach ($totalPessoal as $key => $value) {
-                $somaTotalPessoal += round($value);
+                $somaTotalPessoal += $value;
             }
 
             # Cálculo dos totais de custos operacionais
@@ -322,12 +385,12 @@ class DResultadosAction extends Action
 
             for ($i=1; $i < 13; $i++) {
                 if ($i == 1) {
-                    $vendasInternasAcumuladas[$i] = $vendasInternas[$i];
-                    $vendasExternasAcumuladas[$i] = $vendasExternas[$i];
+                    $vendasInternasAcumuladas[$i] = $vendasInternasOrd[$i];
+                    $vendasExternasAcumuladas[$i] = $vendasExternasOrd[$i];
                     $producaoAcumulada[$i] = $producoes[$i];
                 } else {
-                    $vendasInternasAcumuladas[$i] = $vendasInternas[$i] + $vendasInternasAcumuladas[$i-1];
-                    $vendasExternasAcumuladas[$i] = $vendasExternas[$i] + $vendasExternasAcumuladas[$i-1];
+                    $vendasInternasAcumuladas[$i] = $vendasInternasOrd[$i] + $vendasInternasAcumuladas[$i-1];
+                    $vendasExternasAcumuladas[$i] = $vendasExternasOrd[$i] + $vendasExternasAcumuladas[$i-1];
                     $producaoAcumulada[$i] = $producoes[$i] + $producaoAcumulada[$i-1];
                 }
             }
@@ -431,8 +494,8 @@ class DResultadosAction extends Action
             $vars['cisRelatorioMensal'] = $cisRelatorioMensal;
             $vars['codigoCI'] = $cisRelatorioMensal[$cAnalitico];
             $vars['nomeCI'] = strtoupper($cAnalitico);
-            $vars['vendasExternas'] = $vendasExternas;
-            $vars['vendasInternas'] = $vendasInternas;
+            $vars['vendasExternas'] = $vendasExternasOrd;
+            $vars['vendasInternas'] = $vendasInternasOrd;
             $vars['producoes'] = $producoes;
             $vars['custosGeraisOrd'] = $custosGeraisOrd;
             $vars['maoObraNacional'] = $maoObraNacional;
@@ -611,27 +674,49 @@ class DResultadosAction extends Action
         require 'src/Auxiliares/globals.php';
         require 'src/Auxiliares/helpers.php';
 
-        $vendasInternas = Query::getSQLDRVendas('GTO', 'SPA');
-        $vendasExternas = Query::getSQLDRVendas('VD', 'GR');
-
-        # Eloquent ORM é demaseado lento
-        // $vendas = VendasArimba::selectRaw('*,
-        //                                    round(peso / baridade,2) as m3,
-        //                                    round(valor_in_ton * baridade,1) as preco_m3,
-        //                                    round(valor_ex_ton * baridade,1) as preco_vd,
-        //                                    round(valor_in_ton * peso,2) as total_m3,
-        //                                    round(valor_ex_ton * peso,2) as total_v_m3
-        //                                    ')
-        //                         ->leftjoin('agregados', 'nome_agre', '=', 'nome_agr')
-        //                         ->leftjoin('baridades', 'agregado_id', '=', 'agr_id')
-        //                         ->leftjoin('obras', 'id_obra', '=', 'obra')
-        //                         ->leftjoin('valorun_interno_ton', 'agr_bar_id', '=', 'agr_id')
-        //                         ->leftjoin('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agr_id')
-        //                         ->whereIn('tipo_doc', ['GR', 'VD', 'SPA', 'GTO'])
-        //                         ->whereIn('nome_agr', $lista_agregados_array)
-        //                         ->whereYear('data', $ano)
-        //                         ->get();
-
+        $vendasInternas = Query::getSQLVendas('GTO', 'SPA');
+        $vendasExternas = Query::getSQLVendas('VD', 'GR');
+        // $j= 0;
+        foreach ($vendasInternas as $key => $value) {
+            $total += $value->total;
+            $j++;
+        }
+        // dump($vendasInternas);
+      //   # Eloquent ORM é demaseado lento
+      //   $vendasInternas = VendasArimba::selectRaw('*,
+      //                                      round(peso / baridade,2) as m3,
+      //                                      round(valor_in_ton * baridade,1) as preco_m3,
+      //                                      round(valor_in_ton * peso,2) as total
+      //                                      ')
+      //                           ->leftjoin('agregados', 'nome_agre', '=', 'nome_agr')
+      //                           ->leftjoin('baridades', 'agregado_id', '=', 'agr_id')
+      //                           ->leftjoin('obras', 'id_obra', '=', 'obra')
+      //                           ->leftjoin('valorun_interno_ton', 'agr_bar_id', '=', 'agr_id')
+      //                           ->leftjoin('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agr_id')
+      //                           ->whereIn('tipo_doc', ['GR', 'VD', 'SPA', 'GTO'])
+      //                           ->whereIn('nome_agr', $lista_agregados_array)
+      //                           ->whereYear('data', $ano)
+      //                           ->get();
+      //
+      // # Eloquent ORM é demaseado lento
+      // $vendasExternas = VendasArimba::selectRaw('*,
+      //                                    round(peso / baridade,2) as m3,
+      //                                    round(valor_ex_ton * baridade,1) as preco_m3,
+      //                                    round(valor_ex_ton * peso,2) as total
+      //                                    ')
+      //                         ->leftjoin('agregados', 'nome_agre', '=', 'nome_agr')
+      //                         ->leftjoin('baridades', 'agregado_id', '=', 'agr_id')
+      //                         ->leftjoin('obras', 'id_obra', '=', 'obra')
+      //                         ->leftjoin('valorun_interno_ton', 'agr_bar_id', '=', 'agr_id')
+      //                         ->leftjoin('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agr_id')
+      //                         ->whereIn('tipo_doc', ['GR', 'VD', 'SPA', 'GTO'])
+      //                         ->whereIn('nome_agr', $lista_agregados_array)
+      //                         ->whereYear('data', $ano)
+      //                         ->get();
+      //   foreach ($vendasInternas as $key => $value) {
+      //       $total += $value->total;
+      //   }
+      //   dump($total);
         $vars['page'] = 'facturacao';
         $vars['title'] = 'Vendas';
         $vars['vendasInternas'] = $vendasInternas;
@@ -645,9 +730,9 @@ class DResultadosAction extends Action
     public function producao($request, $response)
     {
         require 'src/Auxiliares/globals.php';
-        require 'src/Auxiliares/helpers.php';
+        // require 'src/Auxiliares/helpers.php';
 
-        $producoes = Query::getSQLDRProducao();
+        $producoes = Query::getSQLProducoes('PRO', 'ENT');
 
         # Eloquent ORM é demaseado lento
         // $vendas = VendasArimba::selectRaw('*,
@@ -785,24 +870,55 @@ class DResultadosAction extends Action
         require 'src/Auxiliares/helpers.php';
 
         # Eloquent ORM
-        $custosDiversos = Compras::selectRaw('custos.id, artigo, valor')
+        $custosDiversos = Compras::selectRaw('data, artigo, valor')
                                    ->where('cind', '=', $cisRelatorioMensal[$cAnalitico])
                                    ->whereIn('familia', $this->pessoal)
-                                   ->whereYear('data', $ano);
+                                   ->whereYear('data', $ano)->get()
+                                   ;
 
-                                  //  $custosSalarios = MaoDeObra::selectRaw('data, nome_col as artigo, (h_normais * ? + h_extras * ?) as valor')
-
-        $custosSalarios = MaoDeObra::selectRaw('folha_ponto.id, nome_col as artigo, (h_normais * ano_2016 + h_extras * ano_2016) as valor')
+        $listanac = ["N", "E"];
+        $custosSalarios = MaoDeObra::selectRaw('month(data) as mes, data, nome_col as artigo, sum(h_normais * ano_2016 + h_extras * ano_2016) as valor')
                                    ->leftjoin('colaboradores', 'num_mec', '=', 'n_mec')
-                                   ->where('cind', '=', '?')
-                                   ->whereYear('data', '?')
-                                   ->setBindings([ $cisRelatorioMensal[$cAnalitico], $ano]);
+                                   ->where('cind', '=', $cisRelatorioMensal[$cAnalitico])
+                                   ->where('ano_2016', '>', 0)
+                                   ->whereIn('nacional', $listanac)
+                                   ->whereYear('data', $ano)->groupBy('mes')->get();
 
-        $resultado = $custosDiversos->union($custosSalarios)->get();
+        // for ($i=1; $i < 13; $i++) {
+        //     $salarios[$i] = 0;
+        // }
+        // for ($i=1; $i < 13; $i++) {
+        //     foreach ($custosDiversos as $key => $value) {
+        //         if (date('m', strtotime($value->data)) == $i) {
+        //             $salarios[$i] += $value->valor;
+        //         }
+        //     }
+        // }
+
+        // $resultado = $custosDiversos->union($custosSalarios)->get();
+
+        $sql = new Query();
+        $custosGerais = $sql::getSQL_custos();
+
+        for ($i=0; $i < count($custosSalarios); $i++) {
+            foreach ($custosSalarios as $key => $value) {
+                $ponto[$i] = array('data'=>$custosSalarios[$i]->data, 'artigo'=>$custosSalarios[$i]->artigo, 'valor'=>$custosSalarios[$i]->valor);
+            }
+        }
+
+        for ($i=0; $i < count($custosDiversos); $i++) {
+            foreach ($custosDiversos as $key => $value) {
+                $ponto2[$i] = array('data'=>$custosDiversos[$i]->data, 'artigo'=>$custosDiversos[$i]->artigo, 'valor'=>$custosDiversos[$i]->valor);
+            }
+        }
+
+        $final = array_merge($ponto, $ponto2);
+
+        // dump($final);
 
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Custos Pessoal';
-        $vars['listaCustos'] = $resultado;
+        $vars['listaCustos'] = $final;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
 
