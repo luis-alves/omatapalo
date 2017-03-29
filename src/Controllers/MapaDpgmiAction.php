@@ -11,6 +11,12 @@ final class MapaDpgmiAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
+        $tipos = [$tipoDoc1, $tipoDoc2];
+
+        $placeholders2 = str_repeat('?, ', count($tipos) - 1) . '?';
+
         if ($tipoDoc1 === 'PRO') {
             $query = "SELECT `nome_agre` AS `nome`,
                              MONTH(`data_in`) AS `mes`,
@@ -24,10 +30,14 @@ final class MapaDpgmiAction extends Action
                       ON `cod_agr` = `agregado_id`
                       JOIN `valorun_interno_ton`
                       ON `cod_agr` = `agr_bar_id`
-                      WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN ('$ano')
+                      WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
                       GROUP BY `nome_agr_corr`, MONTH(`data_in`)
                       ORDER by `nome_agr_corr`
                      ";
+
+            $rows = $this->db->prepare($query);
+            $params = array_merge($lista_agregados_array, [$ano]);
+            $rows->execute($params);
         } else {
             $query = "SELECT `nome_agr` AS `nome`,
                              MONTH(`data`) AS `mes`,
@@ -47,14 +57,17 @@ final class MapaDpgmiAction extends Action
                       ON `agr_bar_ton_id` = `agregado_id`
                       LEFT JOIN `obras`
                       ON `obra` = `id_obra`
-                      WHERE  `tipo_doc` IN ('$tipoDoc1', '$tipoDoc2') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
+                      WHERE  `tipo_doc` IN ($placeholders2) AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN (?)
                       GROUP BY `nome_agr_corr`, MONTH(`data`)
                       ORDER by `nome_agr_corr`
                       ";
+
+            $rows = $this->db->prepare($query);
+            $params = array_merge($tipos, $lista_agregados_array, [$ano]);
+            $rows->execute($params);
         }
 
-        $rows = $this->db->prepare($query);
-        $rows->execute();
+
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
@@ -384,12 +397,12 @@ final class MapaDpgmiAction extends Action
                   FROM `colaboradores`
                   LEFT JOIN `folha_ponto`
                   ON `num_mec` = `n_mec`
-                  WHERE YEAR(`data`) = $ano
+                  WHERE YEAR(`data`) = ?
                   GROUP BY `nome_col`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $rows->execute([$ano]);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
@@ -675,12 +688,12 @@ final class MapaDpgmiAction extends Action
                   FROM `colaboradores`
                   LEFT JOIN `folha_ponto`
                   ON `num_mec` = `n_mec`
-                  WHERE MONTH(`data`) = $mes AND YEAR(`data`) = $ano
+                  WHERE MONTH(`data`) = ? AND YEAR(`data`) = ?
                   GROUP BY `nome_col`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $rows->execute([$mes, $ano]);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
