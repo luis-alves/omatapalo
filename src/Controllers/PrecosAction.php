@@ -2,6 +2,8 @@
 
 namespace Src\Controllers;
 
+use PDO;
+
 /**
  *
  */
@@ -10,29 +12,33 @@ final class PrecosAction extends Action
     public function getSQL_interno($cInd, $tipoTabela, $destino, $mesActual, $unidade)
     {
         include 'src/Auxiliares/globals.php';
+        include 'src/Auxiliares/helpers.php';
 
         $cambioDoDia = $cambio[$_SESSION['ano']][$mesActual];
-        $cIndus = "'".implode("', '", array_keys($cInd[0]))."'";
+        $cIndus = $lista_agregados_array;
+
+
+        $placeholders = str_repeat('?, ', count($cIndus) - 1) . '?';
 
         $query = "SELECT `nome_agr_corr` AS `brita`,
                         CASE
-                        WHEN '$tipoTabela' = 'usd' AND '$destino' = 'externos' AND '$unidade' = 'toneladas'
+                        WHEN ? = 'usd' AND ? = 'externos' AND ? = 'toneladas'
                         THEN ROUND(`valor_ex_ton`,2)
-                        WHEN '$tipoTabela' = 'usd' AND '$destino' = 'externos' AND '$unidade' = 'm3'
+                        WHEN ? = 'usd' AND ? = 'externos' AND ? = 'm3'
                         THEN ROUND(`valor_ex_ton` * `baridade`,2)
-                        WHEN '$tipoTabela' = 'usd' AND '$destino' = 'internos' AND '$unidade' = 'toneladas'
+                        WHEN ? = 'usd' AND ? = 'internos' AND ? = 'toneladas'
                         THEN ROUND(`valor_in_ton`,2)
-                        WHEN '$tipoTabela' = 'usd' AND '$destino' = 'internos' AND '$unidade' = 'm3'
+                        WHEN ? = 'usd' AND ? = 'internos' AND ? = 'm3'
                         THEN ROUND(`valor_in_ton` * `baridade`,2)
 
-                        WHEN '$tipoTabela' = 'aoa' AND '$destino' = 'externos' AND '$unidade' = 'toneladas'
-                        THEN TRIM(ROUND(`valor_ex_ton` * $cambioDoDia))+0
-                        WHEN '$tipoTabela' = 'aoa' AND '$destino' = 'externos' AND '$unidade' = 'm3'
-                        THEN TRIM(ROUND(`valor_ex_ton` * `baridade` * $cambioDoDia))+0
-                        WHEN '$tipoTabela' = 'aoa' AND '$destino' = 'internos' AND '$unidade' = 'toneladas'
-                        THEN TRIM(ROUND(`valor_in_ton` * $cambioDoDia))+0
-                        WHEN '$tipoTabela' = 'aoa' AND '$destino' = 'internos' AND '$unidade' = 'm3'
-                        THEN TRIM(ROUND(`valor_in_ton` * `baridade` * $cambioDoDia))+0
+                        WHEN ? = 'aoa' AND ? = 'externos' AND ? = 'toneladas'
+                        THEN TRIM(ROUND(`valor_ex_ton` * ?))+0
+                        WHEN ? = 'aoa' AND ? = 'externos' AND ? = 'm3'
+                        THEN TRIM(ROUND(`valor_ex_ton` * `baridade` * ?))+0
+                        WHEN ? = 'aoa' AND ? = 'internos' AND ? = 'toneladas'
+                        THEN TRIM(ROUND(`valor_in_ton` * ?))+0
+                        WHEN ? = 'aoa' AND ? = 'internos' AND ? = 'm3'
+                        THEN TRIM(ROUND(`valor_in_ton` * `baridade` * ?))+0
                         END AS `preco`
                   FROM `agregados`
                   LEFT JOIN `valorun_interno_ton`
@@ -41,20 +47,28 @@ final class PrecosAction extends Action
                   ON `agr_id` = `agr_bar_ton_id`
                   LEFT JOIN `baridades`
                   ON `agr_id` = `agregado_id`
-                  WHERE `nome_agre` IN ($cIndus)
+                  WHERE `nome_agre` IN ($placeholders)
                   GROUP BY `nome_agr_corr`
                   ORDER BY `nome_agr_corr`
                  ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge([$tipoTabela, $destino, $unidade,
+                               $tipoTabela, $destino, $unidade,
+                               $tipoTabela, $destino, $unidade,
+                               $tipoTabela, $destino, $unidade,
 
-        $array = array();
+                               $tipoTabela, $destino, $unidade, $cambioDoDia,
+                               $tipoTabela, $destino, $unidade, $cambioDoDia,
+                               $tipoTabela, $destino, $unidade, $cambioDoDia,
+                               $tipoTabela, $destino, $unidade, $cambioDoDia],
+
+                               $cIndus);
+        $rows->execute($params);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
         }
-
         return $vars['row'];
     }
 
@@ -79,13 +93,8 @@ final class PrecosAction extends Action
 
         $listaPrecosArray = array();
         foreach ($listaPrecos as $key => $value) {
-            // dump($value->brita);
-                $listaPrecosArray[] = array('brita' => $value->brita, 'preco' => $value->preco);
+            $listaPrecosArray[] = array('brita' => $value->brita, 'preco' => $value->preco);
         }
-
-        // dump($listaPrecosArray);
-
-
 
         $vars['page'] = 'precos';
         $vars['cInd'] = $cInd;

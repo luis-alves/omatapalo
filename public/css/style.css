@@ -221,3 +221,104 @@ a {
 .centrar_titulo{
     text-align: center;
 }
+
+/* relatorios.twig */
+
+.dr_titulos {
+    background-color: rgb(242,242,242);
+    color: blue;
+    font-weight: bold;
+}
+
+.dr_total {
+    background-color: rgb(197,217,241);
+    color: blue;
+    font-weight: bold;
+}
+
+.dr_tabela>th,td  {
+    padding: 0 4px !important;
+}
+
+.dr_italico {
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.dr_grey {
+    color: light grey;
+}
+
+.dr_red {
+    color: red;
+    font-weight: bold;
+}
+
+.dr_blue {
+  color:blue;
+}
+
+.dr_redWarning {
+    color: red;
+}
+
+.dr_redBack {
+    background-color: red;
+}
+
+.dr_fundoAzul {
+    background-color: rgb(197,217,241);
+}
+
+.dr_italicoAzul {
+    background-color: rgb(197,217,241);
+    font-style: italic;
+    color: blue;
+}
+
+.dr_italicoRed {
+    background-color: rgb(197,217,241);
+    font-style: italic;
+    color: red;
+}
+
+.dr_fundoAzul-red {
+    background-color: rgb(197,217,241);
+    color: red;
+}
+
+.dr_fundoCinza {
+    background-color: rgb(217,217,217);
+}
+
+.dr_totalBold {
+    font-weight: bold;
+}
+
+.dr_thtr {
+    background-color: rgb(54,96,146);
+    color: white;
+}
+
+.dr_pequeno {
+    font-size: 0.9em;
+}
+
+.dr_tabela {
+  width:100%;
+  font-size:0.8em;
+}
+
+.dr_colorir {
+  padding:5px;
+}
+
+.dr_titulo {
+  color:white;
+  text-align:center;
+}
+
+.dr_subtitulo {
+  font-size:1.2em;
+  color:darkblue;"
+}
