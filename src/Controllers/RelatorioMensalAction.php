@@ -9,12 +9,15 @@ final class RelatorioMensalAction extends Action
     private function getSQL($cIndustrial, $op1, $op2, $mesInicial, $mesActual)
     {
         include 'src/Auxiliares/globals.php';
+        $tipos = [$op1, $op2];
+        $placeholders = str_repeat('?, ', count($tipos) - 1) . '?';
+        $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
 
         $query = "SELECT `nome_agre` AS `nome`,
                          ROUND(SUM(`peso` / `baridade`),2) AS `m3`,
                          ROUND(SUM(
                              CASE
-                             WHEN '$op1' IN ('GTO', 'SPA')
+                             WHEN ? IN ('GTO', 'SPA')
                              THEN `peso` * `valor_in_ton`
                              ELSE `peso` * `valor_ex_ton` * (1-`desco`)
                              END
@@ -32,14 +35,15 @@ final class RelatorioMensalAction extends Action
                   ON `agr_bar_ton_id` = `agr_id`
                   LEFT JOIN `obras`
                   ON `id_obra` = `obra`
-                  WHERE  `tipo_doc` IN ('$op1', '$op2') AND `nome_agr` IN ($lista_agregados)
-                  AND YEAR(`data`) IN ('$ano') AND MONTH(`data`) BETWEEN $mesInicial AND $mesActual
+                  WHERE  `tipo_doc` IN ($placeholders) AND `nome_agr` IN ($placeholders2)
+                  AND YEAR(`data`) IN (?) AND MONTH(`data`) BETWEEN ? AND ?
                   GROUP BY `nome_agr_corr`
                   ORDER by `nome_agr_corr`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge([$op1], $tipos, $lista_agregados_array, [$ano, $mesInicial, $mesActual]);
+        $rows->execute($params);
 
         $array = array();
 
@@ -67,11 +71,15 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+        $tipos = [$op1, $op2];
+        $placeholders = str_repeat('?, ', count($tipos) - 1) . '?';
+        $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
         $query = "SELECT `nome_agr_corr` AS `nome`,
                          ROUND(SUM(`peso` / `baridade`),2) AS `m3`,
                          ROUND(SUM(
                              CASE
-                             WHEN '$op1' IN ('GTO', 'SPA')
+                             WHEN ? IN ('GTO', 'SPA')
                              THEN `peso` * `valor_in_ton`
                              ELSE `peso` * `valor_ex_ton` * (1-`desco`)
                              END
@@ -90,14 +98,15 @@ final class RelatorioMensalAction extends Action
                   ON `agr_bar_ton_id` = `agr_id`
                   LEFT JOIN `obras`
                   ON `id_obra` = `obra`
-                  WHERE  `tipo_doc` IN ('$op1', '$op2') AND `nome_agr` IN ($lista_agregados)
-                  AND YEAR(`data`) IN ('$ano') AND MONTH(`data`) BETWEEN $mesInicial AND $mesActual
+                  WHERE  `tipo_doc` IN ($placeholders) AND `nome_agr` IN ($placeholders2)
+                  AND YEAR(`data`) IN (?) AND MONTH(`data`) BETWEEN ? AND ?
                   GROUP BY `cliente`
                   ORDER by `cliente`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge([$op1], $tipos, $lista_agregados_array, [$ano, $mesInicial, $mesActual]);
+        $rows->execute($params);
 
         $array = array();
 
@@ -117,6 +126,8 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
         $query = "SELECT `nome_agre` AS `nome`,
                          MONTH(`data_in`) AS `mes`,
                          ROUND(SUM(`qt` / `baridade`),2) AS `m3`,
@@ -128,15 +139,15 @@ final class RelatorioMensalAction extends Action
                   ON `agr_bar_id` = `cod_agr`
                   JOIN `baridades`
                   ON `cod_agr` = `agregado_id`
-                  WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN ('$ano')
-                  AND MONTH(`data_in`) BETWEEN $agora and $final
+                  WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN (?)
+                  AND MONTH(`data_in`) BETWEEN ? and ?
                   GROUP BY `nome_agre`
                   ORDER by `nome_agre`
                  ";
 
-
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge($lista_agregados_array, [$ano, $agora, $final]);
+        $rows->execute($params);
 
         $array = array();
 
@@ -172,14 +183,14 @@ final class RelatorioMensalAction extends Action
                   FROM `custos`
                   LEFT JOIN `familias`
                   ON custos.familia = familias.familia
-                  WHERE  YEAR(custos.data) IN ('$ano') AND MONTH(custos.data)
-                    BETWEEN '$mesInicial' AND '$mesActual'
+                  WHERE  YEAR(custos.data) IN (?) AND MONTH(custos.data)
+                    BETWEEN ? AND ?
                   GROUP BY superfamilia, cind
                   ";
 
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $rows->execute([$ano,$mesInicial, $mesActual]);
 
         $array = array();
 
@@ -198,18 +209,17 @@ final class RelatorioMensalAction extends Action
 
         $query = "SELECT MONTH(`data`) AS mes,
                          `cind`,
-	                     SUM(`h_normais` * `$ano` + `h_extras` * `$ano`) AS `custo_un`
+	                     SUM(`h_normais` * ? + `h_extras` * ?) AS `custo_un`
                   FROM `folha_ponto`
                   LEFT JOIN `colaboradores`
                   ON `num_mec` = `n_mec`
-                  WHERE  YEAR(`data`) IN ($ano) AND MONTH(`data`)
-                         BETWEEN '$mesInicial' AND '$mesActual' AND
-                         `nacional` = '$tipo'
+                  WHERE  YEAR(`data`) IN (?) AND MONTH(`data`)
+                         BETWEEN ? AND ? AND
+                         `nacional` = ?
                   GROUP BY cind";
 
-
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $rows->execute([$ano,$ano,$ano,$mesInicial, $mesActual, $tipo]);
 
         $array = array();
 
@@ -408,10 +418,10 @@ final class RelatorioMensalAction extends Action
                   ON `agr_id` = `agr_bar_id`
                   JOIN `baridades`
                   ON `agr_id` = `agregado_id`
-                  WHERE `nome_agre` IN ('$agregado')";
+                  WHERE `nome_agre` IN (?)";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $rows->execute([$agregado]);
 
         if ($rows->rowCount() > 0) {
             $vars = $rows->fetchAll(\PDO::FETCH_OBJ);
