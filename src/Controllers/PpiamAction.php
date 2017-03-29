@@ -11,6 +11,8 @@ final class PpiamAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
         $query = "SELECT `nome_agre` AS `nome`,
                          MONTH(`data_in`) AS `mes`,
                          `qt` AS `m3`,
@@ -23,13 +25,14 @@ final class PpiamAction extends Action
                   ON `cod_agr` = `agregado_id`
                   JOIN `valorun_interno_ton`
                   ON `cod_agr` = `agr_bar_id`
-                  WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN ('$ano')
+                  WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
                   GROUP BY `nome_agr_corr`, MONTH(`data_in`)
                   ORDER by `nome_agr_corr`
                  ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge($lista_agregados_array, [$ano]);
+        $rows->execute($params);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
@@ -97,13 +100,14 @@ final class PpiamAction extends Action
                   ON `agr_id` = `agregado_id`
                   JOIN `valorun_interno_ton`
                   ON `agr_bar_id` = `agregado_id`
-                  WHERE  `tipo_doc` IN ('GTO', 'PSA') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
+                  WHERE  `tipo_doc` IN ('GTO', 'PSA') AND `nome_agr` IN ($placeholders) AND YEAR(`data`) IN (?)
                   GROUP BY `nome_agr_corr`, MONTH(`data`)
                   ORDER by `nome_agr_corr`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge($lista_agregados_array, [$ano]);
+        $rows->execute($params);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
@@ -170,13 +174,14 @@ final class PpiamAction extends Action
                   ON `agr_id` = `agregado_id`
                   JOIN `valorun_interno_ton`
                   ON `agr_bar_id` = `agregado_id`
-                  WHERE  `tipo_doc` IN ('GR', 'VD') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
+                  WHERE  `tipo_doc` IN ('GR', 'VD') AND `nome_agr` IN ($placeholders) AND YEAR(`data`) IN (?)
                   GROUP BY `nome_agr_corr`, MONTH(`data`)
                   ORDER by `nome_agr_corr`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge($lista_agregados_array, [$ano]);
+        $rows->execute($params);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
