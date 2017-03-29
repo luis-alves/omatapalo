@@ -14,9 +14,9 @@ final class TabelasAction extends Action
 
         $cindus = 'importacao_'.$cAnalitico;
 
-        $query = "SELECT DISTINCT nome_cliente FROM $cindus ORDER BY nome_cliente";
+        $query = "SELECT DISTINCT nome_cliente FROM ? ORDER BY nome_cliente";
         $clientes = $this->db->prepare($query);
-        $clientes->execute();
+        $clientes->execute([$cindus]);
 
         if ($clientes->rowCount() > 0) {
             $clientes = $clientes->fetchAll(\PDO::FETCH_OBJ);
