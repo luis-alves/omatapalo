@@ -263,7 +263,7 @@ class DResultadosAction extends Action
                     $totalFSE[$key] += $custosGeraisOrd[$i][$key];
                 }
             }
-            // dump($totalFSE);
+
             $somaTotalCustosFinanceiros = $totalImpostos + $totalAmortizacoes;
 
             $totalEquipamento = 0;
