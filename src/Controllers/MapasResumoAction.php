@@ -9,8 +9,10 @@ final class MapasResumoAction extends Action
     public function mapas($request, $response)
     {
         include 'src/Auxiliares/globals.php';
+        include 'src/Auxiliares/helpers.php';
 
         $tipo = $request->getAttribute('item');
+
 
         if ($tipo === 'forninterno') {
             $op1 = 'GTO';
@@ -94,6 +96,9 @@ final class MapasResumoAction extends Action
             $label2 = 'Valor adicionado (USD)';
         }
 
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+        $tipos = [$op1, $op2];
+        $placeholders2 = str_repeat('?, ', count($tipos) - 1) . '?';
 
         if ($op1 === 'PRO') {
             $query = "SELECT `nome_agre` AS `nome`,
@@ -108,16 +113,20 @@ final class MapasResumoAction extends Action
                       ON `cod_agr` = `agregado_id`
                       JOIN `valorun_interno_ton`
                       ON `cod_agr` = `agr_bar_id`
-                      WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN ('$ano')
+                      WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
                       GROUP BY `nome_agr_corr`, MONTH(`data_in`)
                       ORDER by `nome_agr_corr`
                      ";
+
+            $rows = $this->db->prepare($query);
+            $params = array_merge($lista_agregados_array, [$ano]);
+            $rows->execute($params);
         } else {
             $query = "SELECT `nome_agr` AS `nome`,
                              MONTH(`data`) AS `mes`,
                              (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
-                             ROUND((AVG($preco * `baridade`)),2) AS `pu`,
-                             ROUND((SUM(`peso` / `baridade`)) * ROUND((AVG($preco * `baridade`)))) AS `total`
+                             ROUND((AVG(? * `baridade`)),2) AS `pu`,
+                             ROUND((SUM(`peso` / `baridade`)) * ROUND((AVG(? * `baridade`)))) AS `total`
                       FROM `importacao_arimba`
                       LEFT JOIN `centros_analiticos`
                       ON `ca_id` = `obra`
@@ -129,14 +138,17 @@ final class MapasResumoAction extends Action
                       ON `agr_bar_id` = `agregado_id`
                       JOIN `valorun_externo_ton`
                       ON `agr_bar_ton_id` = `agregado_id`
-                      WHERE  `tipo_doc` IN ('$op1', '$op2') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
+                      WHERE  `tipo_doc` IN ($placeholders2) AND `nome_agr` IN ($placeholders) AND YEAR(`data`) IN (?)
                       GROUP BY `nome_agr_corr`, MONTH(data)
                       ORDER by `nome_agr_corr`
                       ";
+
+            $rows = $this->db->prepare($query);
+            $params = array_merge([$preco, $preco], $tipos, $lista_agregados_array, [$ano]);
+            $rows->execute($params);
         }
 
-        $rows = $this->db->prepare($query);
-        $rows->execute();
+
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);

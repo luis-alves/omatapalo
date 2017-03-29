@@ -57,7 +57,7 @@ final class MapaDpgmiAction extends Action
                       ON `agr_bar_ton_id` = `agregado_id`
                       LEFT JOIN `obras`
                       ON `obra` = `id_obra`
-                      WHERE  `tipo_doc` IN ($placeholders2) AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN (?)
+                      WHERE  `tipo_doc` IN ($placeholders2) AND `nome_agr` IN ($placeholders) AND YEAR(`data`) IN (?)
                       GROUP BY `nome_agr_corr`, MONTH(`data`)
                       ORDER by `nome_agr_corr`
                       ";
