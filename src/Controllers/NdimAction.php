@@ -18,18 +18,21 @@ final class NdimAction extends Action
         $mes = $request->getAttribute('item');
         $indus = 'importacao_'.$cAnalitico;
 
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
         $query = "SELECT `no_obra` AS `nome`,
                           `id_obra` AS `id`
-                  FROM `$indus`
+                  FROM $indus
                   JOIN `obras`
                   ON `obra` = `id_obra`
-                  WHERE  `nome_agr` IN ($lista_agregados) AND `tipo_doc` IN ('GTO', 'PSA') AND YEAR(`data`) IN ('$ano') AND MONTH(`data`) IN ($mes)
+                  WHERE  `nome_agr` IN ($placeholders) AND `tipo_doc` IN ('GTO', 'PSA') AND YEAR(`data`) IN (?) AND MONTH(`data`) IN (?)
                   GROUP BY `no_obra`
                   ORDER by `no_obra`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge($lista_agregados_array, [$ano, $mes]);
+        $rows->execute($params);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
@@ -74,13 +77,15 @@ final class NdimAction extends Action
 
         $cambioMes = $cambio[$ano_ndim][$mes-1];
 
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
         $query = "SELECT `nome_agr_corr` AS `nomeBrita`,
                          `no_obra` AS `nomeObra`,
                          `obra`,
                          MONTH(`data`) AS `mes`,
                          SUM(ROUND(`peso` / `baridade`,2)) AS `m3`,
-                         Avg(round(`valor_in_ton` * `baridade` * $cambioMes)) AS `pu`,
-                         ROUND(SUM(ROUND(`peso` / `baridade`,2)) * avg(ROUND(`valor_in_ton` * `baridade` * $cambioMes,2)),2) AS `total`
+                         Avg(round(`valor_in_ton` * `baridade` * ?)) AS `pu`,
+                         ROUND(SUM(ROUND(`peso` / `baridade`,2)) * avg(ROUND(`valor_in_ton` * `baridade` * ?,2)),2) AS `total`
                   FROM `$indus`
                   JOIN `agregados`
                   ON `nome_agre` = `nome_agr`
@@ -90,14 +95,15 @@ final class NdimAction extends Action
                   ON `agr_id` = `agr_bar_id`
                   JOIN `obras`
                   ON `id_obra` = `obra`
-                  WHERE `nome_agre` IN ($lista_agregados) AND `tipo_doc` IN ('GTO', 'SPA') AND YEAR(`data`) IN ('$ano_ndim')
-                        AND MONTH(`data`) IN ($mes) AND `obra` IN ('$obra')
+                  WHERE `nome_agre` IN ($placeholders) AND `tipo_doc` IN ('GTO', 'SPA') AND YEAR(`data`) IN (?)
+                        AND MONTH(`data`) IN (?) AND `obra` IN (?)
                   GROUP BY `nome_agr_corr`
                   ORDER by `nome_agr_corr`
                  ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge([$cambioMes, $cambioMes], $lista_agregados_array, [$ano_ndim, $mes, $obra]);
+        $rows->execute($params);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
@@ -158,6 +164,8 @@ final class NdimAction extends Action
 
         $cambioMes = $cambio[$ano_ndim][$mes-1];
 
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
         $query = "SELECT `nome_agr_corr` AS `nomeBrita`,
                          `no_obra` AS `nomeObra`,
                          `num_doc` AS `guia`,
@@ -165,8 +173,8 @@ final class NdimAction extends Action
                          `obra`,
                          MONTH(`data`) AS `mes`,
                          ROUND(`peso` / `baridade`,2) AS `m3`,
-                         ROUND(`valor_in_ton` * `baridade` * $cambioMes) AS `pu`,
-                         ROUND(`peso` / `baridade`,2) * ROUND(`valor_in_ton` * `baridade` * $cambioMes,2) AS `total`
+                         ROUND(`valor_in_ton` * `baridade` * ?) AS `pu`,
+                         ROUND(`peso` / `baridade`,2) * ROUND(`valor_in_ton` * `baridade` * ?,2) AS `total`
                   FROM `$indus`
                   JOIN `agregados`
                   ON `nome_agre` = `nome_agr`
@@ -176,13 +184,14 @@ final class NdimAction extends Action
                   ON `agr_id` = `agr_bar_id`
                   JOIN `obras`
                   ON `id_obra` = `obra`
-                  WHERE `nome_agre` IN ($lista_agregados) AND `tipo_doc` IN ('GTO', 'SPA') AND YEAR(`data`) IN ('$ano_ndim')
-                        AND MONTH(`data`) IN ($mes) AND `obra` IN ('$obra')
+                  WHERE `nome_agre` IN ($placeholders) AND `tipo_doc` IN ('GTO', 'SPA') AND YEAR(`data`) IN (?)
+                        AND MONTH(`data`) IN (?) AND `obra` IN (?)
                   ORDER by `data`
                  ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute();
+        $params = array_merge([$cambioMes, $cambioMes], $lista_agregados_array, [$ano_ndim, $mes, $obra]);
+        $rows->execute($params);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
