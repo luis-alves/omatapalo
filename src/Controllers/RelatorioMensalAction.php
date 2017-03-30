@@ -1,17 +1,23 @@
 <?php
+
 namespace Src\Controllers;
 
-/**
- *
- */
 final class RelatorioMensalAction extends Action
 {
+    private $listaImportacao = array('importacao_arimba', 'importacao_caraculo', 'importacao_cassosso');
+    private $listaProducoes = array('producoes_arimba', 'producoes_caraculo', 'producoes_cassosso');
+
     private function getSQL($cIndustrial, $op1, $op2, $mesInicial, $mesActual)
     {
         include 'src/Auxiliares/globals.php';
+
+        if (!in_array($cIndustrial, $this->listaImportacao)) {
+            return [];
+        }
+
         $tipos = [$op1, $op2];
-        $placeholders = str_repeat('?, ', count($tipos) - 1) . '?';
-        $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+        $placeholders = str_repeat('?, ', count($tipos) - 1).'?';
+        $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1).'?';
 
         $query = "SELECT `nome_agre` AS `nome`,
                          ROUND(SUM(`peso` / `baridade`),2) AS `m3`,
@@ -71,9 +77,13 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+        if (!in_array($cIndustrial, $this->listaImportacao)) {
+            return [];
+        }
+
         $tipos = [$op1, $op2];
-        $placeholders = str_repeat('?, ', count($tipos) - 1) . '?';
-        $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+        $placeholders = str_repeat('?, ', count($tipos) - 1).'?';
+        $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1).'?';
 
         $query = "SELECT `nome_agr_corr` AS `nome`,
                          ROUND(SUM(`peso` / `baridade`),2) AS `m3`,
@@ -115,7 +125,7 @@ final class RelatorioMensalAction extends Action
 
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
-                $array[$value->cliente] = (array)$value;
+                $array[$value->cliente] = (array) $value;
             }
         }
 
@@ -126,7 +136,11 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
-        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+        if (!in_array($cIndustrial, $this->listaProducoes)) {
+            return [];
+        }
+
+        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1).'?';
 
         $query = "SELECT `nome_agre` AS `nome`,
                          MONTH(`data_in`) AS `mes`,
@@ -139,7 +153,7 @@ final class RelatorioMensalAction extends Action
                   ON `agr_bar_id` = `cod_agr`
                   JOIN `baridades`
                   ON `cod_agr` = `agregado_id`
-                  WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN (?)
+                  WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
                   AND MONTH(`data_in`) BETWEEN ? and ?
                   GROUP BY `nome_agre`
                   ORDER by `nome_agre`
@@ -153,8 +167,6 @@ final class RelatorioMensalAction extends Action
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-
-
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
                 foreach ($lista_array_agregados as $agregado => $real) {
@@ -176,7 +188,7 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
-        $query = "SELECT `superfamilia`,
+        $query = 'SELECT `superfamilia`,
                          `cind`,
                          SUM(`valor`) AS valor,
                          MONTH(`data`) AS mes
@@ -186,19 +198,20 @@ final class RelatorioMensalAction extends Action
                   WHERE  YEAR(custos.data) IN (?) AND MONTH(custos.data)
                     BETWEEN ? AND ?
                   GROUP BY superfamilia, cind
-                  ";
-
+                  ';
 
         $rows = $this->db->prepare($query);
-        $rows->execute([$ano,$mesInicial, $mesActual]);
+        $rows->execute([$ano, $mesInicial, $mesActual]);
 
         $array = array();
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+
             return $vars['row'];
         } else {
             $vars['row'] = 0;
+
             return $vars['row'];
         }
     }
@@ -207,7 +220,7 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
-        $query = "SELECT MONTH(`data`) AS mes,
+        $query = 'SELECT MONTH(`data`) AS mes,
                          `cind`,
 	                     SUM(`h_normais` * ? + `h_extras` * ?) AS `custo_un`
                   FROM `folha_ponto`
@@ -216,18 +229,20 @@ final class RelatorioMensalAction extends Action
                   WHERE  YEAR(`data`) IN (?) AND MONTH(`data`)
                          BETWEEN ? AND ? AND
                          `nacional` = ?
-                  GROUP BY cind";
+                  GROUP BY cind';
 
         $rows = $this->db->prepare($query);
-        $rows->execute([$ano,$ano,$ano,$mesInicial, $mesActual, $tipo]);
+        $rows->execute([$ano, $ano, $ano, $mesInicial, $mesActual, $tipo]);
 
         $array = array();
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+
             return $vars['row'];
         } else {
             $vars['row'] = 0;
+
             return $vars['row'];
         }
     }
@@ -236,8 +251,13 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
-        $producao = $this->getSql_producao('producoes'.'_'.$cIndustrial, $mesA, $mesF);
+        $cindus = 'producoes_'.$cIndustrial;
 
+        if (!in_array($cindus, $this->listaProducoes)) {
+            return [];
+        }
+
+        $producao = $this->getSql_producao($cindus, $mesA, $mesF);
         $arrayProducoes = array('producao' => $cIndustrial,
                                 );
         // Normalizar os nomes dos agregados
@@ -370,7 +390,6 @@ final class RelatorioMensalAction extends Action
             $fExterno_actual[$key] = $this->getFornecimento($key, $op3, $op4, 1, $mes);
         }
 
-
         // Stocks do inicio de cada mês de Fevereiro a Dezembro
         if ($mes == 1) {
             foreach ($cisRelatorioMensal as $cis => $valor) {
@@ -412,19 +431,20 @@ final class RelatorioMensalAction extends Action
 
     private function getPreco($agregado)
     {
-        $query = "SELECT ROUND(`valor_in_ton` * `baridade`,2) AS `valor`
+        $query = 'SELECT ROUND(`valor_in_ton` * `baridade`,2) AS `valor`
                   FROM `agregados`
                   LEFT JOIN `valorun_interno_ton`
                   ON `agr_id` = `agr_bar_id`
                   JOIN `baridades`
                   ON `agr_id` = `agregado_id`
-                  WHERE `nome_agre` IN (?)";
+                  WHERE `nome_agre` IN (?)';
 
         $rows = $this->db->prepare($query);
         $rows->execute([$agregado]);
 
         if ($rows->rowCount() > 0) {
             $vars = $rows->fetchAll(\PDO::FETCH_OBJ);
+
             return $vars[0]->valor;
         } else {
             return 0;
@@ -450,8 +470,8 @@ final class RelatorioMensalAction extends Action
         foreach ($cisRelatorioMensal as $key => $valor) {
             // Obter a produção no mês em análise
             $producao[$key] = $this->getProducao($key, $mes, $mes);
-
             // Obter a produção acumulativa até ao mês anterior ao em análise
+
             $producao_acumulada[$key] = $this->getProducao($key, 1, $mes - 1);
 
             // Obter a produção acumulativa até ao mês actual
@@ -475,7 +495,6 @@ final class RelatorioMensalAction extends Action
             // Obter o fornecimento externo acumulativo até ao mês actual
             $fExterno_actual[$key] = $this->getFornecimento($key, $op3, $op4, 1, $mes);
         }
-
 
         // Stocks do inicio de cada mês de Fevereiro a Dezembro
         if ($mes == 1) {
@@ -511,8 +530,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-
-        # Agrupamento de britas por classes de tamanho
+        // Agrupamento de britas por classes de tamanho
         foreach ($cisRelatorioMensal as $cis => $valor) {
             $stockInicial[$valor]['Pó Pedra'] = $stockInicio[$cis]['Pó de Pedra (Britagem)'] +
                                                 $stockInicio[$cis]['Pó de Pedra - Dundo'];
@@ -543,7 +561,7 @@ final class RelatorioMensalAction extends Action
                                               $stockInicio[$cis]['Pedra Rachão - Dundo'];
         }
 
-        # Agrupamento de britas por classes de tamanho
+        // Agrupamento de britas por classes de tamanho
         foreach ($cisRelatorioMensal as $cis => $valor) {
             $stockFinal[$valor]['Pó Pedra'] = $stockFim[$cis]['Pó de Pedra (Britagem)'] +
                                                 $stockFim[$cis]['Pó de Pedra - Dundo'];
@@ -573,7 +591,6 @@ final class RelatorioMensalAction extends Action
             $stockFinal[$valor]['Rachão'] = $stockFim[$cis]['Pedra Rachão'] +
                                               $stockFim[$cis]['Pedra Rachão - Dundo'];
         }
-
 
         // Agrupamento de britas nos valores de produção
         foreach ($cisRelatorioMensal as $cis => $valor) {
@@ -606,7 +623,6 @@ final class RelatorioMensalAction extends Action
                                                $producao[$cis]['Pedra Rachão - Dundo']['m3'];
         }
 
-
         // Agrupamento de britas nos valores de fornecimento interno
         foreach ($cisRelatorioMensal as $cis => $valor) {
             $grupofInterno[$valor]['Pó Pedra'] = $fInterno[$cis]['Pó de Pedra (Britagem)']['m3'] +
@@ -637,7 +653,6 @@ final class RelatorioMensalAction extends Action
             $grupofInterno[$valor]['Rachão'] = $fInterno[$cis]['Pedra Rachão']['m3'] +
                                                $fInterno[$cis]['Pedra Rachão - Dundo']['m3'];
         }
-
 
         // Agrupamento de britas nos valores de fornecimento externo
         foreach ($cisRelatorioMensal as $cis => $valor) {
@@ -670,7 +685,7 @@ final class RelatorioMensalAction extends Action
                                                $fExterno[$cis]['Pedra Rachão - Dundo']['m3'];
         }
 
-        # Somatório do rodapé
+        // Somatório do rodapé
         foreach ($drBritas as $brita => $nome) {
             $rodapeStockInicial[$brita] = 0;
             foreach ($cisRelatorioMensal as $ci => $value) {
@@ -706,7 +721,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # somatório por linhas
+        // somatório por linhas
         foreach ($cisRelatorioMensal as $ci => $value) {
             $somaStockInicial[$value] = 0;
             foreach ($drBritas as $brita => $nome) {
@@ -720,7 +735,6 @@ final class RelatorioMensalAction extends Action
                 $somaProducao[$value] += $grupoProducao[$value][$brita];
             }
         }
-
         foreach ($cisRelatorioMensal as $ci => $value) {
             $somaFInterno[$value] = 0;
             foreach ($drBritas as $brita => $nome) {
@@ -742,7 +756,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Somatório do rodapé
+        // Somatório do rodapé
         $somaRodapeStockInicial = 0;
         $somaRodapeStockFinal = 0;
         $somaRodapeProducao = 0;
@@ -755,8 +769,6 @@ final class RelatorioMensalAction extends Action
             $somaRodapefInterno += $rodapeGrupoFInterno[$brita];
             $somaRodapefExterno += $rodapeGrupoFExterno[$brita];
         }
-
-
 
         $vars['mes_titulo'] = $lista_meses[$mes - 1];
         $vars['page'] = 'dadosmensais';
@@ -784,12 +796,11 @@ final class RelatorioMensalAction extends Action
         $vars['somaRodapeStockFinal'] = $somaRodapeStockFinal;
         $vars['somaRodapeStockInicial'] = $somaRodapeStockInicial;
 
-        # gráfico
+        // gráfico
         $vars['totalProducao'] = $totalProducao;
-        $vars['titlo_grafico'] = "Produção por C.Industrial";
+        $vars['titlo_grafico'] = 'Produção por C.Industrial';
 
-
-        return $this->view->render($response, 'relatorios/mensais/' . $vars['page'] .'.twig', $vars);
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
     public function dadosAcumulados($request, $response)
@@ -837,7 +848,6 @@ final class RelatorioMensalAction extends Action
             $fExterno_actual[$key] = $this->getFornecimento($key, $op3, $op4, 1, $mes);
         }
 
-
         // Stocks do inicio de cada mês de Fevereiro a Dezembro
         if ($mes == 1) {
             foreach ($cisRelatorioMensal as $cis => $valor) {
@@ -872,7 +882,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Agrupamento de britas por classes de tamanho
+        // Agrupamento de britas por classes de tamanho
         foreach ($cisRelatorioMensal as $cis => $valor) {
             $stockInicial[$valor]['Pó Pedra'] = $stock[$cis][$ano]['Pó de Pedra (Britagem)'] +
                                                 $stock[$cis][$ano]['Pó de Pedra - Dundo'];
@@ -903,7 +913,7 @@ final class RelatorioMensalAction extends Action
                                               $stock[$cis][$ano]['Pedra Rachão - Dundo'];
         }
 
-        # Agrupamento de britas por classes de tamanho
+        // Agrupamento de britas por classes de tamanho
         foreach ($cisRelatorioMensal as $cis => $valor) {
             $stockFinal[$valor]['Pó Pedra'] = $stockFim[$cis]['Pó de Pedra (Britagem)'] +
                                                 $stockFim[$cis]['Pó de Pedra - Dundo'];
@@ -1027,7 +1037,7 @@ final class RelatorioMensalAction extends Action
                                                $fExterno_actual[$cis]['Pedra Rachão - Dundo']['m3'];
         }
 
-        # Somatório do rodapé
+        // Somatório do rodapé
         foreach ($drBritas as $brita => $value) {
             $rodapeStockInicial[$brita] = 0;
             $rodapeStockFinal[$brita] = 0;
@@ -1043,7 +1053,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Somatório de linhas do rodapé
+        // Somatório de linhas do rodapé
         foreach ($cisRelatorioMensal as $ci => $codigo) {
             $somaRodapeStockInicial = 0;
             $somaRodapeStockFinal = 0;
@@ -1086,7 +1096,7 @@ final class RelatorioMensalAction extends Action
         $vars['fInterno'] = $grupofInterno;
         $vars['fExterno'] = $grupofExterno;
         $vars['stock'] = $stock;
-        #rodapé
+        //rodapé
         $vars['rodapeStockInicial'] = $rodapeStockInicial;
         $vars['rodapeStockFinal'] = $rodapeStockFinal;
         $vars['rodapeProducao'] = $rodapeProducao;
@@ -1097,18 +1107,16 @@ final class RelatorioMensalAction extends Action
         $vars['somaRodapeProducao'] = $somaRodapeProducao;
         $vars['somaRodapeFInterno'] = $somaRodapeFInterno;
         $vars['somaRodapeFExterno'] = $somaRodapeFExterno;
-        # Soma linhas
+        // Soma linhas
         $vars['somaStockInicial'] = $somaStockInicial;
         $vars['somaStockFinal'] = $somaStockFinal;
         $vars['somaProducao'] = $somaProducao;
         $vars['somaFInterno'] = $somaFInterno;
         $vars['somaFExterno'] = $somaFExterno;
 
-        # gráfico
+        // gráfico
 
-
-
-        return $this->view->render($response, 'relatorios/mensais/' . $vars['page'] .'.twig', $vars);
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
     public function custos_grafico($mesActual)
@@ -1130,7 +1138,7 @@ final class RelatorioMensalAction extends Action
                                'Serviços externos' => 0,
                                'Outros custos internos' => 0,
                                'Outros custos externos' => 0,
-                               'total' => 0
+                               'total' => 0,
                               );
 
         $arimba_acumulado = array('Materiais' => 0,
@@ -1143,10 +1151,8 @@ final class RelatorioMensalAction extends Action
                                   'Serviços externos' => 0,
                                   'Outros custos internos' => 0,
                                   'Outros custos externos' => 0,
-                                  'total' => 0
+                                  'total' => 0,
                                  );
-
-
 
         $caraculo_mensal = $arimba_mensal;
         $cassosso_mensal = $arimba_mensal;
@@ -1155,7 +1161,7 @@ final class RelatorioMensalAction extends Action
         $cassosso_acumulado = $arimba_acumulado;
 
         if ($custosMensais) {
-            # introduzir dados mensais de custos
+            // introduzir dados mensais de custos
             foreach ($custosMensais as $key => $value) {
                 if ($value->cind == 120401) {
                     if (in_array($value->superfamilia, $arimba_mensal)) {
@@ -1172,29 +1178,29 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-            # Cálculo do total de custos por centro industrial
+            // Cálculo do total de custos por centro industrial
             foreach ($arimba_mensal as $key => $value) {
                 $arimba_mensal['total'] += $value;
             }
 
-            # Cálculo do total de custos por centro industrial
+            // Cálculo do total de custos por centro industrial
             foreach ($caraculo_mensal as $key => $value) {
                 $caraculo_mensal['total'] += $value;
             }
 
-            # Cálculo do total de custos por centro industrial
+            // Cálculo do total de custos por centro industrial
             foreach ($cassosso_mensal as $key => $value) {
                 $cassosso_mensal['total'] += $value;
             }
 
-            # Cálculo dos totais por superfamilia de custos
+            // Cálculo dos totais por superfamilia de custos
             foreach ($arimba_mensal as $key => $value) {
                 $totalGeral_mensal[$key] = $arimba_mensal[$key] + $caraculo_mensal[$key] + $cassosso_mensal[$key];
             }
         }
 
         if ($custosAcumulados) {
-            # introduzir dados mensais acumulados de custos
+            // introduzir dados mensais acumulados de custos
             foreach ($custosAcumulados as $key => $value) {
                 if ($value->cind == 120401) {
                     if (in_array($value->superfamilia, $arimba_acumulado)) {
@@ -1211,29 +1217,26 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-            # Cálculo do total de custos acumulados por centro industrial
+            // Cálculo do total de custos acumulados por centro industrial
             foreach ($arimba_acumulado as $key => $value) {
                 $arimba_acumulado['total'] += $value;
             }
 
-            # Cálculo do total de custos acumulados por centro industrial
+            // Cálculo do total de custos acumulados por centro industrial
             foreach ($caraculo_acumulado as $key => $value) {
                 $caraculo_acumulado['total'] += $value;
             }
 
-
-            # Cálculo do total de custos acumulados por centro industrial
+            // Cálculo do total de custos acumulados por centro industrial
             foreach ($cassosso_acumulado as $key => $value) {
                 $cassosso_acumulado['total'] += $value;
             }
 
-            # Cálculo dos totais por superfamilia de custos
+            // Cálculo dos totais por superfamilia de custos
             foreach ($arimba_acumulado as $key => $value) {
                 $totalGeral_acumulado[$key] = $arimba_acumulado[$key] + $caraculo_acumulado[$key] + $cassosso_acumulado[$key];
             }
         }
-
-
 
         $vars['arimba_mensal'] = $arimba_mensal;
         $vars['caraculo_mensal'] = $caraculo_mensal;
@@ -1254,8 +1257,6 @@ final class RelatorioMensalAction extends Action
         $custosAcumulados = $this->getSQL_custos(1, $mes);
         $custosMensais = $this->getSQL_custos($mes, $mes);
 
-
-
         $arimba_mensal = array('Materiais' => 0,
                                'Ferramentas' => 0,
                                'Expatriados' => 0,
@@ -1266,9 +1267,8 @@ final class RelatorioMensalAction extends Action
                                'Serviços externos' => 0,
                                'Outros custos internos' => 0,
                                'Outros custos externos' => 0,
-                               'total' => 0
+                               'total' => 0,
                               );
-
 
         $arimba_acumulado = $arimba_mensal;
         $caraculo_mensal = $arimba_mensal;
@@ -1277,7 +1277,7 @@ final class RelatorioMensalAction extends Action
         $cassosso_acumulado = $arimba_mensal;
 
         if ($custosMensais) {
-            # introduzir dados mensais de custos
+            // introduzir dados mensais de custos
             foreach ($custosMensais as $key => $value) {
                 if ($value->cind == 120401) {
                     if (in_array($value->superfamilia, $arimba_mensal)) {
@@ -1294,9 +1294,9 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-            # Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
-            # entrada de valores sem que haja de outras familias)
-            $moNacionalMensal = $this->getSQL_MaoDeObra($mes, $mes, "N");
+            // Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
+            // entrada de valores sem que haja de outras familias)
+            $moNacionalMensal = $this->getSQL_MaoDeObra($mes, $mes, 'N');
 
             if (!empty($moNacionalMensal)) {
                 foreach ($moNacionalMensal as $key => $value) {
@@ -1310,7 +1310,7 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-            $moExpatriadoMensal = $this->getSQL_MaoDeObra($mes, $mes, "E");
+            $moExpatriadoMensal = $this->getSQL_MaoDeObra($mes, $mes, 'E');
 
             if (!empty($moExpatriadoMensal)) {
                 foreach ($moExpatriadoMensal as $key => $value) {
@@ -1324,29 +1324,29 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-            # Cálculo do total de custos por centro industrial
+            // Cálculo do total de custos por centro industrial
             foreach ($arimba_mensal as $key => $value) {
                 $arimba_mensal['total'] += $value;
             }
 
-            # Cálculo do total de custos por centro industrial
+            // Cálculo do total de custos por centro industrial
             foreach ($caraculo_mensal as $key => $value) {
                 $caraculo_mensal['total'] += $value;
             }
 
-            # Cálculo do total de custos por centro industrial
+            // Cálculo do total de custos por centro industrial
             foreach ($cassosso_mensal as $key => $value) {
                 $cassosso_mensal['total'] += $value;
             }
 
-            # Cálculo dos totais por superfamilia de custos
+            // Cálculo dos totais por superfamilia de custos
             foreach ($arimba_mensal as $key => $value) {
                 $totalGeral_mensal[$key] = $arimba_mensal[$key] + $caraculo_mensal[$key] + $cassosso_mensal[$key];
             }
         }
 
         if ($custosAcumulados) {
-            # introduzir dados mensais acumulados de custos
+            // introduzir dados mensais acumulados de custos
             foreach ($custosAcumulados as $key => $value) {
                 if ($value->cind == 120401) {
                     if (in_array($value->superfamilia, $arimba_acumulado)) {
@@ -1363,9 +1363,8 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-            # Adicionar o custo com mão de obra nacional Acumulada
-            $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, "N");
-
+            // Adicionar o custo com mão de obra nacional Acumulada
+            $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'N');
 
             if (!empty($moNacionalAcumulada)) {
                 foreach ($moNacionalAcumulada as $key => $value) {
@@ -1379,9 +1378,8 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-            # Adicionar o custo com mão de obra expatriada Acumulada
-            $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, "E");
-
+            // Adicionar o custo com mão de obra expatriada Acumulada
+            $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'E');
 
             if (!empty($moExpatriadaAcumulada)) {
                 foreach ($moExpatriadaAcumulada as $key => $value) {
@@ -1395,24 +1393,22 @@ final class RelatorioMensalAction extends Action
                 }
             }
 
-
-            # Cálculo do total de custos acumulados por centro industrial
+            // Cálculo do total de custos acumulados por centro industrial
             foreach ($arimba_acumulado as $key => $value) {
                 $arimba_acumulado['total'] += $value;
             }
 
-            # Cálculo do total de custos acumulados por centro industrial
+            // Cálculo do total de custos acumulados por centro industrial
             foreach ($caraculo_acumulado as $key => $value) {
                 $caraculo_acumulado['total'] += $value;
             }
 
-
-            # Cálculo do total de custos acumulados por centro industrial
+            // Cálculo do total de custos acumulados por centro industrial
             foreach ($cassosso_acumulado as $key => $value) {
                 $cassosso_acumulado['total'] += $value;
             }
 
-            # Cálculo dos totais por superfamilia de custos
+            // Cálculo dos totais por superfamilia de custos
             foreach ($arimba_acumulado as $key => $value) {
                 $totalGeral_acumulado[$key] = $arimba_acumulado[$key] +
                                               $caraculo_acumulado[$key] +
@@ -1420,14 +1416,11 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-
-
-        for ($i=1; $i <= $mes; $i++) {
+        for ($i = 1; $i <= $mes; ++$i) {
             $dadosGrafico[$i] = $this->custos_grafico($i);
         }
 
-
-        for ($i=1; $i <= $mes; $i++) {
+        for ($i = 1; $i <= $mes; ++$i) {
             $arimbaGraficoMensal[] = $dadosGrafico[$i]['arimba_mensal']['total'];
             $caraculoGraficoMensal[] = $dadosGrafico[$i]['caraculo_mensal']['total'];
             $cassossoGraficoMensal[] = $dadosGrafico[$i]['cassosso_mensal']['total'];
@@ -1446,16 +1439,16 @@ final class RelatorioMensalAction extends Action
 
         $vars['page'] = 'custos';
         $vars['title'] = 'Custos Operacionais';
-        $vars['mes_titulo'] = $lista_meses[$mes-1];
+        $vars['mes_titulo'] = $lista_meses[$mes - 1];
         $vars['arimba_mensal'] = $arimba_mensal;
         $vars['caraculo_mensal'] = $caraculo_mensal;
         $vars['cassosso_mensal'] = $cassosso_mensal;
         $vars['arimba_acumulado'] = $arimba_acumulado;
         $vars['caraculo_acumulado'] = $caraculo_acumulado;
         $vars['cassosso_acumulado'] = $cassosso_acumulado;
-        $vars['totalGeral_mensal'] =$totalGeral_mensal;
-        $vars['totalGeral_acumulado'] =$totalGeral_acumulado;
-        # dados gráfico
+        $vars['totalGeral_mensal'] = $totalGeral_mensal;
+        $vars['totalGeral_acumulado'] = $totalGeral_acumulado;
+        // dados gráfico
         $vars['arimbaGraficoMensal'] = $arimbaGraficoMensal;
         $vars['caraculoGraficoMensal'] = $caraculoGraficoMensal;
         $vars['cassossoGraficoMensal'] = $cassossoGraficoMensal;
@@ -1466,7 +1459,7 @@ final class RelatorioMensalAction extends Action
         $vars['label2'] = 'caraculo';
         $vars['label3'] = 'cassosso';
 
-        return $this->view->render($response, 'relatorios/mensais/' . $vars['page'] .'.twig', $vars);
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
     public function operacional_grafico($mesActual)
@@ -1477,7 +1470,7 @@ final class RelatorioMensalAction extends Action
 
         $custosAcumulados = $this->getSQL_custos(1, $mes);
 
-        # Total de custos acumulados
+        // Total de custos acumulados
         if ($custosAcumulados === 0) {
             $totalCustosAcumulados = 0;
         } else {
@@ -1491,11 +1484,11 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
-        # entrada de valores sem que haja de outras familias)
+        // Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
+        // entrada de valores sem que haja de outras familias)
 
-        # Adicionar o custo com mão de obra nacional Acumulada
-        $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, "N");
+        // Adicionar o custo com mão de obra nacional Acumulada
+        $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'N');
 
         if (!empty($moNacionalAcumulada)) {
             foreach ($moNacionalAcumulada as $key => $value) {
@@ -1509,9 +1502,8 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Adicionar o custo com mão de obra expatriada Acumulada
-        $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, "E");
-
+        // Adicionar o custo com mão de obra expatriada Acumulada
+        $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'E');
 
         if (!empty($moExpatriadaAcumulada)) {
             foreach ($moExpatriadaAcumulada as $key => $value) {
@@ -1530,7 +1522,7 @@ final class RelatorioMensalAction extends Action
             $somaTotalCustos += $value;
         }
 
-        # Valores mensais acumulados da produção
+        // Valores mensais acumulados da produção
         foreach ($cisRelatorioMensal as $key => $value) {
             $producaoMensalAcumulada[$key] = $this->getProducao($key, 1, $mes);
             $valorProduzidaAcumulada[$key] = 0;
@@ -1543,7 +1535,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # CI Operacional por centro industrial
+        // CI Operacional por centro industrial
         foreach ($cisRelatorioMensal as $key => $value) {
             if ($valorProduzidaAcumulada[$key] != 0) {
                 $ciOperacionalAcumulado[$key] = $totalCustosAcumulados[$key] / $valorProduzidaAcumulada[$key];
@@ -1555,17 +1547,16 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-
-        # Stock de todos os CI
+        // Stock de todos os CI
         $stockGeral = $this->getStock($mes);
         $stockJaneiro = $this->getStock(1);
 
-        # Preço do agregado
+        // Preço do agregado
         foreach ($lista_array_agregados as $key => $value) {
             $preco[$key] = $this->getPreco($key);
         }
 
-        # Valor do stock no mês actual
+        // Valor do stock no mês actual
         foreach ($cisRelatorioMensal as $ci => $codigo) {
             $valorStockMesAnterior[$ci] = 0;
             $valorStockMes[$ci] = 0;
@@ -1592,8 +1583,7 @@ final class RelatorioMensalAction extends Action
         $custosAcumulados = $this->getSQL_custos(1, $mes);
         $custosMensais = $this->getSQL_custos($mes, $mes);
 
-
-        # Total de custos acumulados
+        // Total de custos acumulados
         if ($custosAcumulados === 0) {
             $totalCustosAcumulados = 0;
         } else {
@@ -1612,7 +1602,7 @@ final class RelatorioMensalAction extends Action
             $somaTotalCustosAcumulados += $value;
         }
 
-        # Total de custos mensais
+        // Total de custos mensais
         if ($custosMensais === 0) {
             $totalCustos = 0;
         } else {
@@ -1626,9 +1616,9 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
-        # entrada de valores sem que haja de outras familias)
-        $moNacionalMensal = $this->getSQL_MaoDeObra($mes, $mes, "N");
+        // Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
+        // entrada de valores sem que haja de outras familias)
+        $moNacionalMensal = $this->getSQL_MaoDeObra($mes, $mes, 'N');
 
         if (!empty($moNacionalMensal)) {
             foreach ($moNacionalMensal as $key => $value) {
@@ -1642,7 +1632,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        $moExpatriadoMensal = $this->getSQL_MaoDeObra($mes, $mes, "E");
+        $moExpatriadoMensal = $this->getSQL_MaoDeObra($mes, $mes, 'E');
 
         if (!empty($moExpatriadoMensal)) {
             foreach ($moExpatriadoMensal as $key => $value) {
@@ -1656,8 +1646,8 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Adicionar o custo com mão de obra nacional Acumulada
-        $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, "N");
+        // Adicionar o custo com mão de obra nacional Acumulada
+        $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'N');
 
         if (!empty($moNacionalAcumulada)) {
             foreach ($moNacionalAcumulada as $key => $value) {
@@ -1671,9 +1661,8 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Adicionar o custo com mão de obra expatriada Acumulada
-        $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, "E");
-
+        // Adicionar o custo com mão de obra expatriada Acumulada
+        $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'E');
 
         if (!empty($moExpatriadaAcumulada)) {
             foreach ($moExpatriadaAcumulada as $key => $value) {
@@ -1692,7 +1681,7 @@ final class RelatorioMensalAction extends Action
             $somaTotalCustos += $value;
         }
 
-        # Valores mensais da produção
+        // Valores mensais da produção
         foreach ($cisRelatorioMensal as $key => $value) {
             $producaoMensal[$key] = $this->getProducao($key, $mes, $mes);
             $valorProduzida[$key] = 0;
@@ -1714,7 +1703,7 @@ final class RelatorioMensalAction extends Action
             $somaQuantidadeProduzida += $value;
         }
 
-        # Valores mensais acumulados da produção
+        // Valores mensais acumulados da produção
         foreach ($cisRelatorioMensal as $key => $value) {
             $producaoMensalAcumulada[$key] = $this->getProducao($key, 1, $mes);
             $valorProduzidaAcumulada[$key] = 0;
@@ -1736,7 +1725,7 @@ final class RelatorioMensalAction extends Action
             $somaQuantidadeProduzidaAcumulada += $value;
         }
 
-        # Resultado Operacional por centro industrial
+        // Resultado Operacional por centro industrial
         foreach ($cisRelatorioMensal as $key => $value) {
             $resultadoOperacional[$key] = $valorProduzida[$key] - $totalCustos[$key];
             $resultadoOperacionalAcumulado[$key] = $valorProduzidaAcumulada[$key] - $totalCustosAcumulados[$key];
@@ -1751,7 +1740,7 @@ final class RelatorioMensalAction extends Action
             $somaResultadoOperacionalAcumulado += $value;
         }
 
-        # CI Operacional por centro industrial
+        // CI Operacional por centro industrial
         foreach ($cisRelatorioMensal as $key => $value) {
             if ($valorProduzida[$key] != 0) {
                 $ciOperacional[$key] = $totalCustos[$key] / $valorProduzida[$key];
@@ -1789,16 +1778,16 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Stock de todos os CI
+        // Stock de todos os CI
         $stockGeral = $this->getStock($mes);
         $stockJaneiro = $this->getStock(1);
 
-        # Preço do agregado
+        // Preço do agregado
         foreach ($lista_array_agregados as $key => $value) {
             $preco[$key] = $this->getPreco($key);
         }
 
-        # Valor do stock no mês actual
+        // Valor do stock no mês actual
         foreach ($cisRelatorioMensal as $ci => $codigo) {
             $valorStockMesAnterior[$ci] = 0;
             $valorStockMes[$ci] = 0;
@@ -1823,7 +1812,7 @@ final class RelatorioMensalAction extends Action
             $somaValorStockJaneiro += $value;
         }
 
-        # Diferença entre valor stock anterior com actual
+        // Diferença entre valor stock anterior com actual
         foreach ($cisRelatorioMensal as $ci => $codigo) {
             $variacaoMensal[$ci] = $valorStockMes[$ci] - $valorStockMesAnterior[$ci];
             $variacaoAcumulada[$ci] = $valorStockMes[$ci] - $valorStockJaneiro[$ci];
@@ -1838,14 +1827,12 @@ final class RelatorioMensalAction extends Action
             $somaVariacaoAcumulada = $somaValorStockMes - $somaValorStockJaneiro;
         }
 
-
-        # Dados para os gráficos
-        for ($i=1; $i <= $mes; $i++) {
+        // Dados para os gráficos
+        for ($i = 1; $i <= $mes; ++$i) {
             $dadosGrafico[$i] = $this->operacional_grafico($i);
         }
 
-
-        for ($i=1; $i <= $mes; $i++) {
+        for ($i = 1; $i <= $mes; ++$i) {
             $arimbaGraficoCI[] = round($dadosGrafico[$i]['ciAcumulado']['arimba'], 1);
             $caraculoGraficoCI[] = round($dadosGrafico[$i]['ciAcumulado']['caraculo'], 1);
             $cassossoGraficoCI[] = round($dadosGrafico[$i]['ciAcumulado']['cassosso'], 1);
@@ -1854,38 +1841,37 @@ final class RelatorioMensalAction extends Action
             $cassossoGraficoStock[] = round($dadosGrafico[$i]['valorStockActual']['cassosso']);
         }
 
-
         $vars['page'] = 'resultadooperacional';
         $vars['title'] = 'Resultado Operacional';
 
-        $vars['mes_titulo'] = $lista_meses[$mes-1];
-        # Quantidade produzida
+        $vars['mes_titulo'] = $lista_meses[$mes - 1];
+        // Quantidade produzida
         $vars['quantidadeProduzida'] = $quantidadeProduzida;
         $vars['quantidadeProduzidaAcumulada'] = $quantidadeProduzidaAcumulada;
-        # Valor Produção
+        // Valor Produção
         $vars['valorProduzida'] = $valorProduzida;
         $vars['valorProduzidaAcumulada'] = $valorProduzidaAcumulada;
-        # Custos da operação
+        // Custos da operação
         $vars['totalCustos'] = $totalCustos;
         $vars['totalCustosAcumulados'] = $totalCustosAcumulados;
-        # Resultado operacional
+        // Resultado operacional
         $vars['resultadoOperacional'] = $resultadoOperacional;
         $vars['resultadoOperacionalAcumulado'] = $resultadoOperacionalAcumulado;
-        # CI operacional
+        // CI operacional
         $vars['ciOperacional'] = $ciOperacional;
         $vars['ciOperacionalAcumulado'] = $ciOperacionalAcumulado;
-        # Stock mês
+        // Stock mês
         $vars['valorStockMesAnterior'] = $valorStockMesAnterior;
         $vars['valorStockJaneiro'] = $valorStockJaneiro;
         $vars['valorStockMes'] = $valorStockMes;
-        # Variação de stocks
+        // Variação de stocks
         $vars['variacaoMensal'] = $variacaoMensal;
         $vars['variacaoAcumulada'] = $variacaoAcumulada;
 
         $vars['cisRelatorioMensal'] = $cisRelatorioMensal;
-        # Rodapé da tabela
-        $vars['somaTotalCustosAcumulados']= $somaTotalCustosAcumulados;
-        $vars['somaTotalCustos']= $somaTotalCustos;
+        // Rodapé da tabela
+        $vars['somaTotalCustosAcumulados'] = $somaTotalCustosAcumulados;
+        $vars['somaTotalCustos'] = $somaTotalCustos;
         $vars['somaQuantidadeProduzida'] = $somaQuantidadeProduzida;
         $vars['somaQuantidadeProduzidaAcumulada'] = $somaQuantidadeProduzidaAcumulada;
         $vars['somaValorProduzida'] = $somaValorProduzida;
@@ -1900,7 +1886,7 @@ final class RelatorioMensalAction extends Action
         $vars['somaVariacaoMensal'] = $somaVariacaoMensal;
         $vars['somaVariacaoAcumulada'] = $somaVariacaoAcumulada;
 
-        # dados gráfico
+        // dados gráfico
         $vars['arimbaGraficoCI'] = $arimbaGraficoCI;
         $vars['caraculoGraficoCI'] = $caraculoGraficoCI;
         $vars['cassossoGraficoCI'] = $cassossoGraficoCI;
@@ -1912,7 +1898,7 @@ final class RelatorioMensalAction extends Action
         $vars['label2'] = 'caraculo';
         $vars['label3'] = 'cassosso';
 
-        return $this->view->render($response, 'relatorios/mensais/' . $vars['page'] .'.twig', $vars);
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
     public function facturacao($request, $response)
@@ -1921,14 +1907,14 @@ final class RelatorioMensalAction extends Action
 
         $mes = $request->getAttribute('item');
 
-        for ($i = 1; $i <= $mes; $i++) {
+        for ($i = 1; $i <= $mes; ++$i) {
             foreach ($cisRelatorioMensal as $key => $value) {
                 $fornecimentoInterno[$key][$i] = $this->getFornecimento($key, 'GTO', 'SPA', $i, $i);
                 $fornecimentoExterno[$key][$i] = $this->getFornecimento($key, 'GR', 'VD', $i, $i);
             }
         }
 
-        # Somatório dos fornecimentos de todos agregados
+        // Somatório dos fornecimentos de todos agregados
         foreach ($fornecimentoInterno as $ci => $value) {
             foreach ($value as $mes => $dados) {
                 $fornecimentoInternoTotal[$ci][$mes] = 0;
@@ -1940,8 +1926,8 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Total de fornecimento interno e externo
-        for ($i = 1; $i <= $mes; $i++) {
+        // Total de fornecimento interno e externo
+        for ($i = 1; $i <= $mes; ++$i) {
             $totalFI[$i] = 0;
             $totalFE[$i] = 0;
             foreach ($fornecimentoInternoTotal as $ci => $dados) {
@@ -1950,19 +1936,19 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Total do mês
+        // Total do mês
         $totalMes = array();
-        for ($i = 1; $i <= $mes ; $i++) {
+        for ($i = 1; $i <= $mes; ++$i) {
             $totalMes[$i] = $totalFI[$i] + $totalFE[$i];
         }
 
-        # Dados do rodapé
+        // Dados do rodapé
 
         // Subtotais dos CI
         foreach ($fornecimentoInternoTotal as $ci => $dados) {
             $rodapeInterno[$ci] = 0;
             $rodapeExterno[$ci] = 0;
-            for ($i = 1; $i <= $mes ; $i++) {
+            for ($i = 1; $i <= $mes; ++$i) {
                 $rodapeInterno[$ci] += $fornecimentoInternoTotal[$ci][$i];
                 $rodapeExterno[$ci] += $fornecimentoExternoTotal[$ci][$i];
             }
@@ -1976,7 +1962,7 @@ final class RelatorioMensalAction extends Action
         // Subtotais dos totais
             $rodapeTotaisFI = 0;
         $rodapeTotaisFE = 0;
-        for ($i = 1; $i <= $mes ; $i++) {
+        for ($i = 1; $i <= $mes; ++$i) {
             $rodapeTotaisFI += $totalFI[$i];
             $rodapeTotaisFE += $totalFE[$i];
         }
@@ -1987,9 +1973,9 @@ final class RelatorioMensalAction extends Action
         $vars['page'] = 'facturacao';
         $vars['title'] = 'Mapa Facturação';
         $vars['ci'] = $cisRelatorioMensal;
-        $vars['mes_titulo'] = $lista_meses[$mes-1];
+        $vars['mes_titulo'] = $lista_meses[$mes - 1];
         $vars['meses'] = $lista_meses;
-        # Dados
+        // Dados
         $vars['fornecimentoInternoTotal'] = $fornecimentoInternoTotal;
         $vars['fornecimentoExternoTotal'] = $fornecimentoExternoTotal;
         $vars['totalFI'] = $totalFI;
@@ -2002,13 +1988,12 @@ final class RelatorioMensalAction extends Action
         $vars['rodapeTotaisFE'] = $rodapeTotaisFE;
         $vars['totalRodape'] = $totalRodape;
 
-        return $this->view->render($response, 'relatorios/mensais/' . $vars['page'] .'.twig', $vars);
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
     public function resultado_grafico($mes)
     {
         include 'src/Auxiliares/globals.php';
-
 
         foreach ($cisRelatorioMensal as $ci => $value) {
             $qtFIAcumulada[$ci] = $this->getFornecimento($ci, 'GTO', 'SPA', 1, $mes);
@@ -2054,9 +2039,6 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-
-
-
         $vars['CIFacturacao'] = $CIFacturacaoAcumulado;
         $vars['resultadoFacturacao'] = $resultadoFacturacaoAcumulado;
 
@@ -2099,7 +2081,7 @@ final class RelatorioMensalAction extends Action
             $volumeVendido[$ci] = 0;
             $volumeVendidoAcumulado[$ci] = 0;
             foreach ($lista_array_agregados as $nome => $brita) {
-                $volumeVendido[$ci] += $qtFI[$ci][$nome]['m3'] +  $qtFE[$ci][$nome]['m3'];
+                $volumeVendido[$ci] += $qtFI[$ci][$nome]['m3'] + $qtFE[$ci][$nome]['m3'];
                 $volumeVendidoAcumulado[$ci] += $qtFIAcumulada[$ci][$nome]['m3'] + $qtFEAcumulada[$ci][$nome]['m3'];
             }
         }
@@ -2155,7 +2137,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Percentagem dos fornecimentos internos e externos
+        // Percentagem dos fornecimentos internos e externos
         foreach ($somaFI as $ci => $value) {
             if ($totalFornecimento[$ci] === 0) {
                 $percentagemFI[$ci] = 0;
@@ -2173,7 +2155,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Valores do rodapé
+        // Valores do rodapé
         $rodapeVolumeVendido = 0;
         $rodapeFI = 0;
         $rodapeFE = 0;
@@ -2213,7 +2195,7 @@ final class RelatorioMensalAction extends Action
             $rodapeCIF = $rodapeCustoCI / $rodapeTotal;
         }
 
-        # Acumulados
+        // Acumulados
         $rodapeVolumeVendidoAcumulado = 0;
         $rodapeFIAcumulado = 0;
         $rodapeFEAcumulado = 0;
@@ -2253,13 +2235,12 @@ final class RelatorioMensalAction extends Action
             $rodapeCIFAcumulado = $rodapeCustoCIAcumulado / $rodapeTotalAcumulado;
         }
 
-
-        # Dados para os gráficos
-        for ($i=1; $i <= $mes; $i++) {
+        // Dados para os gráficos
+        for ($i = 1; $i <= $mes; ++$i) {
             $dadosGrafico[$i] = $this->resultado_grafico($i);
         }
 
-        for ($i=1; $i <= $mes; $i++) {
+        for ($i = 1; $i <= $mes; ++$i) {
             $arimbaGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['arimba'], 1);
             $caraculoGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['caraculo'], 1);
             $cassossoGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['cassosso'], 1);
@@ -2296,7 +2277,7 @@ final class RelatorioMensalAction extends Action
         $vars['percentagemFE'] = $percentagemFE;
         $vars['percentagemAcumuladaFE'] = $percentagemAcumuladaFE;
 
-        # Rodapés
+        // Rodapés
         $vars['rodapeVolumeVendido'] = $rodapeVolumeVendido;
         $vars['rodapeMediaVenda'] = $rodapeMediaVenda;
         $vars['rodapeFI'] = $rodapeFI;
@@ -2317,7 +2298,7 @@ final class RelatorioMensalAction extends Action
         $vars['rodapeResultadoAcumulado'] = $rodapeResultadoAcumulado;
         $vars['rodapeCIFAcumulado'] = $rodapeCIFAcumulado;
 
-        # dados gráfico
+        // dados gráfico
         $vars['arimbaGraficoCI'] = $arimbaGraficoCI;
         $vars['caraculoGraficoCI'] = $caraculoGraficoCI;
         $vars['cassossoGraficoCI'] = $cassossoGraficoCI;
@@ -2329,7 +2310,7 @@ final class RelatorioMensalAction extends Action
         $vars['label2'] = 'caraculo';
         $vars['label3'] = 'cassosso';
 
-        return $this->view->render($response, 'relatorios/mensais/' . $vars['page'] .'.twig', $vars);
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
     public function vendas($request, $response)
@@ -2344,7 +2325,7 @@ final class RelatorioMensalAction extends Action
             $valoresGTO[$ci] = $this->getFornecimento($ci, 'GTO', 'SPA', $mes, $mes);
         }
 
-        # Organização dos valores das GR
+        // Organização dos valores das GR
         foreach ($valoresGR as $ci => $value) {
             foreach ($value as $cliente => $valor) {
                 $vendaGR[$cliente][$ci] = $valor;
@@ -2360,7 +2341,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Organização dos valores das VD e GTO
+        // Organização dos valores das VD e GTO
         foreach ($cisRelatorioMensal as $ci => $value) {
             $totalVDm3[$ci] = 0;
             $totalGTOm3[$ci] = 0;
@@ -2374,7 +2355,7 @@ final class RelatorioMensalAction extends Action
             }
         }
 
-        # Totais por cliente
+        // Totais por cliente
         foreach ($vendaGR as $cliente => $valor) {
             $somaM3[$cliente] = 0;
             $somaTotal[$cliente] = 0;
@@ -2395,7 +2376,7 @@ final class RelatorioMensalAction extends Action
             $somaGTOtotal += $totalGTOtotal[$ci];
         }
 
-        # Totais do rodapé
+        // Totais do rodapé
         foreach ($cisRelatorioMensal as $ci => $value) {
             $rodapeM3[$ci] = 0;
             $rodapeTotal[$ci] = 0;
@@ -2435,13 +2416,12 @@ final class RelatorioMensalAction extends Action
         $vars['somaVDtotal'] = $somaVDtotal;
         $vars['somaGTOm3'] = $somaGTOm3;
         $vars['somaGTOtotal'] = $somaGTOtotal;
-        # rodapé
+        // rodapé
         $vars['rodapeM3'] = $rodapeM3;
         $vars['rodapeTotal'] = $rodapeTotal;
         $vars['rodapeTotalM3'] = $rodapeTotalM3;
         $vars['rodapeTotalTotal'] = $rodapeTotalTotal;
 
-
-        return $this->view->render($response, 'relatorios/mensais/' . $vars['page'] .'.twig', $vars);
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 }

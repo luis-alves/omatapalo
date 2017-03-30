@@ -156,11 +156,13 @@
     </div>
 
     <script type="text/javascript">
-        //
+
         var val1 = {{ somaProducao['120401']|json_encode|raw }};
         var val2 = {{ somaProducao['120402']|json_encode|raw }};
         var val3 = {{ somaProducao['120403']|json_encode|raw }};
-
+        console.log(val1)
+        console.log(val2)
+        console.log(val3)
         var pieData = {
             labels: [
                 "Arimba", "Caraculo", "Cassosso"
@@ -193,7 +195,8 @@
         //
         var val1 = {{ somaRodapefInterno|json_encode|raw }};
         var val2 = {{ somaRodapefExterno|json_encode|raw }};
-
+        console.log(val1)
+        console.log(val2)
         var pieData = {
             labels: [
                 "Venda Interna", "Venda Externa"
