@@ -3,13 +3,13 @@
 namespace Src\Controllers;
 
 use Src\Models\VendasArimba;
+use DateTime;
 
 /**
  *
  */
 final class TabelasAction extends Action
 {
-
     public function form($request, $response)
     {
         include 'src/Auxiliares/globals.php';
@@ -138,35 +138,32 @@ final class TabelasAction extends Action
                 return $response->withRedirect('balanca/form');
             }
 
+            $todosTipos = array('GTO', 'SPA', 'VD', 'GR');
+
             $tipoDoc = rtrim("'".implode("'".", '", $check)."'", ',');
             $tipoDocArray = explode(", ", $tipoDoc);
+
+            foreach ($check as $key => $value) {
+                if (!in_array($value, $todosTipos)) {
+                    $vars['valores'] = [];
+                    $vars['page'] = 'balanca/balanca';
+                    $vars['title'] = 'Mapa Balança';
+                    dump($todosTipos);
+                    return $this->view->render($response, 'tabelas/balanca/balanca.twig', $vars);
+                }
+            }
+
+            if ($this->validateDate($data_inicial) === false || $this->validateDate($data_final) === false) {
+                $vars['valores'] = [];
+                $vars['page'] = 'balanca/balanca';
+                $vars['title'] = 'Mapa Balança';
+                dump($todosTipos);
+                return $this->view->render($response, 'tabelas/balanca/balanca.twig', $vars);
+            }
 
             // dump($tipoDocArray);
             switch (true) {
                 case empty($_POST['clientes']) && empty($_POST['obras']):
-
-                    // $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
-                    //                                          nome_obra, nome_agr_corr, peso,
-                    //                                          ROUND(peso/baridade) AS m3,
-                    //                                          ROUND(valor_in_ton * baridade,2) AS preco_m3,
-                    //                                          ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
-                    //                                          ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
-                    //                                          ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
-                    //                            ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
-                    //                            ->leftjoin('agregados', 'nome_agr', '=', 'nome_agre')
-                    //                            ->leftjoin('baridades', 'agr_id', '=', 'agregado_id')
-                    //                            ->leftjoin('valorun_interno_ton', 'agr_bar_id', '=', 'agregado_id')
-                    //                            ->leftjoin('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agregado_id')
-                    //                            ->leftjoin('obras', 'obra', '=', 'id_obra')
-                    //                            ->where('data', '>', $data_inicial)
-                    //                            ->where('data', '<', $data_final)
-                    //                            ->where('tipo_doc', $check)
-                    //                         //    ->whereIn('nome_agr', $agr)
-                    //                            ->get();
-
-                    $placeholders = str_repeat('?, ', count($tipoDocArray) - 1).'?';
-                    $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1).'?';
-
 
                     $query = "SELECT `data`, `tipo_doc`, `num_doc`, `nome_cliente`, `no_obra`,
                                      `obra`, `nome_obra`, `nome_agr_corr`, `peso`,
@@ -188,138 +185,92 @@ final class TabelasAction extends Action
                               ON `agr_bar_ton_id` = `agregado_id`
                               JOIN `obras`
                               ON `obra` = `id_obra`
-                              WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND `nome_agr` IN ($placeholders2)
+                              WHERE `tipo_doc` IN ($tipoDoc) AND `data` BETWEEN '$data_inicial' AND '$data_final' AND `nome_agr` IN ($lista_agregados)
                               ORDER by `data`, `num_doc`";
 
                               $rows = $this->db->prepare($query);
-                              $params = array_merge( $lista_array_agregados);
-                              $rows->execute($params);
+                              $rows->execute();
 
                               if ($rows->rowCount() > 0) {
                                   $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+                                  $queryBalanca = $vars['row'];
+                              } else {
+                                  $queryBalanca = [];
                               }
-                              $queryBalanca = $vars['row'];
 
                     break;
 
                 case !empty($_POST['clientes']) && empty($_POST['obras']):
                     $array_cliente = $_POST['clientes'];
-                    $new_cliente = rtrim('('."'".implode("'".", '", $array_cliente)."'".')', ',');
 
-                    $query = "SELECT `data`, `tipo_doc`, `num_doc`, `nome_cliente`, `no_obra`,
-                                     `obra`, `nome_obra`, `nome_agr_corr`, `peso`,
-                                      ROUND((`peso`/`baridade`),2) AS `m3`,
-                                      ROUND(`valor_in_ton`*`baridade`,2) AS `preco_m3`,
-                                      ROUND(ROUND((`peso`/`baridade`),2)*ROUND(`valor_in_ton`*`baridade`,2),2) AS `total_m3`,
-                                      ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2) AS `preco_vd`,
-                                      ROUND(ROUND((`peso`/`baridade`),2) * ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2),2) AS `total_v_m3`
-                                  FROM `importacao_arimba`
-                                  LEFT JOIN `centros_analiticos`
-                                  ON `ca_id` = `obra`
-                                  JOIN `agregados`
-                                  ON `nome_agr` = `nome_agre`
-                                  JOIN `baridades`
-                                  ON `agr_id` = `agregado_id`
-                                  JOIN `valorun_interno_ton`
-                                  ON `agr_bar_id` = `agregado_id`
-                                  JOIN `valorun_externo_ton`
-                                  ON `agr_bar_ton_id` = `agregado_id`
-                                  LEFT JOIN `obras`
-                                  ON `obra` = `id_obra`
-                                  WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND `tipo_doc` IN ($tipoDoc) AND `nome_agr` IN ($lista_agregados) AND `nome_cliente` IN ($new_cliente)
-                                  ORDER by `data`, `num_doc`";
-
-                    $rows = $this->db->prepare($query);
-                    $rows->execute();
-
-                    if ($rows->rowCount() > 0) {
-                        $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-                    }
-
-                    $queryBalanca = $vars['row'];
+                    $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
+                                                             nome_obra, nome_agr_corr, peso,
+                                                             ROUND(peso/baridade) AS m3,
+                                                             ROUND(valor_in_ton * baridade,2) AS preco_m3,
+                                                             ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
+                                                             ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
+                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
+                                               ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
+                                               ->join('agregados', 'nome_agr', '=', 'nome_agre')
+                                               ->join('baridades', 'agr_id', '=', 'agregado_id')
+                                               ->join('valorun_interno_ton', 'agr_bar_id', '=', 'agregado_id')
+                                               ->join('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agregado_id')
+                                               ->join('obras', 'obra', '=', 'id_obra')
+                                               ->whereBetween('data', [$data_inicial,$data_final])
+                                               ->whereIn('tipo_doc', $check)
+                                               ->whereIn('nome_agr', $lista_agregados_array)
+                                               ->whereIn('nome_cliente', $array_cliente)
+                                               ->get();
 
                     break;
 
                 case !empty($_POST['clientes']) && !empty($_POST['obras']):
                     $array_obras = $_POST['obras'];
-                    $new_obra = rtrim('('."'".implode("'".", '", $array_obras)."'".')', ',');
-                    //dump($new_cliente);
                     $array_cliente = $_POST['clientes'];
-                    $new_cliente = rtrim('('."'".implode("'".", '", $array_cliente)."'".')', ',');
 
-                    $query = "SELECT `data`, `tipo_doc`, `num_doc`, `nome_cliente`, `no_obra`,
-                                     `obra`, `nome_obra`, `nome_agr_corr`, `peso`,
-                                      ROUND((`peso`/`baridade`),2) AS `m3`,
-                                      ROUND(`valor_in_ton`*`baridade`,2) AS `preco_m3`,
-                                      ROUND(ROUND((`peso`/`baridade`),2)*ROUND(`valor_in_ton`*`baridade`,2),2) AS `total_m3`,
-                                      ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2) AS `preco_vd`,
-                                      ROUND(ROUND((`peso`/`baridade`),2) * ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2),2) AS `total_v_m3`
-                              FROM `importacao_arimba`
-                              LEFT JOIN `centros_analiticos`
-                              ON `ca_id` = `obra`
-                              JOIN `agregados`
-                              ON `nome_agr` = `nome_agre`
-                              JOIN `baridades`
-                              ON `agr_id` = `agregado_id`
-                              JOIN `valorun_interno_ton`
-                              ON `agr_bar_id` = `agregado_id`
-                              JOIN `valorun_externo_ton`
-                              ON `agr_bar_ton_id` = `agregado_id`
-                              LEFT JOIN `obras`
-                              ON `obra` = `id_obra`
-                              WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND
-                                     `tipo_doc` IN ($tipoDoc) AND `nome_agr` IN $lista_agregados AND
-                                     `nome_cliente` IN $new_cliente
-                              AND `nome_obra` IN $new_obra
-                              ORDER by `data`, `num_doc`";
+                    $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
+                                                             nome_obra, nome_agr_corr, peso,
+                                                             ROUND(peso/baridade) AS m3,
+                                                             ROUND(valor_in_ton * baridade,2) AS preco_m3,
+                                                             ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
+                                                             ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
+                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
+                                               ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
+                                               ->join('agregados', 'nome_agr', '=', 'nome_agre')
+                                               ->join('baridades', 'agr_id', '=', 'agregado_id')
+                                               ->join('valorun_interno_ton', 'agr_bar_id', '=', 'agregado_id')
+                                               ->join('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agregado_id')
+                                               ->join('obras', 'obra', '=', 'id_obra')
+                                               ->whereBetween('data', [$data_inicial,$data_final])
+                                               ->whereIn('tipo_doc', $check)
+                                               ->whereIn('nome_agr', $lista_agregados_array)
+                                               ->whereIn('nome_cliente', $array_cliente)
+                                               ->whereIn('no_obra', $array_obras)
+                                               ->get();
 
-                  $rows = $this->db->prepare($query);
-                  $rows->execute();
-
-                  if ($rows->rowCount() > 0) {
-                      $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-                  }
-
-                  $queryBalanca = $vars['row'];
-
-                  break;
+                    break;
 
                 case empty($_POST['clientes']) && !empty($_POST['obras']):
                     $array_obras = $_POST['obras'];
-                    $new_obra = rtrim('('."'".implode("'".", '", $array_obras)."'".')', ',');
-                    $query = "SELECT `data`, `tipo_doc`, `num_doc`, `nome_cliente`, `no_obra`,
-                                     `obra`, `nome_obra`, `nome_agr_corr`, `peso`,
-                                      ROUND((`peso`/`baridade`),2) AS `m3`,
-                                      ROUND(`valor_in_ton`*`baridade`,2) AS `preco_m3`,
-                                      ROUND(ROUND((`peso`/`baridade`),2)*ROUND(`valor_in_ton`*`baridade`,2),2) AS `total_m3`,
-                                      ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2) AS `preco_vd`,
-                                      ROUND(ROUND((`peso`/`baridade`),2) * ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2),2) AS `total_v_m3`
-                                  FROM `importacao_arimba`
-                                  LEFT JOIN `centros_analiticos`
-                                  ON `ca_id` = `obra`
-                                  JOIN `agregados`
-                                  ON `nome_agr` = `nome_agre`
-                                  JOIN `baridades`
-                                  ON `agr_id` = `agregado_id`
-                                  JOIN `valorun_interno_ton`
-                                  ON `agr_bar_id` = `agregado_id`
-                                  JOIN `valorun_externo_ton`
-                                  ON `agr_bar_ton_id` = `agregado_id`
-                                  LEFT JOIN `obras`
-                                  ON `obra` = `id_obra`
-                                  WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND
-                                         `tipo_doc` IN ($tipoDoc) AND `nome_agr` IN ($lista_agregados) AND
-                                         `no_obra` IN ($new_obra)
-                                  ORDER by `data`, `num_doc`";
 
-                  $rows = $this->db->prepare($query);
-                  $rows->execute();
-
-                  if ($rows->rowCount() > 0) {
-                      $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-                  }
-
-                  $queryBalanca = $vars['row'];
+                    $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
+                                                             nome_obra, nome_agr_corr, peso,
+                                                             ROUND(peso/baridade) AS m3,
+                                                             ROUND(valor_in_ton * baridade,2) AS preco_m3,
+                                                             ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
+                                                             ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
+                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
+                                               ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
+                                               ->join('agregados', 'nome_agr', '=', 'nome_agre')
+                                               ->join('baridades', 'agr_id', '=', 'agregado_id')
+                                               ->join('valorun_interno_ton', 'agr_bar_id', '=', 'agregado_id')
+                                               ->join('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agregado_id')
+                                               ->join('obras', 'obra', '=', 'id_obra')
+                                               ->whereBetween('data', [$data_inicial,$data_final])
+                                               ->whereIn('tipo_doc', $check)
+                                               ->whereIn('nome_agr', $lista_agregados_array)
+                                               ->whereIn('no_obra', $array_obras)
+                                               ->get();
 
                   break;
             }
@@ -332,5 +283,11 @@ final class TabelasAction extends Action
 
             return $this->view->render($response, 'tabelas/balanca/balanca.twig', $vars);
         }
+    }
+
+    public function validateDate($date, $format = 'Y/m/d')
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
     }
 }
