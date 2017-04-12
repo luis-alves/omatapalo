@@ -2,21 +2,24 @@
 
 namespace Src\Controllers;
 
+use Src\Models\VendasArimba;
+
 /**
  *
  */
 final class TabelasAction extends Action
 {
+
     public function form($request, $response)
     {
         include 'src/Auxiliares/globals.php';
-
+        include 'src/Auxiliares/helpers.php';
 
         $cindus = 'importacao_'.$cAnalitico;
 
-        $query = "SELECT DISTINCT nome_cliente FROM ? ORDER BY nome_cliente";
+        $query = "SELECT DISTINCT nome_cliente FROM $cindus ORDER BY nome_cliente";
         $clientes = $this->db->prepare($query);
-        $clientes->execute([$cindus]);
+        $clientes->execute();
 
         if ($clientes->rowCount() > 0) {
             $clientes = $clientes->fetchAll(\PDO::FETCH_OBJ);
@@ -44,7 +47,7 @@ final class TabelasAction extends Action
         $nomeCI = $cAnalitico.'Agregados';
         $nomeCE = $$nomeCI;
         foreach ($nomeCE as $key => $nome) {
-            $agregadosDoCi[] = $nome;
+            $agregadosDoCi[] = [$nome => $key];
         }
         // dump($agregadosDoCi);
 
@@ -59,7 +62,6 @@ final class TabelasAction extends Action
     public function toneladas($request, $response)
     {
         include 'src/Auxiliares/globals.php';
-
 
         //
         // Obter os preços
@@ -79,6 +81,9 @@ final class TabelasAction extends Action
 
     public function balanca($request, $response)
     {
+        include 'src/Auxiliares/helpers.php';
+        include 'src/Auxiliares/globals.php';
+
         $vars['page'] = 'balanca';
         $vars['title'] = 'Mapa Balança';
 
@@ -120,13 +125,6 @@ final class TabelasAction extends Action
                 // return $response->withRedirect($this->router->pathFor('view',[], $vars));
             }
 
-            // reformat data to presente to sql making it like ('GTO', 'GR')
-            // from array(0 => 'GTO', 1 => 'GR')
-            // implode() method from http://stackoverflow.com/questions/
-            // 12230338/mysql-where-not-in-name-array
-
-            $new_array = rtrim('('.implode(', ', $check).')', ',');
-
             if (!empty($_POST['agr'])) {
                 $agr = $_POST['agr'];
                 $_SESSION['erro'] = null;
@@ -140,10 +138,35 @@ final class TabelasAction extends Action
                 return $response->withRedirect('balanca/form');
             }
 
-            $new_agr = rtrim('('.implode(', ', $agr).')', ',');
+            $tipoDoc = rtrim("'".implode("'".", '", $check)."'", ',');
+            $tipoDocArray = explode(", ", $tipoDoc);
 
+            // dump($tipoDocArray);
             switch (true) {
                 case empty($_POST['clientes']) && empty($_POST['obras']):
+
+                    // $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
+                    //                                          nome_obra, nome_agr_corr, peso,
+                    //                                          ROUND(peso/baridade) AS m3,
+                    //                                          ROUND(valor_in_ton * baridade,2) AS preco_m3,
+                    //                                          ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
+                    //                                          ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
+                    //                                          ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
+                    //                            ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
+                    //                            ->leftjoin('agregados', 'nome_agr', '=', 'nome_agre')
+                    //                            ->leftjoin('baridades', 'agr_id', '=', 'agregado_id')
+                    //                            ->leftjoin('valorun_interno_ton', 'agr_bar_id', '=', 'agregado_id')
+                    //                            ->leftjoin('valorun_externo_ton', 'agr_bar_ton_id', '=', 'agregado_id')
+                    //                            ->leftjoin('obras', 'obra', '=', 'id_obra')
+                    //                            ->where('data', '>', $data_inicial)
+                    //                            ->where('data', '<', $data_final)
+                    //                            ->where('tipo_doc', $check)
+                    //                         //    ->whereIn('nome_agr', $agr)
+                    //                            ->get();
+
+                    $placeholders = str_repeat('?, ', count($tipoDocArray) - 1).'?';
+                    $placeholders2 = str_repeat('?, ', count($lista_agregados_array) - 1).'?';
+
 
                     $query = "SELECT `data`, `tipo_doc`, `num_doc`, `nome_cliente`, `no_obra`,
                                      `obra`, `nome_obra`, `nome_agr_corr`, `peso`,
@@ -165,9 +188,18 @@ final class TabelasAction extends Action
                               ON `agr_bar_ton_id` = `agregado_id`
                               JOIN `obras`
                               ON `obra` = `id_obra`
-                              WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND
-                                     `tipo_doc` IN $new_array AND `nome_agr` IN $new_agr
+                              WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND `nome_agr` IN ($placeholders2)
                               ORDER by `data`, `num_doc`";
+
+                              $rows = $this->db->prepare($query);
+                              $params = array_merge( $lista_array_agregados);
+                              $rows->execute($params);
+
+                              if ($rows->rowCount() > 0) {
+                                  $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+                              }
+                              $queryBalanca = $vars['row'];
+
                     break;
 
                 case !empty($_POST['clientes']) && empty($_POST['obras']):
@@ -194,8 +226,18 @@ final class TabelasAction extends Action
                                   ON `agr_bar_ton_id` = `agregado_id`
                                   LEFT JOIN `obras`
                                   ON `obra` = `id_obra`
-                                  WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND `tipo_doc` IN $new_array AND `nome_agr` IN $new_agr AND `nome_cliente` IN $new_cliente
+                                  WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND `tipo_doc` IN ($tipoDoc) AND `nome_agr` IN ($lista_agregados) AND `nome_cliente` IN ($new_cliente)
                                   ORDER by `data`, `num_doc`";
+
+                    $rows = $this->db->prepare($query);
+                    $rows->execute();
+
+                    if ($rows->rowCount() > 0) {
+                        $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+                    }
+
+                    $queryBalanca = $vars['row'];
+
                     break;
 
                 case !empty($_POST['clientes']) && !empty($_POST['obras']):
@@ -226,11 +268,21 @@ final class TabelasAction extends Action
                               LEFT JOIN `obras`
                               ON `obra` = `id_obra`
                               WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND
-                                     `tipo_doc` IN $new_array AND `nome_agr` IN $new_agr AND
+                                     `tipo_doc` IN ($tipoDoc) AND `nome_agr` IN $lista_agregados AND
                                      `nome_cliente` IN $new_cliente
                               AND `nome_obra` IN $new_obra
                               ORDER by `data`, `num_doc`";
-                        break;
+
+                  $rows = $this->db->prepare($query);
+                  $rows->execute();
+
+                  if ($rows->rowCount() > 0) {
+                      $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+                  }
+
+                  $queryBalanca = $vars['row'];
+
+                  break;
 
                 case empty($_POST['clientes']) && !empty($_POST['obras']):
                     $array_obras = $_POST['obras'];
@@ -256,18 +308,24 @@ final class TabelasAction extends Action
                                   LEFT JOIN `obras`
                                   ON `obra` = `id_obra`
                                   WHERE  `data` BETWEEN '$data_inicial' AND '$data_final' AND
-                                         `tipo_doc` IN $new_array AND `nome_agr` IN $new_agr AND
-                                         `no_obra` IN $new_obra
+                                         `tipo_doc` IN ($tipoDoc) AND `nome_agr` IN ($lista_agregados) AND
+                                         `no_obra` IN ($new_obra)
                                   ORDER by `data`, `num_doc`";
-                    break;
+
+                  $rows = $this->db->prepare($query);
+                  $rows->execute();
+
+                  if ($rows->rowCount() > 0) {
+                      $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+                  }
+
+                  $queryBalanca = $vars['row'];
+
+                  break;
             }
 
-            $rows = $this->db->prepare($query);
-            $rows->execute();
 
-            if ($rows->rowCount() > 0) {
-                $vars['valores'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-            }
+            $vars['valores'] = $queryBalanca;
 
             $vars['page'] = 'balanca/balanca';
             $vars['title'] = 'Mapa Balança';
