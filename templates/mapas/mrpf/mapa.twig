@@ -34,9 +34,9 @@
                     <th class="text-center">Total/ média</th>
                     {% if qtMensal is defined %}
                         {% for item in 1..6 %}
-                            <th class="text-center">{{ qtMensal[loop.index]|number_format(0,",",".") }}</th>
+                            <th class="text-center">{{ qtMensal[loop.index]|number_format(0,","," ") }}</th>
                             <th class="text-center">{{ media_precos[loop.index]|number_format(2,",",".") }}</th>
-                            <th class="text-center">{{ factMensal[loop.index]|number_format(0,",",".") }}</th>
+                            <th class="text-center">{{ factMensal[loop.index]|number_format(0,","," ") }}</th>
                         {% endfor %}
                     {% else %}
                         {% for item in 1..6 %}
@@ -45,9 +45,9 @@
                             <th class="text-center"><?= 0 ?></th>
                         {% endfor %}
                     {% endif %}
-                    <th class="text-center">{{ qtTotalAnual|number_format(0,",",".") }}</th>
+                    <th class="text-center">{{ qtTotalAnual|number_format(0,","," ") }}</th>
                     <th class="text-center">{{ mediaAnualRodape|number_format(2,",",".") }}</th>
-                    <th class="text-center">{{ factTotalAnual|number_format(0,",",".") }}</th>
+                    <th class="text-center">{{ factTotalAnual|number_format(0,","," ") }}</th>
                 </tr>
             </tfoot>
 
@@ -57,13 +57,13 @@
                         <tr>
                             <td class="text-center">{{ key }}</td>
                             {% for item in 1..6 %}
-                                <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,",",".") }}</td>
+                                <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,","," ") }}</td>
                                 <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
-                                <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,",",".") }}</td>
+                                <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,","," ") }}</td>
                             {% endfor %}
-                            <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,",",".") }}</td>
+                            <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,","," ") }}</td>
                             <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
-                            <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,",",".") }}</td>
+                            <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,","," ") }}</td>
                         </tr>
                     {% endfor %}
                 {% endif %}
@@ -97,9 +97,9 @@
                     <th class="text-center">Total/ média</th>
                     {% if qtMensal is defined %}
                         {% for item in 7..12 %}
-                            <th class="text-center">{{ qtMensal[loop.index]|number_format(0,",",".") }}</th>
+                            <th class="text-center">{{ qtMensal[loop.index]|number_format(0,","," ") }}</th>
                             <th class="text-center">{{ media_precos[loop.index]|number_format(2,",",".") }}</th>
-                            <th class="text-center">{{ factMensal[loop.index]|number_format(0,",",".") }}</th>
+                            <th class="text-center">{{ factMensal[loop.index]|number_format(0,","," ") }}</th>
                         {% endfor %}
                     {% else %}
                         {% for item in 7..12 %}
@@ -108,9 +108,9 @@
                             <th class="text-center"><?= 0 ?></th>
                         {% endfor %}
                     {% endif %}
-                    <th class="text-center">{{ qtTotalAnual|number_format(0,",",".") }}</th>
+                    <th class="text-center">{{ qtTotalAnual|number_format(0,","," ") }}</th>
                     <th class="text-center">{{ mediaAnualRodape|number_format(2,",",".") }}</th>
-                    <th class="text-center">{{ factTotalAnual|number_format(0,",",".") }}</th>
+                    <th class="text-center">{{ factTotalAnual|number_format(0,","," ") }}</th>
                 </tr>
             </tfoot>
 
@@ -120,13 +120,13 @@
                         <tr>
                             <td class="text-center">{{ key }}</td>
                             {% for item in 7..12 %}
-                                <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,",",".") }}</td>
+                                <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,","," ") }}</td>
                                 <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
-                                <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,",",".") }}</td>
+                                <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,","," ") }}</td>
                             {% endfor %}
-                            <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,",",".") }}</td>
+                            <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,","," ") }}</td>
                             <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
-                            <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,",",".") }}</td>
+                            <td class="text-center Tparcial">{{ factAnual[key]|number_format(0,","," ") }}</td>
                         </tr>
                     {% endfor %}
                 {% endif %}
@@ -134,7 +134,7 @@
         </table>
 
         <div >
-            <canvas id="myChart" width="100%"></canvas>
+            <canvas id="myChart" height="30px" width="100%"></canvas>
         </div>
     </div>
 
@@ -160,13 +160,8 @@
             }
 
             #myChart {
-                height: auto !important;
-                max-width: 900px !important;
-            }
-
-            #maximo {
-                max-width: 1024px;
-                max-height: 400px;
+                height: 200px !important;
+                max-width: 1300px !important;
             }
 
             td,
@@ -180,13 +175,8 @@
             }
 
             #myChart {
-                height: auto !important;
+                height: 200px !important;
                 max-width: 960px !important;
-            }
-
-            #maximo {
-                max-width: 1024px;
-                max-height: 400px;
             }
 
             td,

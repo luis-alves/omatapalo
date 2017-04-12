@@ -122,11 +122,14 @@ final class MapasResumoAction extends Action
             $params = array_merge($lista_agregados_array, [$ano]);
             $rows->execute($params);
         } else {
+            // dump($preco);
+            $rows =
+
             $query = "SELECT `nome_agr` AS `nome`,
                              MONTH(`data`) AS `mes`,
                              (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
-                             ROUND((AVG(? * `baridade`)),2) AS `pu`,
-                             ROUND((SUM(`peso` / `baridade`)) * ROUND((AVG(? * `baridade`)))) AS `total`
+                             ROUND((AVG($preco * `baridade`)),2) AS `pu`,
+                             ROUND((SUM(`peso` / `baridade`)) * ROUND((AVG($preco * `baridade`)))) AS `total`
                       FROM `importacao_arimba`
                       LEFT JOIN `centros_analiticos`
                       ON `ca_id` = `obra`
@@ -144,8 +147,9 @@ final class MapasResumoAction extends Action
                       ";
 
             $rows = $this->db->prepare($query);
-            $params = array_merge([$preco, $preco], $tipos, $lista_agregados_array, [$ano]);
+            $params = array_merge($tipos, $lista_agregados_array, [$ano]);
             $rows->execute($params);
+            // dump($query);
         }
 
 
