@@ -3,6 +3,7 @@
 namespace Src\Controllers;
 
 use Src\Models\VendasArimba;
+use Illuminate\Database\Capsule\Manager as Capsule;
 use DateTime;
 
 /**
@@ -203,13 +204,13 @@ final class TabelasAction extends Action
                 case !empty($_POST['clientes']) && empty($_POST['obras']):
                     $array_cliente = $_POST['clientes'];
 
-                    $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
+                    $queryBalanca = Capsule::table('importacao_'.$cAnalitico)->select(Capsule::raw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
                                                              nome_obra, nome_agr_corr, peso,
                                                              ROUND(peso/baridade) AS m3,
                                                              ROUND(valor_in_ton * baridade,2) AS preco_m3,
                                                              ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
                                                              ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
-                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
+                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3'))
                                                ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
                                                ->join('agregados', 'nome_agr', '=', 'nome_agre')
                                                ->join('baridades', 'agr_id', '=', 'agregado_id')
@@ -228,13 +229,13 @@ final class TabelasAction extends Action
                     $array_obras = $_POST['obras'];
                     $array_cliente = $_POST['clientes'];
 
-                    $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
+                    $queryBalanca = Capsule::table('importacao_'.$cAnalitico)->select(Capsule::raw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
                                                              nome_obra, nome_agr_corr, peso,
                                                              ROUND(peso/baridade) AS m3,
                                                              ROUND(valor_in_ton * baridade,2) AS preco_m3,
                                                              ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
                                                              ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
-                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
+                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3'))
                                                ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
                                                ->join('agregados', 'nome_agr', '=', 'nome_agre')
                                                ->join('baridades', 'agr_id', '=', 'agregado_id')
@@ -253,13 +254,13 @@ final class TabelasAction extends Action
                 case empty($_POST['clientes']) && !empty($_POST['obras']):
                     $array_obras = $_POST['obras'];
 
-                    $queryBalanca = VendasArimba::selectRaw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
+                    $queryBalanca = Capsule::table('importacao_'.$cAnalitico)->select(Capsule::raw('data, tipo_doc, num_doc, nome_cliente, no_obra,obra,
                                                              nome_obra, nome_agr_corr, peso,
                                                              ROUND(peso/baridade) AS m3,
                                                              ROUND(valor_in_ton * baridade,2) AS preco_m3,
                                                              ROUND(ROUND((peso/baridade),2)*ROUND(valor_in_ton*baridade,2),2) AS total_m3,
                                                              ROUND(valor_ex_ton*baridade * (1-desco),2) AS preco_vd,
-                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3')
+                                                             ROUND(ROUND((peso/baridade),2) * ROUND(valor_ex_ton*baridade * (1-desco),2),2) AS total_v_m3'))
                                                ->leftjoin('centros_analiticos', 'ca_id', '=', 'obra')
                                                ->join('agregados', 'nome_agr', '=', 'nome_agre')
                                                ->join('baridades', 'agr_id', '=', 'agregado_id')
