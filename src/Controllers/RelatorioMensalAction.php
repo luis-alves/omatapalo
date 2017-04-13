@@ -220,9 +220,11 @@ final class RelatorioMensalAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+        $anoAnalise = 'ano_'.$ano;
+
         $query = 'SELECT MONTH(`data`) AS mes,
                          `cind`,
-	                     SUM(`h_normais` * ? + `h_extras` * ?) AS `custo_un`
+	                     SUM(`h_normais` * "'.$anoAnalise.'" + `h_extras` * "'.$anoAnalise.'") AS `custo_un`
                   FROM `folha_ponto`
                   LEFT JOIN `colaboradores`
                   ON `num_mec` = `n_mec`
@@ -232,7 +234,7 @@ final class RelatorioMensalAction extends Action
                   GROUP BY cind';
 
         $rows = $this->db->prepare($query);
-        $rows->execute([$ano, $ano, $ano, $mesInicial, $mesActual, $tipo]);
+        $rows->execute([$ano, $mesInicial, $mesActual, $tipo]);
 
         $array = array();
 

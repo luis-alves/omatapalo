@@ -152,7 +152,7 @@
                         var pageTotal = api.column(colNo, {page: 'current'}).data().reduce(function(a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
-                        $("tr:eq(0) td:eq(" + colNo + ")", api.table().footer()).html(pageTotal + '$').css("font-weight", "bold");
+                        $("tr:eq(0) td:eq(" + colNo + ")", api.table().footer()).html(pageTotal).css("font-weight", "bold");
                     }
 
                     // Total global
@@ -168,4 +168,17 @@
 
         });
     </script>
+
+    <style>
+        @media (max-width:670px) {
+            /*body {
+                font-size: 1.1em;
+            }*/
+            th {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+
+    </style>
 {% endblock %}

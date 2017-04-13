@@ -2,14 +2,13 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="colorir" style="background-color:#003686;padding:5px;">
-            <h2 style="color:white;text-align:center;">{{title}}</h2>
-        </div>
+    <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" style="width:100%;overflow-x:auto">
+        <caption style="">
+            <h2 class="colorir" style="color:white;text-align:center;background-color:#003686;padding:5px;">{{title}}</h2>
+        </caption>
         <br>
-    </div>
-    <div class="container">
-        <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" style="width:100%;overflow-x:auto">
+        <div class="container">
+
             <thead>
                 <tr>
                     <th rowspan="2" class="text-center" style="vertical-align:middle;">Agregados</th>
@@ -61,6 +60,15 @@
         th {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
+        }
+        @media (max-width:670px) {
+            body {
+                font-size: 0.9em;
+            }
+            th {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
         }
 
     </style>
