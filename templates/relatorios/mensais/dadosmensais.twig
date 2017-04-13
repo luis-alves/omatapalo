@@ -141,13 +141,13 @@
             <tbody>
                 <tr>
                     <td>
-                        <div id="container" style="width: 80;float:left;">
-                            <canvas id="myData1" width="600" height="400"></canvas>
+                        <div id="container" style="float:left;">
+                            <canvas id="myData1" width="400" height="300"></canvas>
                         </div>
                     </td>
                     <td>
-                        <div id="container" style="width: 80;float:right;">
-                            <canvas id="myData2" width="600" height="400"></canvas>
+                        <div id="container" style="float:right;">
+                            <canvas id="myData2" width="400" height="300"></canvas>
                         </div>
                     </td>
                 </tr>
@@ -244,6 +244,19 @@
         th {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
+        }
+        @media (max-width: 670px) {
+            body {
+                font-size: 0.8em;
+            }
+            #myData1 {
+                width: 320px !important;
+                height: 200px !important;
+            }
+            #myData2 {
+                width: 280px !important;
+                height: 200px !important;
+            }
         }
 
     </style>
