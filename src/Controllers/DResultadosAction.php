@@ -118,24 +118,29 @@ class DResultadosAction extends Action
 
         # Dados da produção
         $producoesOrd = $sql::getSQLProducoes("PRO", "ENT");
-
-        # Ordenar por array de meses (On^2)
-        #
-        for ($i=0; $i < 12; $i++) {
-            $producoes[$i+1] = 0;
-            foreach ($producoesOrd as $key => $value) {
-                if ($value->mes - 1 == $i) {
-                    $producoes[$value->mes] += $value->total;
+        if (!empty($producoesOrd)) {
+            # Ordenar por array de meses (On^2)
+            for ($i=0; $i < 12; $i++) {
+                $producoes[$i+1] = 0;
+                foreach ($producoesOrd as $key => $value) {
+                    // dump($key);
+                    if (!empty($value->mes)) {
+                        if ($value->mes - 1 == $i) {
+                            $producoes[$value->mes] += $value->total;
+                        }
+                    }
                 }
             }
-        }
 
-        # Inserir meses sem valores (O n.n^2)
-        #
-        for ($i=1; $i <= 12; $i++) {
-            if (empty($producoes[$i])) {
-                $producoes[$i] = 0;
+            # Inserir meses sem valores (O n.n^2)
+            #
+            for ($i=1; $i <= 12; $i++) {
+                if (empty($producoes[$i])) {
+                    $producoes[$i] = 0;
+                }
             }
+        } else {
+            $producoes = [];
         }
 
         $totalProducoes = 0;
@@ -157,7 +162,12 @@ class DResultadosAction extends Action
             }
         }
 
-        $percTotalProducoes = $totalProducoes / $totalProducoes * 100;
+        if ($totalProducoes > 0) {
+            $percTotalProducoes = $totalProducoes / $totalProducoes * 100;
+        } else {
+            $percTotalProducoes = 0;
+        }
+
 
         for ($i=1; $i < 13; $i++) {
             $totalProveitosOperacionais += $proveitosOperacionais[$i];
@@ -376,7 +386,12 @@ class DResultadosAction extends Action
                 }
             }
 
-            $totalMargemMedianteFacturacao = $totalResultadoMedianteFacturacao / $somatorioTotalVendas * 100;
+            if ($somatorioTotalVendas > 0) {
+                $totalMargemMedianteFacturacao = $totalResultadoMedianteFacturacao / $somatorioTotalVendas * 100;
+            } else {
+                $totalMargemMedianteFacturacao = 0;
+            }
+
 
             # Calcular o stock mensal
 
@@ -410,7 +425,12 @@ class DResultadosAction extends Action
                 $mediaStockAnual += $stockMensal[$i];
             }
 
-            $mediaStockAnual = $mediaStockAnual / count($stockMensal);
+            if (count($stockMensal) > 0) {
+                $mediaStockAnual = $mediaStockAnual / count($stockMensal);
+            } else {
+                $mediaStockAnual = 0;
+            }
+
 
             # Entradas Externas para Stock
             $entradasExternas = array();
@@ -426,65 +446,120 @@ class DResultadosAction extends Action
             $margemComStock = array();
 
             for ($i=1; $i < 13; $i++) {
-                $margemComStock[$i] = ($resultadosOperacionais[$i] + $stockMensal[$i] - ($entradasExternas[$i] * ($entradasExternas[$i] / $producoes[$i]))) / $producoes[$i] * 100;
+                if ($producoes[$i] > 0) {
+                    $margemComStock[$i] = ($resultadosOperacionais[$i] + $stockMensal[$i] - ($entradasExternas[$i] * ($entradasExternas[$i] / $producoes[$i]))) / $producoes[$i] * 100;
+                } else {
+                    $margemComStock[$i] = 0;
+                }
             }
 
-            $margemComStockGlobal = ($totalResultadosOperacionais + $mediaStockAnual - ($totalEntradasExternas * ($totalEntradasExternas / $totalProducoes))) / $totalProducoes * 100;
+            if ($totalProducoes > 0) {
+                $margemComStockGlobal = ($totalResultadosOperacionais + $mediaStockAnual - ($totalEntradasExternas * ($totalEntradasExternas / $totalProducoes))) / $totalProducoes * 100;
+            } else {
+                $margemComStockGlobal = 0;
+            }
+
 
             $custosOperacionais = array();
 
             for ($i=1; $i < 13; $i++) {
-                $custosOperacionais[$i] = $totalCustosOperacionais[$i] / $totalOperacional * 100;
+                if ($totalOperacional > 0) {
+                    $custosOperacionais[$i] = $totalCustosOperacionais[$i] / $totalOperacional * 100;
+                } else {
+                    $custosOperacionais[$i] = 0;
+                }
             }
 
             # Calculo de percentagens
-            $percMateriaisDiversos = $totalMateriaisDiversos / $totalOperacional * 100;
-            $percMateriasPrimas = $totalMateriasPrimas / $totalOperacional * 100;
-            //$percMateriasExternas = $ / $totalOperacional * 100;
-            $percTotalEquipamento = $totalEquipamento / $totalOperacional * 100;
-            $percEquipamentoInterno = $totalEquipamentoInterno / $totalOperacional * 100;
-            $percEquipamentoExterno = $totalEquipamentoExterno / $totalOperacional * 100;
-            $percTotalTransporte = $totalTransporte / $totalOperacional * 100;
-            $percTransporteInterno = $totalTransporteInterno / $totalOperacional * 100;
-            $percTransporteExterno = $totalTransporteExterno / $totalOperacional * 100;
-            $percFSE = $somaTotalFSE / $totalOperacional * 100;
-            $percSubcontratos = $totalFSE['Subcontratos/SubEmpreitadas'] / $totalOperacional * 100;
-            $percElectricidade = $totalFSE['Material Eléctrico'] / $totalOperacional * 100;
-            $percAgua = $totalFSE['Água'] / $totalOperacional * 100;
-            $percComustiveis = $totalFSE['Combustíveis'] / $totalOperacional * 100;
-            $percSeguros = $totalFSE['Seguros'] / $totalOperacional * 100;
-            $percFerramentas = $totalFSE['Ferram. e Utens. Desg. Rápido'] / $totalOperacional * 100;
-            $percConservacao = $totalFSE['Conservação e Reparação'] / $totalOperacional * 100;
-            $percLivros = $totalFSE['Livros e Documentação Técnica'] / $totalOperacional * 100;
-            $percEscritorio = $totalFSE['Material de Escritório'] / $totalOperacional * 100;
-            $percInformatica = $totalFSE['Material Informático'] / $totalOperacional * 100;
-            $percComunicacao = $totalFSE['Comunicação'] / $totalOperacional * 100;
-            $percRendas = $totalFSE['Rendas e Alugueres'] / $totalOperacional * 100;
-            $percProteccao = $totalFSE['Material de Protecção e Segurança'] / $totalOperacional * 100;
-            $percVigilancia = $totalFSE['Vigilância e Segurança'] / $totalOperacional * 100;
-            $percRepresentacao = $totalFSE['Despesas Representação'] / $totalOperacional * 100;
-            $percEstadas = $totalFSE['Deslocações e Estadas'] / $totalOperacional * 100;
-            $percEspecial = $totalFSE['Trabalhos Especializados'] / $totalOperacional * 100;
-            $percOferta = $totalFSE['Artigos para Oferta'] / $totalOperacional * 100;
-            $percContencioso = $totalFSE['Contecioso e Notariado'] / $totalOperacional * 100;
-            $percPub = $totalFSE['Publicidade e Propaganda'] / $totalOperacional * 100;
-            $percOutros = $totalFSE['Outros Custos Vários'] / $totalOperacional * 100;
-            $percTotalPessoal = $somaTotalPessoal / $totalOperacional * 100;
-            $percSalariosNacionais = $totalPessoal['Salários Nacionais'] / $totalOperacional * 100;
-            $percSalariosExpatriados = $totalPessoal['Salários Expatriados'] / $totalOperacional * 100;
-            $percAlojamento = $totalPessoal['Alojamento'] / $totalOperacional * 100;
-            $percLimpeza = $totalPessoal['Limpeza. Higiene e Conforto'] / $totalOperacional * 100;
-            $percAlimentacao = $totalPessoal['Alimentação'] / $totalOperacional * 100;
-            $percSaude = $totalPessoal['Despesas de Saúde'] / $totalOperacional * 100;
-            $percOutrosPessoal = $totalPessoal['Horas Extras e Prémios'] / $totalOperacional * 100;
-            $percCustosFinanceiros = $somaTotalCustosFinanceiros / $totalOperacional * 100;
-            $percImpostos = $totalImpostos / $totalOperacional * 100;
-            $percAmortizacoes = $totalAmortizacoes / $totalOperacional * 100;
-            $percTotalOperacional = $totalOperacional / $totalOperacional * 100;
-
-
-
-
+            if ($totalOperacional > 0) {
+                $percMateriaisDiversos = $totalMateriaisDiversos / $totalOperacional * 100;
+                $percMateriasPrimas = $totalMateriasPrimas / $totalOperacional * 100;
+              //$percMateriasExternas = $ / $totalOperacional * 100;
+              $percTotalEquipamento = $totalEquipamento / $totalOperacional * 100;
+                $percEquipamentoInterno = $totalEquipamentoInterno / $totalOperacional * 100;
+                $percEquipamentoExterno = $totalEquipamentoExterno / $totalOperacional * 100;
+                $percTotalTransporte = $totalTransporte / $totalOperacional * 100;
+                $percTransporteInterno = $totalTransporteInterno / $totalOperacional * 100;
+                $percTransporteExterno = $totalTransporteExterno / $totalOperacional * 100;
+                $percFSE = $somaTotalFSE / $totalOperacional * 100;
+                $percSubcontratos = $totalFSE['Subcontratos/SubEmpreitadas'] / $totalOperacional * 100;
+                $percElectricidade = $totalFSE['Material Eléctrico'] / $totalOperacional * 100;
+                $percAgua = $totalFSE['Água'] / $totalOperacional * 100;
+                $percComustiveis = $totalFSE['Combustíveis'] / $totalOperacional * 100;
+                $percSeguros = $totalFSE['Seguros'] / $totalOperacional * 100;
+                $percFerramentas = $totalFSE['Ferram. e Utens. Desg. Rápido'] / $totalOperacional * 100;
+                $percConservacao = $totalFSE['Conservação e Reparação'] / $totalOperacional * 100;
+                $percLivros = $totalFSE['Livros e Documentação Técnica'] / $totalOperacional * 100;
+                $percEscritorio = $totalFSE['Material de Escritório'] / $totalOperacional * 100;
+                $percInformatica = $totalFSE['Material Informático'] / $totalOperacional * 100;
+                $percComunicacao = $totalFSE['Comunicação'] / $totalOperacional * 100;
+                $percRendas = $totalFSE['Rendas e Alugueres'] / $totalOperacional * 100;
+                $percProteccao = $totalFSE['Material de Protecção e Segurança'] / $totalOperacional * 100;
+                $percVigilancia = $totalFSE['Vigilância e Segurança'] / $totalOperacional * 100;
+                $percRepresentacao = $totalFSE['Despesas Representação'] / $totalOperacional * 100;
+                $percEstadas = $totalFSE['Deslocações e Estadas'] / $totalOperacional * 100;
+                $percEspecial = $totalFSE['Trabalhos Especializados'] / $totalOperacional * 100;
+                $percOferta = $totalFSE['Artigos para Oferta'] / $totalOperacional * 100;
+                $percContencioso = $totalFSE['Contecioso e Notariado'] / $totalOperacional * 100;
+                $percPub = $totalFSE['Publicidade e Propaganda'] / $totalOperacional * 100;
+                $percOutros = $totalFSE['Outros Custos Vários'] / $totalOperacional * 100;
+                $percTotalPessoal = $somaTotalPessoal / $totalOperacional * 100;
+                $percSalariosNacionais = $totalPessoal['Salários Nacionais'] / $totalOperacional * 100;
+                $percSalariosExpatriados = $totalPessoal['Salários Expatriados'] / $totalOperacional * 100;
+                $percAlojamento = $totalPessoal['Alojamento'] / $totalOperacional * 100;
+                $percLimpeza = $totalPessoal['Limpeza. Higiene e Conforto'] / $totalOperacional * 100;
+                $percAlimentacao = $totalPessoal['Alimentação'] / $totalOperacional * 100;
+                $percSaude = $totalPessoal['Despesas de Saúde'] / $totalOperacional * 100;
+                $percOutrosPessoal = $totalPessoal['Horas Extras e Prémios'] / $totalOperacional * 100;
+                $percCustosFinanceiros = $somaTotalCustosFinanceiros / $totalOperacional * 100;
+                $percImpostos = $totalImpostos / $totalOperacional * 100;
+                $percAmortizacoes = $totalAmortizacoes / $totalOperacional * 100;
+                $percTotalOperacional = $totalOperacional / $totalOperacional * 100;
+            } else {
+                $percMateriaisDiversos = 0;
+                $percMateriasPrimas = 0;
+              //$percMateriasExternas = $ / $totalOperacional * 100;
+              $percTotalEquipamento = 0;
+                $percEquipamentoInterno = 0;
+                $percEquipamentoExterno = 0;
+                $percTotalTransporte = 0;
+                $percTransporteInterno = 0;
+                $percTransporteExterno = 0;
+                $percFSE = 0;
+                $percSubcontratos = 0;
+                $percElectricidade = 0;
+                $percAgua = 0;
+                $percComustiveis = 0;
+                $percSeguros = 0;
+                $percFerramentas = 0;
+                $percConservacao = 0;
+                $percLivros = 0;
+                $percEscritorio = 0;
+                $percInformatica = 0;
+                $percComunicacao = 0;
+                $percRendas = 0;
+                $percProteccao = 0;
+                $percVigilancia = 0;
+                $percRepresentacao = 0;
+                $percEstadas = 0;
+                $percEspecial = 0;
+                $percOferta = 0;
+                $percContencioso = 0;
+                $percPub = 0;
+                $percOutros = 0;
+                $percTotalPessoal = 0;
+                $percSalariosNacionais = 0;
+                $percSalariosExpatriados = 0;
+                $percAlojamento = 0;
+                $percLimpeza = 0;
+                $percAlimentacao = 0;
+                $percSaude = 0;
+                $percOutrosPessoal = 0;
+                $percCustosFinanceiros = 0;
+                $percImpostos = 0;
+                $percAmortizacoes = 0;
+                $percTotalOperacional = 0;
+            }
 
             $vars['ano'] = $ano;
             $vars['page'] = 'relatorio';
