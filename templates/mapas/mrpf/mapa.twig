@@ -57,9 +57,9 @@
                         <tr>
                             <td class="text-center">{{ key }}</td>
                             {% for item in 1..6 %}
-                                <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,","," ") }}</td>
-                                <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
-                                <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,","," ") }}</td>
+                                <td class="text-center">{{ arrayValores[key][item]['m3']|number_format(0,","," ") }}</td>
+                                <td class="text-center">{{ arrayValores[key][item]['pu']|number_format(2,",",".") }}</td>
+                                <td class="text-center">{{ arrayValores[key][item]['total']|number_format(0,","," ") }}</td>
                             {% endfor %}
                             <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,","," ") }}</td>
                             <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
@@ -120,9 +120,9 @@
                         <tr>
                             <td class="text-center">{{ key }}</td>
                             {% for item in 7..12 %}
-                                <td class="text-center">{{ arrayValores[key][loop.index]['m3']|number_format(0,","," ") }}</td>
-                                <td class="text-center">{{ arrayValores[key][loop.index]['pu']|number_format(2,",",".") }}</td>
-                                <td class="text-center">{{ arrayValores[key][loop.index]['total']|number_format(0,","," ") }}</td>
+                                <td class="text-center">{{ arrayValores[key][item]['m3']|number_format(0,","," ") }}</td>
+                                <td class="text-center">{{ arrayValores[key][item]['pu']|number_format(2,",",".") }}</td>
+                                <td class="text-center">{{ arrayValores[key][item]['total']|number_format(0,","," ") }}</td>
                             {% endfor %}
                             <td class="text-center Tparcial">{{ qtAnual[key]|number_format(0,","," ") }}</td>
                             <td class="text-center Tparcial">{{ media_precos_anual[key]|number_format(2,",",".") }}</td>
