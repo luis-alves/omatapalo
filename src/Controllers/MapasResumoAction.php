@@ -315,7 +315,6 @@ final class MapasResumoAction extends Action
                     $factMensalGrafico[$i-1] = round($factMensal[$i], 0);
                 }
             }
-            // dump($arrayValores);
             $vars['arrayValores'] = $arrayValores;
             $vars['qtAnual'] = $qtAnual;
             $vars['qtMensal'] = $qtMensal;
