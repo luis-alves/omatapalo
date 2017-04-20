@@ -55,6 +55,13 @@ a {
     margin: 0 auto;
 }
 
+.centrar_rm {
+    display: table;
+    /*margin: 0 auto;*/
+    text-align: center;
+    width: 100%;
+}
+
 #teste {
     background-color: #4CAF50;
 }
