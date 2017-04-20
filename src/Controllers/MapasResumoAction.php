@@ -99,6 +99,8 @@ final class MapasResumoAction extends Action
         $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
         $tipos = [$op1, $op2];
         $placeholders2 = str_repeat('?, ', count($tipos) - 1) . '?';
+        $cindus = 'importacao_'.$cAnalitico;
+        $cindusProd = 'producao_'.$cAnalitico;
 
         if ($op1 === 'PRO') {
             $query = "SELECT `nome_agre` AS `nome`,
@@ -106,7 +108,7 @@ final class MapasResumoAction extends Action
                              `qt` AS `m3`,
                              ROUND(`valor_in_ton` * `baridade`,2) AS `pu`,
                              `qt` * ROUND(`valor_in_ton` * `baridade`) AS `total`
-                      FROM `producoes_arimba`
+                      FROM `$cindusProd`
                       JOIN `agregados`
                       ON `agr_id` = `cod_agr`
                       JOIN `baridades`
@@ -122,15 +124,12 @@ final class MapasResumoAction extends Action
             $params = array_merge($lista_agregados_array, [$ano]);
             $rows->execute($params);
         } else {
-            // dump($preco);
-            $rows =
-
             $query = "SELECT `nome_agr` AS `nome`,
                              MONTH(`data`) AS `mes`,
                              (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                              ROUND((AVG($preco * `baridade`)),2) AS `pu`,
                              ROUND((SUM(`peso` / `baridade`)) * ROUND((AVG($preco * `baridade`)))) AS `total`
-                      FROM `importacao_arimba`
+                      FROM `$cindus`
                       LEFT JOIN `centros_analiticos`
                       ON `ca_id` = `obra`
                       JOIN `agregados`
@@ -149,14 +148,12 @@ final class MapasResumoAction extends Action
             $rows = $this->db->prepare($query);
             $params = array_merge($tipos, $lista_agregados_array, [$ano]);
             $rows->execute($params);
-            // dump($query);
         }
 
 
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-
             $array = array();
             // Separar cada uma das linhas da query, por nome do agregado
             foreach ($vars['row'] as $key => $value) {
@@ -318,7 +315,7 @@ final class MapasResumoAction extends Action
                     $factMensalGrafico[$i-1] = round($factMensal[$i], 0);
                 }
             }
-
+            // dump($arrayValores);
             $vars['arrayValores'] = $arrayValores;
             $vars['qtAnual'] = $qtAnual;
             $vars['qtMensal'] = $qtMensal;
