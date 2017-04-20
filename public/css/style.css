@@ -61,7 +61,7 @@ a {
 
 .colorir{
     padding: 5px;
-    background: #003686;
+    background-color: #003686;
     color: white;
 }
 /*   */
@@ -307,10 +307,11 @@ a {
 
 .dr_colorir {
   padding:5px;
+  color: white;
+  background-color: #003686;
 }
 
 .dr_titulo {
-  color:white;
   text-align:center;
 }
 
