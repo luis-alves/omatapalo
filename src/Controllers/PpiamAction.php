@@ -13,12 +13,15 @@ final class PpiamAction extends Action
 
         $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
 
+        $cindus = 'importacao_'.$cAnalitico;
+        $cindusProd = 'producoes_'.$cAnalitico;
+
         $query = "SELECT `nome_agre` AS `nome`,
                          MONTH(`data_in`) AS `mes`,
                          `qt` AS `m3`,
                          ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                          `qt` * ROUND(`valor_in_ton` * `baridade`) AS `total`
-                  FROM `producoes_arimba`
+                  FROM `$cindusProd`
                   JOIN `agregados`
                   ON `agr_id` = `cod_agr`
                   JOIN `baridades`
@@ -91,7 +94,7 @@ final class PpiamAction extends Action
                           (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                           ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                           ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-                  FROM `importacao_arimba`
+                  FROM `$cindus`
                   LEFT JOIN `centros_analiticos`
                   ON `ca_id` = `obra`
                   JOIN `agregados`
@@ -165,7 +168,7 @@ final class PpiamAction extends Action
                           (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                           ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                           ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-                  FROM `importacao_arimba`
+                  FROM `$cindus`
                   LEFT JOIN `centros_analiticos`
                   ON `ca_id` = `obra`
                   JOIN `agregados`

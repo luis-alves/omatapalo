@@ -10,7 +10,8 @@ final class MapaDpgmiAction extends Action
     public function getSQL($tipoDoc1, $tipoDoc2, $preco)
     {
         include 'src/Auxiliares/globals.php';
-
+        $cindus = 'importacao_'.$cAnalitico;
+        $cindusProd = 'producoes_'.$cAnalitico;
         $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
 
         $tipos = [$tipoDoc1, $tipoDoc2];
@@ -23,7 +24,7 @@ final class MapaDpgmiAction extends Action
                              `qt` AS `m3`,
                              ROUND(`valor_in_ton` * `baridade`,2) AS `pu`,
                              `qt` * ROUND(`valor_in_ton` * `baridade`) AS `total`
-                      FROM `producoes_arimba`
+                      FROM `$cindusProd`
                       JOIN `agregados`
                       ON `agr_id` = `cod_agr`
                       JOIN `baridades`
@@ -44,7 +45,7 @@ final class MapaDpgmiAction extends Action
                              (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                              ROUND((AVG($preco * `baridade`)),2) AS `pu`,
                              ROUND((SUM(`peso` / `baridade`)) * ROUND((AVG($preco * `baridade` * (1-`desco`))))) AS `total`
-                      FROM `importacao_arimba`
+                      FROM `$cindus`
                       LEFT JOIN `centros_analiticos`
                       ON `ca_id` = `obra`
                       JOIN `agregados`

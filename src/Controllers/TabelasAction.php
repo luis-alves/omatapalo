@@ -96,7 +96,7 @@ final class TabelasAction extends Action
 
             $cindus = "importacao_".$cAnalitico;
 
-            $query = "SELECT DISTINCT nome_cliente FROM importacao_arimba ORDER BY nome_cliente";
+            $query = "SELECT DISTINCT nome_cliente FROM `$cindus` ORDER BY nome_cliente";
             $clientes = $this->db->prepare($query);
             $clientes->execute();
 
@@ -173,7 +173,7 @@ final class TabelasAction extends Action
                                       ROUND(ROUND((`peso`/`baridade`),2)*ROUND(`valor_in_ton`*`baridade`,2),2) AS `total_m3`,
                                       ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2) AS `preco_vd`,
                                       ROUND(ROUND((`peso`/`baridade`),2) * ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2),2) AS `total_v_m3`
-                              FROM `importacao_arimba`
+                              FROM `$cindus`
                               LEFT JOIN `centros_analiticos`
                               ON `ca_id` = `obra`
                               JOIN `agregados`

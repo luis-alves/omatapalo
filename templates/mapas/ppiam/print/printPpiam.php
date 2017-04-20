@@ -2,13 +2,15 @@
 
 include 'c:/xampp/htdocs/omatapalo_v3/src/Auxiliares/globals.php';
 
+$cindus = 'importacao_'.$cAnalitico;
+
 $anoAnalise = $ano;
 $query = "SELECT `nome_agr` AS `nome`,
                   MONTH(`data`) AS `mes`,
                   (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                   ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                   ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-          FROM `importacao_arimba`
+          FROM `$cindus`
           LEFT JOIN `centros_analiticos`
           ON `ca_id` = `obra`
           JOIN `agregados`
@@ -83,7 +85,7 @@ if ($stmt->rowCount() > 0) {
                       (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                       ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                       ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-              FROM `importacao_arimba`
+              FROM `$cindus`
               LEFT JOIN `centros_analiticos`
               ON `ca_id` = `obra`
               JOIN `agregados`
@@ -157,7 +159,7 @@ if ($stmt->rowCount() > 0) {
                       (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                       ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                       ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-              FROM `importacao_arimba`
+              FROM `$cindus`
               LEFT JOIN `centros_analiticos`
               ON `ca_id` = `obra`
               JOIN `agregados`

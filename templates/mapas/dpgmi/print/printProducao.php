@@ -1,12 +1,14 @@
 <?php
 include 'src/Auxiliares/globals.php';
 
+$cindus = 'importacao_'.$cAnalitico;
+
 $query = "SELECT `nome_agr` AS `nome`,
                   MONTH(`data`) AS `mes`,
                   (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                   ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                   ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-          FROM `importacao_arimba`
+          FROM `$cindus`
           LEFT JOIN `centros_analiticos`
           ON `ca_id` = `obra`
           JOIN `agregados`
@@ -83,7 +85,7 @@ $query = "SELECT `nome_agr` AS `nome`,
                   (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                   ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                   ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-          FROM `importacao_arimba`
+          FROM `$cindus`
           LEFT JOIN `centros_analiticos`
           ON `ca_id` = `obra`
           JOIN `agregados`
@@ -158,7 +160,7 @@ $query = "SELECT `nome_agr` AS `nome`,
                   (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
                   ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
                   ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-          FROM `importacao_arimba`
+          FROM `$cindus`
           LEFT JOIN `centros_analiticos`
           ON `ca_id` = `obra`
           JOIN `agregados`
