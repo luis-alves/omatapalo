@@ -227,6 +227,38 @@ a {
 
 /* relatorios.twig */
 
+/*vertical-align center*/
+.vam{
+  vertical-align: middle !important;
+}
+
+/*vertical-align center bottom border*/
+.vambb{
+  vertical-align: middle !important;
+  border-bottom-width:2px !important;
+}
+
+/*bottom border 2px*/
+.bbw2px{
+  border-bottom-width: 2px !important;
+}
+
+/*float left*/
+.fl{
+  float: left;
+}
+
+/*float right*/
+.fr{
+  float: right;
+}
+
+/*display: inline-block*/
+.dib{
+  display: inline-block !important;
+}
+
+
 .dr_titulos {
     background-color: rgb(242,242,242);
     color: blue;

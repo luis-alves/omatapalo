@@ -4,7 +4,7 @@
 
     <div class="container">
 
-        <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable" stylse="width:100%;overflow-x:auto">
+        <table class="table table-striped table-bordered table-hover" cellpadding="0" cellspacing="0" id="myTable">
             <caption>
                 <div class="centrar_rm">
                     <h2 class="colorir">{{title}}</h2>
@@ -25,7 +25,7 @@
             </thead>
             <tfoot>
                 <tr>
-                    <th class="text-center" rowspan="5" style="vertical-align:middle;border-bottom-width:2px;">Totais</th>
+                    <th class="text-center vambb" rowspan="5">Totais</th>
                     <th class="text-center">Stock Inicial</th>
                     {% for brita, nome in drBritas %}
                         <th class="text-center">{{ rodapeStockInicial[brita]|number_format(0,","," ") }}</th>
@@ -54,16 +54,16 @@
                     <th class="text-center">{{ somaRodapefExterno|number_format(0,","," ") }}</th>
                 </tr>
                 <tr>
-                    <th class="text-center" style="border-bottom-width:2px;">Stock Final</th>
+                    <th class="text-center bbw2px">Stock Final</th>
                     {% for brita, nome in drBritas %}
-                        <th class="text-center" style="border-bottom-width:2px;">{{ rodapeStockFinal[brita]|number_format(0,","," ") }}</th>
+                        <th class="text-center bbw2px">{{ rodapeStockFinal[brita]|number_format(0,","," ") }}</th>
                     {% endfor %}
-                    <th class="text-center" style="border-bottom-width:2px;">{{ somaRodapeStockFinal|number_format(0,","," ") }}</th>
+                    <th class="text-center bbw2px">{{ somaRodapeStockFinal|number_format(0,","," ") }}</th>
                 </tr>
             </tfoot>
             <tbody>
                 {% for cIndustrial, codigo in cisRelatorioMensal %}
-                    <td class="text-center" style="vertical-align:middle; border-bottom-width:2px;" rowspan="6">
+                    <td class="text-center vambb" rowspan="6">
                         <strong>{{ cIndustrial }}</strong>
                     </td>
                     <tr>
@@ -111,13 +111,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-center" style="border-bottom-width:2px;">
+                        <td class="text-center bbw2px">
                             <strong>Stock Final</strong>
                         </td>
                         {% for brita, nome in drBritas %}
-                            <td class="text-center" style="border-bottom-width:2px;">{{stockFinal[codigo][brita]|number_format(0,","," ")}}</td>
+                            <td class="text-center bbw2px">{{stockFinal[codigo][brita]|number_format(0,","," ")}}</td>
                         {% endfor %}
-                        <td class="text-center" style="border-bottom-width:2px;">
+                        <td class="text-center bbw2px">
                             <b>{{ somaStockFinal[codigo]|number_format(0,","," ") }}</b>
                         </td>
                     </tr>
@@ -126,8 +126,8 @@
         </table>
     </div>
 
-    <div class="container" style="text-align: center">
-        <table style="display: inline-block;">
+    <div class="container text-center">
+        <table class="dib">
             <thead>
                 <tr>
                     <th class="text-center">
@@ -141,12 +141,12 @@
             <tbody>
                 <tr>
                     <td>
-                        <div id="container" style="float:left;">
+                        <div id="container fl">
                             <canvas id="myData1" width="400" height="300"></canvas>
                         </div>
                     </td>
                     <td>
-                        <div id="container" style="float:right;">
+                        <div id="container fr">
                             <canvas id="myData2" width="400" height="300"></canvas>
                         </div>
                     </td>
