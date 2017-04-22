@@ -50,7 +50,6 @@ final class RelatorioMensalAction extends Action
         $rows = $this->db->prepare($query);
         $params = array_merge([$op1], $tipos, $lista_agregados_array, [$ano, $mesInicial, $mesActual]);
         $rows->execute($params);
-
         $array = array();
 
         if ($rows->rowCount() > 0) {
@@ -140,8 +139,6 @@ final class RelatorioMensalAction extends Action
             return [];
         }
 
-        $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1).'?';
-
         $query = "SELECT `nome_agre` AS `nome`,
                          MONTH(`data_in`) AS `mes`,
                          ROUND(SUM(`qt` / `baridade`),2) AS `m3`,
@@ -153,14 +150,14 @@ final class RelatorioMensalAction extends Action
                   ON `agr_bar_id` = `cod_agr`
                   JOIN `baridades`
                   ON `cod_agr` = `agregado_id`
-                  WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
+                  WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN (?)
                   AND MONTH(`data_in`) BETWEEN ? and ?
                   GROUP BY `nome_agre`
                   ORDER by `nome_agre`
                  ";
 
         $rows = $this->db->prepare($query);
-        $params = array_merge($lista_agregados_array, [$ano, $agora, $final]);
+        $params = array_merge([$ano, $agora, $final]);
         $rows->execute($params);
 
         $array = array();
@@ -2047,16 +2044,93 @@ final class RelatorioMensalAction extends Action
         return $vars;
     }
 
+    private function get_custos()
+    {
+        include 'src/Auxiliares/globals.php';
+
+        $query = "SELECT `cind`,
+                    	   (`valor`) AS valor,
+                    	   month(`data`) AS mes
+                  FROM `custos`
+                  LEFT JOIN `familias`
+                  ON custos.familia = familias.familia
+                  WHERE  YEAR(custos.data) IN (?) AND MONTH(custos.data)
+                	BETWEEN 1 AND 12
+                  GROUP BY mes, cind
+                  ";
+
+        $rows = $this->db->prepare($query);
+        $rows->execute([$ano]);
+
+        if ($rows->rowCount() > 0) {
+            $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+
+            return $vars['row'];
+        } else {
+            $vars['row'] = [];
+
+            return $vars['row'];
+        }
+    }
+
+    private function get_fornecimento($cIndustrial, $tipo, $tipo2)
+    {
+        include 'src/Auxiliares/globals.php';
+
+        $cindus = 'importacao_'.$cIndustrial;
+
+        $query = "SELECT ROUND(SUM(
+                             CASE
+                             WHEN ? IN ('GTO', 'SPA')
+                             THEN `peso` * `valor_in_ton`
+                             ELSE `peso` * `valor_ex_ton` * (1-`desco`)
+                             END
+                         )) AS `total`,
+                         MONTH(`data`) AS mes
+                  FROM `$cindus`
+                  LEFT JOIN `centros_analiticos`
+                  ON `ca_id` = `obra`
+                  JOIN `agregados`l
+                  ON `nome_agr` = `nome_agre`
+                  JOIN `baridades`
+                  ON `agr_id` = `agregado_id`
+                  LEFT JOIN `valorun_interno_ton`
+                  ON `agr_bar_id` = `agr_id`
+                  LEFT JOIN `valorun_externo_ton`
+                  ON `agr_bar_ton_id` = `agr_id`
+                  LEFT JOIN `obras`
+                  ON `id_obra` = `obra`
+                  WHERE  `tipo_doc` IN (?, ?) AND `nome_agr` IN ($lista_agregados)
+                  AND YEAR(`data`) IN (?) AND MONTH(`data`) BETWEEN 1 AND 12
+                  GROUP BY `mes`
+                  ORDER by `mes`
+                  ";
+
+        $rows = $this->db->prepare($query);
+        $rows->execute([$tipo, $tipo, $tipo2, $ano]);
+
+        if ($rows->rowCount() > 0) {
+            $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+
+            return $vars['row'];
+        } else {
+            $vars['row'] = [];
+
+            return $vars['row'];
+        }
+    }
+
+
     public function resultado($request, $response)
     {
         include 'src/Auxiliares/globals.php';
+        include 'src/Auxiliares/helpers.php';
 
         $mes = $request->getAttribute('item');
 
         foreach ($cisRelatorioMensal as $ci => $value) {
             $qtFI[$ci] = $this->getFornecimento($ci, 'GTO', 'SPA', $mes, $mes);
             $qtFIAcumulada[$ci] = $this->getFornecimento($ci, 'GTO', 'SPA', 1, $mes);
-
             $qtFE[$ci] = $this->getFornecimento($ci, 'GR', 'VD', $mes, $mes);
             $qtFEAcumulada[$ci] = $this->getFornecimento($ci, 'GR', 'VD', 1, $mes);
         }
@@ -2238,10 +2312,53 @@ final class RelatorioMensalAction extends Action
         }
 
         // Dados para os gráficos
-        for ($i = 1; $i <= $mes; ++$i) {
-            $dadosGrafico[$i] = $this->resultado_grafico($i);
+
+        #Custos mensais
+        $custos = $this->get_custos();
+
+        #Fornecimentos internos por CI
+        $interno = 'GTO';
+        $interno2 = 'SPA';
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $fornecimentoInterno[$value] = $this->get_fornecimento($key, $interno, $interno2);
         }
 
+        foreach ($fornecimentoInterno as $key => $value) {
+            $fornInternoOrdenado[$value] = array();
+            for ($i=0; $i < 12; $i++) {
+                if ($value[$i]->mes !== $i+1) {
+                    $fornInternoOrdenado[$value][$i+1] = $value[$i]->total;
+                } else {
+                    $fornInternoOrdenado[$value][$i+1] = 0;
+                }
+            }
+        }
+
+
+        dump($fornInternoOrdenado);
+        #Fornecimentos externo por CI
+        $interno = 'GR';
+        $interno2 = 'VD';
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $fornecimentoExterno[$value] = $this->get_fornecimento($key, $interno, $interno2);
+        }
+
+        #soma dos fornecimentos externos com os internos
+        $somaFornecimento = [];
+        foreach ($cisRelatorioMensal as $key => $value) {
+            for ($i = 0; $i < 12; $i++) {
+                $somaFornecimento[$value][$i+1] = $fornecimentoInterno[$value][$i]->total + $fornecimentoExterno[$value][$i]->total;
+            }
+        }
+
+
+
+        dump($somaFornecimento);
+
+        // for ($i = 1; $i <= $mes; ++$i) {
+        //     $dadosGrafico[$i] = $this->resultado_grafico($i);
+        // }
+        // dump($dadosGrafico);
         for ($i = 1; $i <= $mes; ++$i) {
             $arimbaGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['arimba'], 1);
             $caraculoGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['caraculo'], 1);
