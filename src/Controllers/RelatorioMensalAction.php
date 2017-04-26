@@ -1250,6 +1250,7 @@ final class RelatorioMensalAction extends Action
     public function custos($request, $response)
     {
         include 'src/Auxiliares/globals.php';
+        include 'src/Auxiliares/helpers.php';
 
         $mes = $request->getAttribute('item');
 
@@ -1990,82 +1991,61 @@ final class RelatorioMensalAction extends Action
         return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
-    public function resultado_grafico($mes)
+    private function get_custos($mes)
     {
         include 'src/Auxiliares/globals.php';
 
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $qtFIAcumulada[$ci] = $this->getFornecimento($ci, 'GTO', 'SPA', 1, $mes);
+        $tabela = 'ano_'.$ano;
 
-            $qtFEAcumulada[$ci] = $this->getFornecimento($ci, 'GR', 'VD', 1, $mes);
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $somaFIAcumulado[$ci] = 0;
-            $somaFEAcumulado[$ci] = 0;
-            foreach ($lista_array_agregados as $nome => $brita) {
-                $somaFIAcumulado[$ci] += $qtFIAcumulada[$ci][$nome]['total'];
-                $somaFEAcumulado[$ci] += $qtFEAcumulada[$ci][$nome]['total'];
-            }
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $totalFornecimentoAcumulado[$ci] = $somaFIAcumulado[$ci] + $somaFEAcumulado[$ci];
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $custoAcumulado = $this->getSQL_custos(1, $mes);
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $codigo) {
-            $custoCIAcumulado[$ci] = 0;
-            foreach ($custoAcumulado as $valor => $dados) {
-                if ($dados->cind == $codigo) {
-                    $custoCIAcumulado[$ci] += $dados->valor;
-                }
-            }
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $resultadoFacturacaoAcumulado[$ci] = round($totalFornecimentoAcumulado[$ci] - $custoCIAcumulado[$ci], 0);
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            if ($totalFornecimentoAcumulado[$ci] === 0) {
-                $CIFacturacaoAcumulado[$ci] = 0;
-            } else {
-                $CIFacturacaoAcumulado[$ci] = round($custoCIAcumulado[$ci] / $totalFornecimentoAcumulado[$ci], 1);
-            }
-        }
-
-        $vars['CIFacturacao'] = $CIFacturacaoAcumulado;
-        $vars['resultadoFacturacao'] = $resultadoFacturacaoAcumulado;
-
-        return $vars;
-    }
-
-    private function get_custos()
-    {
-        include 'src/Auxiliares/globals.php';
-
-        $query = "SELECT `cind`,
-                    	   (`valor`) AS valor,
-                    	   month(`data`) AS mes
-                  FROM `custos`
-                  LEFT JOIN `familias`
-                  ON custos.familia = familias.familia
-                  WHERE  YEAR(custos.data) IN (?) AND MONTH(custos.data)
-                	BETWEEN 1 AND 12
-                  GROUP BY mes, cind
+        $query = "SELECT x.cind, SUM(x.valor) as valor,x.mes, x.ano
+                  FROM
+                      (SELECT `cind`,
+                    	   SUM(`valor`) AS valor,
+                    	   month(`data`) AS mes,
+                         year(`data`) AS ano
+                      FROM `custos`
+                      LEFT JOIN `familias`
+                      ON custos.familia = familias.familia
+                      WHERE  YEAR(custos.data) IN (?) AND MONTH(custos.data)
+                    	BETWEEN 1 AND ?
+                      GROUP BY mes, cind
+                      UNION ALL
+                      SELECT `cind`,
+                             SUM(`h_normais` * $tabela + `h_extras` * $tabela) AS valor,
+                             MONTH(`data`) AS mes,
+                             year(`data`) AS ano
+                      FROM `folha_ponto`
+                      LEFT JOIN `colaboradores`
+                      ON `num_mec` = `n_mec`
+                      WHERE  YEAR(`data`) IN (?)
+                      GROUP BY mes, cind) as x
+                  GROUP BY x.mes, x.cind
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute([$ano]);
+        $rows->execute([$ano, $mes, $ano]);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
 
-            return $vars['row'];
+            $dados = $vars['row'];
+
+            foreach ($dados as $key => $value) {
+                foreach ($cisRelatorioMensal as $key1 => $value1) {
+                    if ($value->cind === $value1) {
+                        $custo[$key1][$value->mes] = $value->valor;
+                    }
+                }
+            }
+            foreach ($custo as $key => $value) {
+                for ($i = 1; $i < $mes+1; $i++) {
+                    if (!isset($value[$i])) {
+                        $custo[$key][$i] = 0;
+                    }
+                }
+            }
+
+            return $custo;
         } else {
             $vars['row'] = [];
 
@@ -2081,16 +2061,17 @@ final class RelatorioMensalAction extends Action
 
         $query = "SELECT ROUND(SUM(
                              CASE
-                             WHEN ? IN ('GTO', 'SPA')
+                             WHEN '$tipo' IN ('GTO', 'SPA')
                              THEN `peso` * `valor_in_ton`
                              ELSE `peso` * `valor_ex_ton` * (1-`desco`)
                              END
                          )) AS `total`,
+                         SUM(`peso` / `baridade`) AS m3,
                          MONTH(`data`) AS mes
-                  FROM `$cindus`
+                  FROM $cindus
                   LEFT JOIN `centros_analiticos`
                   ON `ca_id` = `obra`
-                  JOIN `agregados`l
+                  JOIN `agregados`
                   ON `nome_agr` = `nome_agre`
                   JOIN `baridades`
                   ON `agr_id` = `agregado_id`
@@ -2100,26 +2081,23 @@ final class RelatorioMensalAction extends Action
                   ON `agr_bar_ton_id` = `agr_id`
                   LEFT JOIN `obras`
                   ON `id_obra` = `obra`
-                  WHERE  `tipo_doc` IN (?, ?) AND `nome_agr` IN ($lista_agregados)
+                  WHERE  `tipo_doc` IN ('$tipo', '$tipo2') AND `nome_agr` IN ($lista_agregados)
                   AND YEAR(`data`) IN (?) AND MONTH(`data`) BETWEEN 1 AND 12
                   GROUP BY `mes`
                   ORDER by `mes`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute([$tipo, $tipo, $tipo2, $ano]);
+        $rows->execute([$ano]);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-
             return $vars['row'];
         } else {
             $vars['row'] = [];
-
             return $vars['row'];
         }
     }
-
 
     public function resultado($request, $response)
     {
@@ -2128,245 +2106,307 @@ final class RelatorioMensalAction extends Action
 
         $mes = $request->getAttribute('item');
 
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $qtFI[$ci] = $this->getFornecimento($ci, 'GTO', 'SPA', $mes, $mes);
-            $qtFIAcumulada[$ci] = $this->getFornecimento($ci, 'GTO', 'SPA', 1, $mes);
-            $qtFE[$ci] = $this->getFornecimento($ci, 'GR', 'VD', $mes, $mes);
-            $qtFEAcumulada[$ci] = $this->getFornecimento($ci, 'GR', 'VD', 1, $mes);
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $somaFI[$ci] = 0;
-            $somaFIAcumulado[$ci] = 0;
-            $somaFE[$ci] = 0;
-            $somaFEAcumulado[$ci] = 0;
-            foreach ($lista_array_agregados as $nome => $brita) {
-                $somaFI[$ci] += $qtFI[$ci][$nome]['total'];
-                $somaFIAcumulado[$ci] += $qtFIAcumulada[$ci][$nome]['total'];
-                $somaFE[$ci] += $qtFE[$ci][$nome]['total'];
-                $somaFEAcumulado[$ci] += $qtFEAcumulada[$ci][$nome]['total'];
-            }
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $totalFornecimento[$ci] = $somaFI[$ci] + $somaFE[$ci];
-            $totalFornecimentoAcumulado[$ci] = $somaFIAcumulado[$ci] + $somaFEAcumulado[$ci];
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $volumeVendido[$ci] = 0;
-            $volumeVendidoAcumulado[$ci] = 0;
-            foreach ($lista_array_agregados as $nome => $brita) {
-                $volumeVendido[$ci] += $qtFI[$ci][$nome]['m3'] + $qtFE[$ci][$nome]['m3'];
-                $volumeVendidoAcumulado[$ci] += $qtFIAcumulada[$ci][$nome]['m3'] + $qtFEAcumulada[$ci][$nome]['m3'];
-            }
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            if ($volumeVendido[$ci] === 0) {
-                $media[$ci] = 0;
-            } else {
-                $media[$ci] = $totalFornecimento[$ci] / $volumeVendido[$ci];
-            }
-            if ($volumeVendidoAcumulado[$ci] === 0) {
-                $media[$ci] = 0;
-            } else {
-                $mediaAcumulada[$ci] = $totalFornecimentoAcumulado[$ci] / $volumeVendidoAcumulado[$ci];
-            }
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $custoMensal = $this->getSQL_custos($mes, $mes);
-            $custoAcumulado = $this->getSQL_custos(1, $mes);
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $codigo) {
-            $custoCI[$ci] = 0;
-            $custoCIAcumulado[$ci] = 0;
-            foreach ($custoMensal as $valor => $dados) {
-                if ($dados->cind == $codigo) {
-                    $custoCI[$ci] += $dados->valor;
-                }
-            }
-            foreach ($custoAcumulado as $valor => $dados) {
-                if ($dados->cind == $codigo) {
-                    $custoCIAcumulado[$ci] += $dados->valor;
-                }
-            }
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $resultadoFacturacao[$ci] = $totalFornecimento[$ci] - $custoCI[$ci];
-            $resultadoFacturacaoAcumulado[$ci] = $totalFornecimentoAcumulado[$ci] - $custoCIAcumulado[$ci];
-        }
-
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            if ($totalFornecimento[$ci] === 0) {
-                $CIFacturacao[$ci] = 0;
-            } else {
-                $CIFacturacao[$ci] = $custoCI[$ci] / $totalFornecimento[$ci];
-            }
-            if ($totalFornecimentoAcumulado[$ci] === 0) {
-                $CIFacturacaoAcumulado[$ci] = 0;
-            } else {
-                $CIFacturacaoAcumulado[$ci] = $custoCIAcumulado[$ci] / $totalFornecimentoAcumulado[$ci];
-            }
-        }
-
-        // Percentagem dos fornecimentos internos e externos
-        foreach ($somaFI as $ci => $value) {
-            if ($totalFornecimento[$ci] === 0) {
-                $percentagemFI[$ci] = 0;
-                $percentagemFE[$ci] = 0;
-            } else {
-                $percentagemFI[$ci] = $somaFI[$ci] / $totalFornecimento[$ci] * 100;
-                $percentagemFE[$ci] = $somaFE[$ci] / $totalFornecimento[$ci] * 100;
-            }
-            if ($totalFornecimentoAcumulado[$ci] === 0) {
-                $percentagemAcumuladaFI[$ci] = 0;
-                $percentagemAcumuladaFE[$ci] = 0;
-            } else {
-                $percentagemAcumuladaFI[$ci] = $somaFIAcumulado[$ci] / $totalFornecimentoAcumulado[$ci] * 100;
-                $percentagemAcumuladaFE[$ci] = $somaFIAcumulado[$ci] / $totalFornecimentoAcumulado[$ci] * 100;
-            }
-        }
-
-        // Valores do rodapé
-        $rodapeVolumeVendido = 0;
-        $rodapeFI = 0;
-        $rodapeFE = 0;
-        $rodapeTotal = 0;
-        $rodapeResultado = 0;
-        $rodapeCustoCI = 0;
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $rodapeVolumeVendido += $volumeVendido[$ci];
-            $rodapeFI += $somaFI[$ci];
-            $rodapeFE += $somaFE[$ci];
-            $rodapeTotal += $totalFornecimento[$ci];
-            $rodapeResultado += $resultadoFacturacao[$ci];
-            $rodapeCustoCI += $custoCI[$ci];
-        }
-
-        if ($rodapeVolumeVendido === 0) {
-            $rodapeMediaVenda = 0;
-        } else {
-            $rodapeMediaVenda = $rodapeTotal / $rodapeVolumeVendido;
-        }
-
-        if ($rodapeTotal === 0) {
-            $rodapePercentagemFI = 0;
-        } else {
-            $rodapePercentagemFI = $rodapeFI / $rodapeTotal * 100;
-        }
-
-        if ($rodapeTotal === 0) {
-            $rodapePercentagemFE = 0;
-        } else {
-            $rodapePercentagemFE = $rodapeFE / $rodapeTotal * 100;
-        }
-
-        if ($rodapeTotal === 0) {
-            $rodapeCIF = 0;
-        } else {
-            $rodapeCIF = $rodapeCustoCI / $rodapeTotal;
-        }
-
-        // Acumulados
-        $rodapeVolumeVendidoAcumulado = 0;
-        $rodapeFIAcumulado = 0;
-        $rodapeFEAcumulado = 0;
-        $rodapeTotalAcumulado = 0;
-        $rodapeResultadoAcumulado = 0;
-        $rodapeCustoCIAcumulado = 0;
-        foreach ($cisRelatorioMensal as $ci => $value) {
-            $rodapeVolumeVendidoAcumulado += $volumeVendidoAcumulado[$ci];
-            $rodapeFIAcumulado += $somaFIAcumulado[$ci];
-            $rodapeFEAcumulado += $somaFEAcumulado[$ci];
-            $rodapeTotalAcumulado += $totalFornecimentoAcumulado[$ci];
-            $rodapeResultadoAcumulado += $resultadoFacturacaoAcumulado[$ci];
-            $rodapeCustoCIAcumulado += $custoCIAcumulado[$ci];
-        }
-
-        if ($rodapeVolumeVendidoAcumulado === 0) {
-            $rodapeMediaVendaAcumulado = 0;
-        } else {
-            $rodapeMediaVendaAcumulado = $rodapeTotalAcumulado / $rodapeVolumeVendidoAcumulado;
-        }
-
-        if ($rodapeTotalAcumulado === 0) {
-            $rodapePercentagemFIAcumulado = 0;
-        } else {
-            $rodapePercentagemFIAcumulado = $rodapeFIAcumulado / $rodapeTotalAcumulado * 100;
-        }
-
-        if ($rodapeTotalAcumulado === 0) {
-            $rodapePercentagemFEAcumulado = 0;
-        } else {
-            $rodapePercentagemFEAcumulado = $rodapeFEAcumulado / $rodapeTotalAcumulado * 100;
-        }
-
-        if ($rodapeTotalAcumulado === 0) {
-            $rodapeCIFAcumulado = 0;
-        } else {
-            $rodapeCIFAcumulado = $rodapeCustoCIAcumulado / $rodapeTotalAcumulado;
-        }
-
-        // Dados para os gráficos
-
         #Custos mensais
-        $custos = $this->get_custos();
+        $custos = $this->get_custos($mes);
+
+        #soma dos custos
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $temp = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $temp += $custos[$key][$i];
+                $custosTotal[$key][$i] = $temp;
+            }
+        }
+
+        # Acumulado de custos
+        foreach ($custosTotal as $key => $value) {
+            $custosAcumulados[$key] = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $custosAcumulados[$key] += $custos[$key][$i];
+            }
+        }
 
         #Fornecimentos internos por CI
         $interno = 'GTO';
         $interno2 = 'SPA';
         foreach ($cisRelatorioMensal as $key => $value) {
-            $fornecimentoInterno[$value] = $this->get_fornecimento($key, $interno, $interno2);
+            $fornecimentoInterno[$key] = $this->get_fornecimento($key, $interno, $interno2);
         }
 
-        foreach ($fornecimentoInterno as $key => $value) {
-            $fornInternoOrdenado[$value] = array();
-            for ($i=0; $i < 12; $i++) {
-                if ($value[$i]->mes !== $i+1) {
-                    $fornInternoOrdenado[$value][$i+1] = $value[$i]->total;
-                } else {
-                    $fornInternoOrdenado[$value][$i+1] = 0;
+        #Preencher meses sem valores
+        for ($i = 0; $i < $mes; $i++) {
+            foreach ($fornecimentoInterno as $key => $value) {
+                foreach ($value as $indice => $valor) {
+                    if ($valor->mes === $i+1) {
+                        $fornInternoOrdenado[$key][$i+1] = $valor->total;
+                        $fornInternoOrdenadoM3[$key][$i+1] = $valor->m3;
+                    }
                 }
             }
         }
 
-
-        dump($fornInternoOrdenado);
-        #Fornecimentos externo por CI
-        $interno = 'GR';
-        $interno2 = 'VD';
-        foreach ($cisRelatorioMensal as $key => $value) {
-            $fornecimentoExterno[$value] = $this->get_fornecimento($key, $interno, $interno2);
-        }
-
-        #soma dos fornecimentos externos com os internos
-        $somaFornecimento = [];
-        foreach ($cisRelatorioMensal as $key => $value) {
-            for ($i = 0; $i < 12; $i++) {
-                $somaFornecimento[$value][$i+1] = $fornecimentoInterno[$value][$i]->total + $fornecimentoExterno[$value][$i]->total;
+        for ($i = 1; $i < $mes+1; $i++) {
+            foreach ($fornInternoOrdenado as $key => $value) {
+                if ($value[$i] === null) {
+                    $fornInternoOrdenado[$key][$i] = 0;
+                    $fornInternoOrdenadoM3[$key][$i] = 0;
+                }
             }
         }
 
-
-
-        dump($somaFornecimento);
-
-        // for ($i = 1; $i <= $mes; ++$i) {
-        //     $dadosGrafico[$i] = $this->resultado_grafico($i);
-        // }
-        // dump($dadosGrafico);
-        for ($i = 1; $i <= $mes; ++$i) {
-            $arimbaGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['arimba'], 1);
-            $caraculoGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['caraculo'], 1);
-            $cassossoGraficoCI[] = round($dadosGrafico[$i]['CIFacturacao']['cassosso'], 1);
-            $arimbaGraficoStock[] = round($dadosGrafico[$i]['resultadoFacturacao']['arimba']);
-            $caraculoGraficoStock[] = round($dadosGrafico[$i]['resultadoFacturacao']['caraculo']);
-            $cassossoGraficoStock[] = round($dadosGrafico[$i]['resultadoFacturacao']['cassosso']);
+        # Fornecimentos externo por CI
+        $externo = 'GR';
+        $externo2 = 'VD';
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $fornecimentoExterno[$key] = $this->get_fornecimento($key, $externo, $externo2);
+            d($fornecimentoExterno[$key]);
         }
+
+        #Preencher meses sem valores
+        for ($i = 0; $i < $mes; $i++) {
+            foreach ($fornecimentoExterno as $key => $value) {
+                foreach ($value as $indice => $valor) {
+                    if ($valor->mes === $i+1) {
+                        $fornExternoOrdenado[$key][$i+1] = $valor->total;
+                        $fornExternoOrdenadoM3[$key][$i+1] = $valor->m3;
+                    }
+                }
+            }
+        }
+
+        for ($i = 1; $i < $mes+1; $i++) {
+            foreach ($fornExternoOrdenado as $key => $value) {
+                if (!isset($value[$i])) {
+                    $fornExternoOrdenado[$key][$i] = 0;
+                    $fornExternoOrdenadoM3[$key][$i] = 0;
+                }
+            }
+        }
+
+        # Acumulado dos fornecimentos Internos e Externos
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $temp = 0;
+            $temp2 = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $temp += $fornInternoOrdenado[$key][$i];
+                $temp2 += $fornExternoOrdenado[$key][$i];
+                $fornecimentosInternoAcumulado[$key] = $temp;
+                $fornecimentosExternoAcumulado[$key] = $temp2;
+            }
+        }
+
+        # Soma dos fornecimentos externos com os internos Acumulados
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $temp = 0;
+            $temp2 = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $fornTotal[$key][$i] = $fornInternoOrdenado[$key][$i] + $fornExternoOrdenado[$key][$i];
+                $fornTotalM3[$key][$i] = $fornInternoOrdenadoM3[$key][$i] + $fornExternoOrdenadoM3[$key][$i];
+                $temp += $fornTotalM3[$key][$i];
+                $fornTotalM3Acumulado[$key] = $temp;
+                $temp2 += $fornTotal[$key][$i];
+                $fornTotalAcumulado[$key] = $temp2;
+            }
+        }
+
+        #Acumulado dos fornecimentos
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $temp = 0;
+            $temp2 = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $temp += $fornTotal[$key][$i];
+                $temp2 += $fornTotalM3[$key][$i];
+                $fornecimentosTotal[$key] = $temp;
+                $fornecimentosTotalM3[$key] = $temp2;
+            }
+        }
+
+        # Percentagem dos fornecimentos internos e externos
+        foreach ($cisRelatorioMensal as $ci => $value) {
+            if ($fornTotal[$ci] === 0) {
+                $percentagemFI[$ci] = 0;
+                $percentagemFE[$ci] = 0;
+            } else {
+                $percentagemFI[$ci] = $fornInternoOrdenado[$ci][$mes] / $fornTotal[$ci][$mes] * 100;
+                $percentagemFE[$ci] = $fornExternoOrdenado[$ci][$mes] / $fornTotal[$ci][$mes] * 100;
+            }
+            if ($fornTotalAcumulado[$ci] === 0) {
+                $percentagemAcumuladaFI[$ci] = 0;
+                $percentagemAcumuladaFE[$ci] = 0;
+            } else {
+                $percentagemAcumuladaFI[$ci] = $fornecimentosInternoAcumulado[$ci] / $fornTotalAcumulado[$ci] * 100;
+                $percentagemAcumuladaFE[$ci] = $fornecimentosExternoAcumulado[$ci] / $fornTotalAcumulado[$ci] * 100;
+            }
+        }
+
+        # Médias de preço
+        foreach ($cisRelatorioMensal as $ci => $value) {
+            if ($fornTotalM3[$ci][$mes] === 0) {
+                $mediaMensal[$ci] = 0;
+            } else {
+                $mediaMensal[$ci] = $fornTotal[$ci][$mes] / $fornTotalM3[$ci][$mes];
+            }
+            if ($fornecimentosTotalM3[$ci] === 0) {
+                $mediaAcumulada[$ci] = 0;
+            } else {
+                $mediaAcumulada[$ci] = $fornecimentosTotal[$ci] / $fornecimentosTotalM3[$ci];
+            }
+        }
+        foreach ($fornecimentosTotal as $key => $value) {
+            for ($i = 1; $i < $mes+1; $i++) {
+                if ($fornecimentosTotal > 0) {
+                    $racioCI[$key][$i-1] = round($custosTotal[$key][$i] / $fornTotal[$key][$i], 1);
+                    $resultadoFornecimento[$key][$i-1] = round($fornTotal[$key][$i] - $custos[$key][$i], 2);
+                } else {
+                    $racioCI[$key][$i-1] = 0;
+                    $resultadoFornecimento[$key][$i-1] = round($fornTotal[$key][$i] - $custos[$key][$i], 2);
+                }
+            }
+        }
+
+        foreach ($fornTotalAcumulado as $key => $value) {
+            if ($fornTotalAcumulado > 0) {
+                $racioCIAcumulado[$key] = round($custosAcumulados[$key] / $fornTotalAcumulado[$key], 1);
+                $resultadoFornecimentoAcumulado[$key] = round($fornTotalAcumulado[$key][$mes] - $custosAcumulados[$key], 2);
+            } else {
+                $racioCIAcumulado = 0;
+                $resultadoFornecimentoAcumulado[$key] = round($fornTotalAcumulado[$key] - $custosAcumulados[$key], 2);
+            }
+        }
+
+        # Valores acumulativos de fornecimento por mês
+        foreach ($fornTotal as $key => $value) {
+            $temp = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $temp += $value[$i];
+                $forn[$key][$i] = $temp;
+            }
+        }
+
+        foreach ($cisRelatorioMensal as $key => $value) {
+            for ($i = 1; $i < $mes+1; $i++) {
+                if ($forn[$key][$i] > 0) {
+                    ${$key}[$i-1] = round($custosTotal[$key][$i] / $forn[$key][$i], 1);
+                } else {
+                    ${$key}[$i-1] = 0;
+                }
+            }
+        }
+        // RODAPÉS
+
+        // Mensal
+
+        # Quantidades vendidas
+        $rodapeM3 = 0;
+        foreach ($fornTotalM3 as $key => $value) {
+            $rodapeM3 += $value[$mes];
+        }
+
+        # Valor fornecido Internamente
+        $rodapeFornInterno = 0;
+        foreach ($fornInternoOrdenado as $key => $value) {
+            $rodapeFornInterno += $value[$mes];
+        }
+
+        # Valor fornecido Externamente
+        $rodapeFornExterno = 0;
+        foreach ($fornExternoOrdenado as $key => $value) {
+            $rodapeFornExterno += $value[$mes];
+        }
+
+        # Total fornecido
+        $rodapeTotalFornecido = $rodapeFornInterno + $rodapeFornExterno;
+
+        # Média preço
+        if ($rodapeM3 > 0) {
+            $rodapeMediaM3 = $rodapeTotalFornecido / $rodapeM3;
+        } else {
+            $rodapeMediaM3 = 0;
+        }
+
+        #total custos Mensal
+        $totalDeCustos = 0;
+        foreach ($custosTotal as $key => $value) {
+            $totalDeCustos += $value[$mes];
+        }
+
+        #média de percentagens
+        if ($rodapeTotalFornecido > 0) {
+            $rodapePercFI = $rodapeFornInterno / $rodapeTotalFornecido * 100;
+            $rodapePercFE = $rodapeFornExterno / $rodapeTotalFornecido * 100;
+        } else {
+            $rodapePercFI = 0;
+            $rodapePercFE = 0;
+        }
+
+        # Média de CIF
+        if ($rodapeTotalFornecido > 0) {
+            $rodapeCIF = $totalDeCustos / $rodapeTotalFornecido;
+        } else {
+            $rodapeCIF = 0;
+        }
+
+
+        # Resultado facturação total
+        $rodapeResultadoAc = $rodapeTotalFornecido - $totalDeCustos;
+
+        // Acumulado
+
+        # Quantidades vendidas
+        $rodapeM3Acumulado = 0;
+        foreach ($fornecimentosTotalM3 as $key => $value) {
+            $rodapeM3Acumulado += $value;
+        }
+
+        # Valor fornecido Internamente
+        $rodapeFornInternoAc = 0;
+        foreach ($fornecimentosInternoAcumulado as $key => $value) {
+            $rodapeFornInternoAc += $value;
+        }
+
+        # Valor fornecido Externamente
+        $rodapeFornExternoAc = 0;
+        foreach ($fornecimentosExternoAcumulado as $key => $value) {
+            $rodapeFornExternoAc += $value;
+        }
+
+        # Total fornecido
+        $rodapeTotalFornecidoAc = $rodapeFornInternoAc + $rodapeFornExternoAc;
+
+        # Média preço
+        if ($rodapeM3Acumulado > 0) {
+            $rodapeMediaM3Ac = $rodapeTotalFornecidoAc / $rodapeM3Acumulado;
+        } else {
+            $rodapeMediaM3Ac = 0;
+        }
+
+        #média de percentagens
+            if ($rodapeTotalFornecidoAc > 0) {
+                $rodapePercAcFI = $rodapeFornInternoAc / $rodapeTotalFornecidoAc * 100;
+            } else {
+                $rodapePercAcFI = 0;
+            }
+        if ($rodapeTotalFornecidoAc > 0) {
+            $rodapePercAcFE = $rodapeFornExternoAc / $rodapeTotalFornecidoAc * 100;
+        } else {
+            $rodapePercAcFE = 0;
+        }
+
+        #total custos Acumulado
+        $totalDeCustosAc = 0;
+        foreach ($custosAcumulados as $key => $value) {
+            $totalDeCustosAc += $value;
+        }
+
+        # Média de CIF
+        if ($rodapeTotalFornecidoAc > 0) {
+            $rodapeCIFAc = $totalDeCustosAc / $rodapeTotalFornecidoAc;
+        } else {
+            $rodapeCIFAc = 0;
+        }
+
+        # Resultado facturação total
+        $rodapeResultado = $rodapeTotalFornecidoAc - $totalDeCustosAc;
 
         $vars['page'] = 'resultadofacturacao';
         $vars['title'] = 'Resultado Mediante Facturação';
@@ -2374,56 +2414,57 @@ final class RelatorioMensalAction extends Action
         $vars['mes_titulo'] = $lista_meses[$mes - 1];
         $vars['meses'] = $lista_meses;
         $vars['cisRelatorioMensal'] = $cisRelatorioMensal;
-
-        $vars['CIFacturacao'] = $CIFacturacao;
-        $vars['CIFacturacaoAcumulado'] = $CIFacturacaoAcumulado;
-        $vars['custoCI'] = $custoCI;
-        $vars['custoCIAcumulado'] = $custoCIAcumulado;
-        $vars['resultadoFacturacao'] = $resultadoFacturacao;
-        $vars['resultadoFacturacaoAcumulado'] = $resultadoFacturacaoAcumulado;
-        $vars['totalFornecimento'] = $totalFornecimento;
-        $vars['totalFornecimentoAcumulado'] = $totalFornecimentoAcumulado;
-        $vars['media'] = $media;
-        $vars['mediaAcumulada'] = $mediaAcumulada;
-        $vars['volumeVendido'] = $volumeVendido;
-        $vars['volumeVendidoAcumulado'] = $volumeVendidoAcumulado;
-        $vars['somaFI'] = $somaFI;
-        $vars['somaFIAcumulado'] = $somaFIAcumulado;
-        $vars['somaFE'] = $somaFE;
-        $vars['somaFEAcumulado'] = $somaFEAcumulado;
         $vars['percentagemFI'] = $percentagemFI;
         $vars['percentagemAcumuladaFI'] = $percentagemAcumuladaFI;
         $vars['percentagemFE'] = $percentagemFE;
         $vars['percentagemAcumuladaFE'] = $percentagemAcumuladaFE;
 
-        // Rodapés
-        $vars['rodapeVolumeVendido'] = $rodapeVolumeVendido;
-        $vars['rodapeMediaVenda'] = $rodapeMediaVenda;
-        $vars['rodapeFI'] = $rodapeFI;
-        $vars['rodapePercentagemFI'] = $rodapePercentagemFI;
-        $vars['rodapeFE'] = $rodapeFE;
-        $vars['rodapePercentagemFE'] = $rodapePercentagemFE;
-        $vars['rodapeTotal'] = $rodapeTotal;
-        $vars['rodapeResultado'] = $rodapeResultado;
-        $vars['rodapeCIF'] = $rodapeCIF;
+        $vars['resultadoFornecimento'] = $resultadoFornecimento;
+        $vars['mes'] = $mes;
+        $vars['mesMenosUm'] = $mes -1 ;
+        $vars['fornExternoOrdenado'] = $fornExternoOrdenado;
+        $vars['fornInternoOrdenado'] = $fornInternoOrdenado;
+        $vars['fornTotal'] = $fornTotal;
+        $vars['racioCI'] = $racioCI;
+        $vars['fornTotalM3'] = $fornTotalM3;
+        $vars['mediaMensal'] = $mediaMensal;
+        $vars['mediaAcumulada'] = $mediaAcumulada;
+        $vars['fornTotalM3Acumulado'] = $fornTotalM3Acumulado;
+        $vars['fornTotalAcumulado'] = $fornTotalAcumulado;
+        $vars['fornecimentosInternoAcumulado'] = $fornecimentosInternoAcumulado;
+        $vars['fornecimentosExternoAcumulado'] = $fornecimentosExternoAcumulado;
+        $vars['resultadoFornecimentoAcumulado'] = $resultadoFornecimentoAcumulado;
+        $vars['racioCIAcumulado'] = $racioCIAcumulado;
 
-        $vars['rodapeVolumeVendidoAcumulado'] = $rodapeVolumeVendidoAcumulado;
-        $vars['rodapeMediaVendaAcumulado'] = $rodapeMediaVendaAcumulado;
-        $vars['rodapeFIAcumulado'] = $rodapeFIAcumulado;
-        $vars['rodapePercentagemFIAcumulado'] = $rodapePercentagemFIAcumulado;
-        $vars['rodapeFEAcumulado'] = $rodapeFEAcumulado;
-        $vars['rodapePercentagemFEAcumulado'] = $rodapePercentagemFEAcumulado;
-        $vars['rodapeTotalAcumulado'] = $rodapeTotalAcumulado;
-        $vars['rodapeResultadoAcumulado'] = $rodapeResultadoAcumulado;
-        $vars['rodapeCIFAcumulado'] = $rodapeCIFAcumulado;
+
+        // Rodapés
+        $vars['rodapeM3'] = $rodapeM3;
+        $vars['rodapeM3Acumulado'] = $rodapeM3Acumulado;
+        $vars['rodapeFornExterno'] = $rodapeFornExterno;
+        $vars['rodapeFornInterno'] = $rodapeFornInterno;
+        $vars['rodapeFornInternoAc'] = $rodapeFornInternoAc;
+        $vars['rodapeFornExternoAc'] = $rodapeFornExternoAc;
+        $vars['rodapeTotalFornecido'] = $rodapeTotalFornecido;
+        $vars['rodapeTotalFornecidoAc'] = $rodapeTotalFornecidoAc;
+        $vars['rodapeMediaM3'] = $rodapeMediaM3;
+        $vars['rodapeMediaM3Ac'] = $rodapeMediaM3Ac;
+        $vars['rodapePercFI'] = $rodapePercFI;
+        $vars['rodapePercFE'] = $rodapePercFE;
+        $vars['rodapePercAcFI'] = $rodapePercAcFI;
+        $vars['rodapePercAcFE'] = $rodapePercAcFE;
+        $vars['rodapeCIF'] = $rodapeCIF;
+        $vars['rodapeCIFAc'] = $rodapeCIFAc;
+
+        $vars['rodapeResultado'] = $rodapeResultado;
+        $vars['rodapeResultadoAc'] = $rodapeResultadoAc;
 
         // dados gráfico
-        $vars['arimbaGraficoCI'] = $arimbaGraficoCI;
-        $vars['caraculoGraficoCI'] = $caraculoGraficoCI;
-        $vars['cassossoGraficoCI'] = $cassossoGraficoCI;
-        $vars['arimbaGraficoStock'] = $arimbaGraficoStock;
-        $vars['caraculoGraficoStock'] = $caraculoGraficoStock;
-        $vars['cassossoGraficoStock'] = $cassossoGraficoStock;
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $vars[$key.'GraficoCI'] = ${$key};
+        }
+        foreach ($resultadoFornecimento as $key => $value) {
+            $vars[$key.'GraficoStock'] = $value;
+        }
         $vars['title_grafico'] = 'CI Mediante Facturação - Acumulado';
         $vars['label1'] = 'arimba';
         $vars['label2'] = 'caraculo';
