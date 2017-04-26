@@ -2159,7 +2159,6 @@ final class RelatorioMensalAction extends Action
         $externo2 = 'VD';
         foreach ($cisRelatorioMensal as $key => $value) {
             $fornecimentoExterno[$key] = $this->get_fornecimento($key, $externo, $externo2);
-            d($fornecimentoExterno[$key]);
         }
 
         #Preencher meses sem valores
