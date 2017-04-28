@@ -1462,535 +1462,6 @@ final class RelatorioMensalAction extends Action
         return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
     }
 
-    public function operacional_grafico($mesActual)
-    {
-        include 'src/Auxiliares/globals.php';
-
-        $mes = $mesActual;
-
-        $custosAcumulados = $this->getSQL_custos(1, $mes);
-
-        // Total de custos acumulados
-        if ($custosAcumulados === 0) {
-            $totalCustosAcumulados = 0;
-        } else {
-            foreach ($cisRelatorioMensal as $key => $value) {
-                $totalCustosAcumulados[$key] = 0;
-                foreach ($custosAcumulados as $key2 => $value2) {
-                    if ($value == $value2->cind) {
-                        $totalCustosAcumulados[$key] += $value2->valor;
-                    }
-                }
-            }
-        }
-
-        // Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
-        // entrada de valores sem que haja de outras familias)
-
-        // Adicionar o custo com mão de obra nacional Acumulada
-        $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'N');
-
-        if (!empty($moNacionalAcumulada)) {
-            foreach ($moNacionalAcumulada as $key => $value) {
-                if ($value->cind == 120401) {
-                    $totalCustosAcumulados['arimba'] += $value->custo_un;
-                } elseif ($value->cind == 120402) {
-                    $totalCustosAcumulados['caraculo'] += $value->custo_un;
-                } elseif ($value->cind == 120403) {
-                    $totalCustosAcumulados['cassosso'] += $value->custo_un;
-                }
-            }
-        }
-
-        // Adicionar o custo com mão de obra expatriada Acumulada
-        $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'E');
-
-        if (!empty($moExpatriadaAcumulada)) {
-            foreach ($moExpatriadaAcumulada as $key => $value) {
-                if ($value->cind == 120401) {
-                    $totalCustosAcumulados['arimba'] += $value->custo_un;
-                } elseif ($value->cind == 120402) {
-                    $totalCustosAcumulados['caraculo'] += $value->custo_un;
-                } elseif ($value->cind == 120403) {
-                    $totalCustosAcumulados['cassosso'] += $value->custo_un;
-                }
-            }
-        }
-
-        $somaTotalCustos = 0;
-        foreach ($totalCustosAcumulados as $key => $value) {
-            $somaTotalCustos += $value;
-        }
-
-        // Valores mensais acumulados da produção
-        foreach ($cisRelatorioMensal as $key => $value) {
-            $producaoMensalAcumulada[$key] = $this->getProducao($key, 1, $mes);
-            $valorProduzidaAcumulada[$key] = 0;
-            $quantidadeProduzidaAcumulada[$key] = 0;
-        }
-        foreach ($producaoMensalAcumulada as $key => $value) {
-            foreach ($value as $key2 => $value2) {
-                $valorProduzidaAcumulada[$key] += $value2['pu'] * $value2['m3'];
-                $quantidadeProduzidaAcumulada[$key] += $value2['m3'];
-            }
-        }
-
-        // CI Operacional por centro industrial
-        foreach ($cisRelatorioMensal as $key => $value) {
-            if ($valorProduzidaAcumulada[$key] != 0) {
-                $ciOperacionalAcumulado[$key] = $totalCustosAcumulados[$key] / $valorProduzidaAcumulada[$key];
-            } else {
-                $ciOperacionalAcumulado[$key] = 0;
-            }
-            if ($ciOperacionalAcumulado[$key] > 3) {
-                $ciOperacionalAcumulado[$key] = 3;
-            }
-        }
-
-        // Stock de todos os CI
-        $stockGeral = $this->getStock($mes);
-        $stockJaneiro = $this->getStock(1);
-
-        // Preço do agregado
-        foreach ($lista_array_agregados as $key => $value) {
-            $preco[$key] = $this->getPreco($key);
-        }
-
-        // Valor do stock no mês actual
-        foreach ($cisRelatorioMensal as $ci => $codigo) {
-            $valorStockMesAnterior[$ci] = 0;
-            $valorStockMes[$ci] = 0;
-            $valorStockJaneiro[$ci] = 0;
-            foreach ($lista_array_agregados as $key => $value) {
-                $valorStockMesAnterior[$ci] += ($stockGeral[0][$ci][$key] * $preco[$key]);
-                $valorStockMes[$ci] += $stockGeral[1][$ci][$key] * $preco[$key];
-                $valorStockJaneiro[$ci] += $stockJaneiro[0][$ci][$key] * $preco[$key];
-            }
-        }
-
-        $vars['ciAcumulado'] = $ciOperacionalAcumulado;
-        $vars['valorStockActual'] = $valorStockMes;
-
-        return $vars;
-    }
-
-    public function operacional($request, $response)
-    {
-        include 'src/Auxiliares/globals.php';
-
-        $mes = $request->getAttribute('item');
-
-        $custosAcumulados = $this->getSQL_custos(1, $mes);
-        $custosMensais = $this->getSQL_custos($mes, $mes);
-
-        // Total de custos acumulados
-        if ($custosAcumulados === 0) {
-            $totalCustosAcumulados = 0;
-        } else {
-            foreach ($cisRelatorioMensal as $key => $value) {
-                $totalCustosAcumulados[$key] = 0;
-                foreach ($custosAcumulados as $key2 => $value2) {
-                    if ($value == $value2->cind) {
-                        $totalCustosAcumulados[$key] += $value2->valor;
-                    }
-                }
-            }
-        }
-
-        $somaTotalCustosAcumulados = 0;
-        foreach ($totalCustosAcumulados as $key => $value) {
-            $somaTotalCustosAcumulados += $value;
-        }
-
-        // Total de custos mensais
-        if ($custosMensais === 0) {
-            $totalCustos = 0;
-        } else {
-            foreach ($cisRelatorioMensal as $key => $value) {
-                $totalCustos[$key] = 0;
-                foreach ($custosMensais as $key2 => $value2) {
-                    if ($value == $value2->cind) {
-                        $totalCustos[$key] += $value2->valor;
-                    }
-                }
-            }
-        }
-
-        // Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
-        // entrada de valores sem que haja de outras familias)
-        $moNacionalMensal = $this->getSQL_MaoDeObra($mes, $mes, 'N');
-
-        if (!empty($moNacionalMensal)) {
-            foreach ($moNacionalMensal as $key => $value) {
-                if ($value->cind == 120401) {
-                    $totalCustos['arimba'] += $value->custo_un;
-                } elseif ($value->cind == 120402) {
-                    $totalCustos['caraculo'] += $value->custo_un;
-                } elseif ($value->cind == 120403) {
-                    $totalCustos['cassosso'] += $value->custo_un;
-                }
-            }
-        }
-
-        $moExpatriadoMensal = $this->getSQL_MaoDeObra($mes, $mes, 'E');
-
-        if (!empty($moExpatriadoMensal)) {
-            foreach ($moExpatriadoMensal as $key => $value) {
-                if ($value->cind == 120401) {
-                    $totalCustos['arimba'] += $value->custo_un;
-                } elseif ($value->cind == 120402) {
-                    $totalCustos['caraculo'] += $value->custo_un;
-                } elseif ($value->cind == 120403) {
-                    $totalCustos['cassosso'] += $value->custo_un;
-                }
-            }
-        }
-
-        // Adicionar o custo com mão de obra nacional Acumulada
-        $moNacionalAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'N');
-
-        if (!empty($moNacionalAcumulada)) {
-            foreach ($moNacionalAcumulada as $key => $value) {
-                if ($value->cind == 120401) {
-                    $totalCustosAcumulados['arimba'] += $value->custo_un;
-                } elseif ($value->cind == 120402) {
-                    $totalCustosAcumulados['caraculo'] += $value->custo_un;
-                } elseif ($value->cind == 120403) {
-                    $totalCustosAcumulados['cassosso'] += $value->custo_un;
-                }
-            }
-        }
-
-        // Adicionar o custo com mão de obra expatriada Acumulada
-        $moExpatriadaAcumulada = $this->getSQL_MaoDeObra(1, $mes, 'E');
-
-        if (!empty($moExpatriadaAcumulada)) {
-            foreach ($moExpatriadaAcumulada as $key => $value) {
-                if ($value->cind == 120401) {
-                    $totalCustosAcumulados['arimba'] += $value->custo_un;
-                } elseif ($value->cind == 120402) {
-                    $totalCustosAcumulados['caraculo'] += $value->custo_un;
-                } elseif ($value->cind == 120403) {
-                    $totalCustosAcumulados['cassosso'] += $value->custo_un;
-                }
-            }
-        }
-
-        $somaTotalCustos = 0;
-        foreach ($totalCustos as $key => $value) {
-            $somaTotalCustos += $value;
-        }
-
-        // Valores mensais da produção
-        foreach ($cisRelatorioMensal as $key => $value) {
-            $producaoMensal[$key] = $this->getProducao($key, $mes, $mes);
-            $valorProduzida[$key] = 0;
-            $quantidadeProduzida[$key] = 0;
-        }
-        foreach ($producaoMensal as $key => $value) {
-            foreach ($value as $key2 => $value2) {
-                $valorProduzida[$key] += $value2['pu'] * $value2['m3'];
-                $quantidadeProduzida[$key] += $value2['m3'];
-            }
-        }
-
-        $somaValorProduzida = 0;
-        $somaQuantidadeProduzida = 0;
-        foreach ($valorProduzida as $key => $value) {
-            $somaValorProduzida += $value;
-        }
-        foreach ($quantidadeProduzida as $key => $value) {
-            $somaQuantidadeProduzida += $value;
-        }
-
-        // Valores mensais acumulados da produção
-        foreach ($cisRelatorioMensal as $key => $value) {
-            $producaoMensalAcumulada[$key] = $this->getProducao($key, 1, $mes);
-            $valorProduzidaAcumulada[$key] = 0;
-            $quantidadeProduzidaAcumulada[$key] = 0;
-        }
-        foreach ($producaoMensalAcumulada as $key => $value) {
-            foreach ($value as $key2 => $value2) {
-                $valorProduzidaAcumulada[$key] += $value2['pu'] * $value2['m3'];
-                $quantidadeProduzidaAcumulada[$key] += $value2['m3'];
-            }
-        }
-
-        $somaValorProduzidaAcumulada = 0;
-        $somaQuantidadeProduzidaAcumulada = 0;
-        foreach ($valorProduzidaAcumulada as $key => $value) {
-            $somaValorProduzidaAcumulada += $value;
-        }
-        foreach ($quantidadeProduzidaAcumulada as $key => $value) {
-            $somaQuantidadeProduzidaAcumulada += $value;
-        }
-
-        // Resultado Operacional por centro industrial
-        foreach ($cisRelatorioMensal as $key => $value) {
-            $resultadoOperacional[$key] = $valorProduzida[$key] - $totalCustos[$key];
-            $resultadoOperacionalAcumulado[$key] = $valorProduzidaAcumulada[$key] - $totalCustosAcumulados[$key];
-        }
-
-        $somaResultadoOperacional = 0;
-        $somaResultadoOperacionalAcumulado = 0;
-        foreach ($resultadoOperacional as $key => $value) {
-            $somaResultadoOperacional += $value;
-        }
-        foreach ($resultadoOperacionalAcumulado as $key => $value) {
-            $somaResultadoOperacionalAcumulado += $value;
-        }
-
-        // CI Operacional por centro industrial
-        foreach ($cisRelatorioMensal as $key => $value) {
-            if ($valorProduzida[$key] != 0) {
-                $ciOperacional[$key] = $totalCustos[$key] / $valorProduzida[$key];
-            } else {
-                $ciOperacional[$key] = 0;
-            }
-            if ($ciOperacional[$key] > 3) {
-                $ciOperacional[$key] = 3;
-            }
-            if ($valorProduzidaAcumulada[$key] != 0) {
-                $ciOperacionalAcumulado[$key] = $totalCustosAcumulados[$key] / $valorProduzidaAcumulada[$key];
-            } else {
-                $ciOperacionalAcumulado[$key] = 0;
-            }
-            if ($ciOperacionalAcumulado[$key] > 3) {
-                $ciOperacionalAcumulado[$key] = 3;
-            }
-        }
-
-        $mediaCIOperacional = 0;
-        $mediaCIOperacionalAcumulado = 0;
-        foreach ($ciOperacional as $key => $value) {
-            if ($somaValorProduzida === 0) {
-                $mediaCIOperacional = 0;
-            } else {
-                $mediaCIOperacional = $somaTotalCustos / $somaValorProduzida;
-            }
-        }
-
-        foreach ($ciOperacionalAcumulado as $key => $value) {
-            if ($somaValorProduzidaAcumulada === 0) {
-                $mediaCIOperacionalAcumulado = 0;
-            } else {
-                $mediaCIOperacionalAcumulado = $somaTotalCustosAcumulados / $somaValorProduzidaAcumulada;
-            }
-        }
-
-        // Stock de todos os CI
-        $stockGeral = $this->getStock($mes);
-        $stockJaneiro = $this->getStock(1);
-
-        // Preço do agregado
-        foreach ($lista_array_agregados as $key => $value) {
-            $preco[$key] = $this->getPreco($key);
-        }
-
-        // Valor do stock no mês actual
-        foreach ($cisRelatorioMensal as $ci => $codigo) {
-            $valorStockMesAnterior[$ci] = 0;
-            $valorStockMes[$ci] = 0;
-            $valorStockJaneiro[$ci] = 0;
-            foreach ($lista_array_agregados as $key => $value) {
-                $valorStockMesAnterior[$ci] += ($stockGeral[0][$ci][$key] * $preco[$key]);
-                $valorStockMes[$ci] += $stockGeral[1][$ci][$key] * $preco[$key];
-                $valorStockJaneiro[$ci] += $stockJaneiro[0][$ci][$key] * $preco[$key];
-            }
-        }
-
-        $somaValorStockMesAnterior = 0;
-        $somaValorStockMes = 0;
-        $somaValorStockJaneiro = 0;
-        foreach ($valorStockMesAnterior as $key => $value) {
-            $somaValorStockMesAnterior += $value;
-        }
-        foreach ($valorStockMes as $key => $value) {
-            $somaValorStockMes += $value;
-        }
-        foreach ($valorStockJaneiro as $key => $value) {
-            $somaValorStockJaneiro += $value;
-        }
-
-        // Diferença entre valor stock anterior com actual
-        foreach ($cisRelatorioMensal as $ci => $codigo) {
-            $variacaoMensal[$ci] = $valorStockMes[$ci] - $valorStockMesAnterior[$ci];
-            $variacaoAcumulada[$ci] = $valorStockMes[$ci] - $valorStockJaneiro[$ci];
-        }
-
-        $somaVariacaoMensal = 0;
-        $somaVariacaoMensalAcumulada = 0;
-        foreach ($variacaoMensal as $key => $value) {
-            $somaVariacaoMensal = $somaValorStockMes - $somaValorStockMesAnterior;
-        }
-        foreach ($variacaoAcumulada as $key => $value) {
-            $somaVariacaoAcumulada = $somaValorStockMes - $somaValorStockJaneiro;
-        }
-
-        // Dados para os gráficos
-        for ($i = 1; $i <= $mes; ++$i) {
-            $dadosGrafico[$i] = $this->operacional_grafico($i);
-        }
-
-        for ($i = 1; $i <= $mes; ++$i) {
-            $arimbaGraficoCI[] = round($dadosGrafico[$i]['ciAcumulado']['arimba'], 1);
-            $caraculoGraficoCI[] = round($dadosGrafico[$i]['ciAcumulado']['caraculo'], 1);
-            $cassossoGraficoCI[] = round($dadosGrafico[$i]['ciAcumulado']['cassosso'], 1);
-            $arimbaGraficoStock[] = round($dadosGrafico[$i]['valorStockActual']['arimba']);
-            $caraculoGraficoStock[] = round($dadosGrafico[$i]['valorStockActual']['caraculo']);
-            $cassossoGraficoStock[] = round($dadosGrafico[$i]['valorStockActual']['cassosso']);
-        }
-
-        $vars['page'] = 'resultadooperacional';
-        $vars['title'] = 'Resultado Operacional';
-
-        $vars['mes_titulo'] = $lista_meses[$mes - 1];
-        // Quantidade produzida
-        $vars['quantidadeProduzida'] = $quantidadeProduzida;
-        $vars['quantidadeProduzidaAcumulada'] = $quantidadeProduzidaAcumulada;
-        // Valor Produção
-        $vars['valorProduzida'] = $valorProduzida;
-        $vars['valorProduzidaAcumulada'] = $valorProduzidaAcumulada;
-        // Custos da operação
-        $vars['totalCustos'] = $totalCustos;
-        $vars['totalCustosAcumulados'] = $totalCustosAcumulados;
-        // Resultado operacional
-        $vars['resultadoOperacional'] = $resultadoOperacional;
-        $vars['resultadoOperacionalAcumulado'] = $resultadoOperacionalAcumulado;
-        // CI operacional
-        $vars['ciOperacional'] = $ciOperacional;
-        $vars['ciOperacionalAcumulado'] = $ciOperacionalAcumulado;
-        // Stock mês
-        $vars['valorStockMesAnterior'] = $valorStockMesAnterior;
-        $vars['valorStockJaneiro'] = $valorStockJaneiro;
-        $vars['valorStockMes'] = $valorStockMes;
-        // Variação de stocks
-        $vars['variacaoMensal'] = $variacaoMensal;
-        $vars['variacaoAcumulada'] = $variacaoAcumulada;
-
-        $vars['cisRelatorioMensal'] = $cisRelatorioMensal;
-        // Rodapé da tabela
-        $vars['somaTotalCustosAcumulados'] = $somaTotalCustosAcumulados;
-        $vars['somaTotalCustos'] = $somaTotalCustos;
-        $vars['somaQuantidadeProduzida'] = $somaQuantidadeProduzida;
-        $vars['somaQuantidadeProduzidaAcumulada'] = $somaQuantidadeProduzidaAcumulada;
-        $vars['somaValorProduzida'] = $somaValorProduzida;
-        $vars['somaValorProduzidaAcumulada'] = $somaValorProduzidaAcumulada;
-        $vars['somaResultadoOperacional'] = $somaResultadoOperacional;
-        $vars['somaResultadoOperacionalAcumulado'] = $somaResultadoOperacionalAcumulado;
-        $vars['mediaCIOperacional'] = $mediaCIOperacional;
-        $vars['mediaCIOperacionalAcumulado'] = $mediaCIOperacionalAcumulado;
-        $vars['somaValorStockMesAnterior'] = $somaValorStockMesAnterior;
-        $vars['somaValorStockJaneiro'] = $somaValorStockJaneiro;
-        $vars['somaValorStockMes'] = $somaValorStockMes;
-        $vars['somaVariacaoMensal'] = $somaVariacaoMensal;
-        $vars['somaVariacaoAcumulada'] = $somaVariacaoAcumulada;
-
-        // dados gráfico
-        $vars['arimbaGraficoCI'] = $arimbaGraficoCI;
-        $vars['caraculoGraficoCI'] = $caraculoGraficoCI;
-        $vars['cassossoGraficoCI'] = $cassossoGraficoCI;
-        $vars['arimbaGraficoStock'] = $arimbaGraficoStock;
-        $vars['caraculoGraficoStock'] = $caraculoGraficoStock;
-        $vars['cassossoGraficoStock'] = $cassossoGraficoStock;
-        $vars['title_grafico'] = 'CI Operacional Acumulado';
-        $vars['label1'] = 'arimba';
-        $vars['label2'] = 'caraculo';
-        $vars['label3'] = 'cassosso';
-
-        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
-    }
-
-    public function facturacao($request, $response)
-    {
-        include 'src/Auxiliares/globals.php';
-
-        $mes = $request->getAttribute('item');
-
-        for ($i = 1; $i <= $mes; ++$i) {
-            foreach ($cisRelatorioMensal as $key => $value) {
-                $fornecimentoInterno[$key][$i] = $this->getFornecimento($key, 'GTO', 'SPA', $i, $i);
-                $fornecimentoExterno[$key][$i] = $this->getFornecimento($key, 'GR', 'VD', $i, $i);
-            }
-        }
-
-        // Somatório dos fornecimentos de todos agregados
-        foreach ($fornecimentoInterno as $ci => $value) {
-            foreach ($value as $mes => $dados) {
-                $fornecimentoInternoTotal[$ci][$mes] = 0;
-                $fornecimentoExternoTotal[$ci][$mes] = 0;
-                foreach ($dados as $nome => $valor) {
-                    $fornecimentoInternoTotal[$ci][$mes] += $fornecimentoInterno[$ci][$mes][$nome]['total'];
-                    $fornecimentoExternoTotal[$ci][$mes] += $fornecimentoExterno[$ci][$mes][$nome]['total'];
-                }
-            }
-        }
-
-        // Total de fornecimento interno e externo
-        for ($i = 1; $i <= $mes; ++$i) {
-            $totalFI[$i] = 0;
-            $totalFE[$i] = 0;
-            foreach ($fornecimentoInternoTotal as $ci => $dados) {
-                $totalFI[$i] += $fornecimentoInternoTotal[$ci][$i];
-                $totalFE[$i] += $fornecimentoExternoTotal[$ci][$i];
-            }
-        }
-
-        // Total do mês
-        $totalMes = array();
-        for ($i = 1; $i <= $mes; ++$i) {
-            $totalMes[$i] = $totalFI[$i] + $totalFE[$i];
-        }
-
-        // Dados do rodapé
-
-        // Subtotais dos CI
-        foreach ($fornecimentoInternoTotal as $ci => $dados) {
-            $rodapeInterno[$ci] = 0;
-            $rodapeExterno[$ci] = 0;
-            for ($i = 1; $i <= $mes; ++$i) {
-                $rodapeInterno[$ci] += $fornecimentoInternoTotal[$ci][$i];
-                $rodapeExterno[$ci] += $fornecimentoExternoTotal[$ci][$i];
-            }
-        }
-
-        // Soma dos subtotais dos CI
-        foreach ($rodapeInterno as $ci => $value) {
-            $totalRodape[$ci] = $rodapeInterno[$ci] + $rodapeExterno[$ci];
-        }
-
-        // Subtotais dos totais
-            $rodapeTotaisFI = 0;
-        $rodapeTotaisFE = 0;
-        for ($i = 1; $i <= $mes; ++$i) {
-            $rodapeTotaisFI += $totalFI[$i];
-            $rodapeTotaisFE += $totalFE[$i];
-        }
-
-        // Total Geral
-        $rodapeTotalGeral = $rodapeTotaisFI + $rodapeTotaisFE;
-
-        $vars['page'] = 'facturacao';
-        $vars['title'] = 'Mapa Facturação';
-        $vars['ci'] = $cisRelatorioMensal;
-        $vars['mes_titulo'] = $lista_meses[$mes - 1];
-        $vars['meses'] = $lista_meses;
-        // Dados
-        $vars['fornecimentoInternoTotal'] = $fornecimentoInternoTotal;
-        $vars['fornecimentoExternoTotal'] = $fornecimentoExternoTotal;
-        $vars['totalFI'] = $totalFI;
-        $vars['totalFE'] = $totalFE;
-        $vars['totalMes'] = $totalMes;
-        $vars['rodapeInterno'] = $rodapeInterno;
-        $vars['rodapeExterno'] = $rodapeExterno;
-        $vars['rodapeTotalGeral'] = $rodapeTotalGeral;
-        $vars['rodapeTotaisFI'] = $rodapeTotaisFI;
-        $vars['rodapeTotaisFE'] = $rodapeTotaisFE;
-        $vars['totalRodape'] = $totalRodape;
-
-        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
-    }
-
     private function get_custos($mes)
     {
         include 'src/Auxiliares/globals.php';
@@ -2099,6 +1570,579 @@ final class RelatorioMensalAction extends Action
         }
     }
 
+    private function get_fornecimentoGlobal($cIndustrial)
+    {
+        include 'src/Auxiliares/globals.php';
+
+        $cindus = 'importacao_'.$cIndustrial;
+
+        $query = "SELECT SUM(x.total) as total, SUM(x.m3) as m3, x.mes as mes
+                  FROM (SELECT SUM(`peso` * `valor_in_ton`) AS total,
+                         SUM(`peso` / `baridade`) AS m3,
+                         MONTH(`data`) AS mes
+                  FROM $cindus
+                  LEFT JOIN `centros_analiticos`
+                  ON `ca_id` = `obra`
+                  JOIN `agregados`
+                  ON `nome_agr` = `nome_agre`
+                  JOIN `baridades`
+                  ON `agr_id` = `agregado_id`
+                  LEFT JOIN `valorun_interno_ton`
+                  ON `agr_bar_id` = `agr_id`
+                  LEFT JOIN `valorun_externo_ton`
+                  ON `agr_bar_ton_id` = `agr_id`
+                  LEFT JOIN `obras`
+                  ON `id_obra` = `obra`
+                  WHERE  `tipo_doc` IN ('GTO','SPA') AND `nome_agr` IN ($lista_agregados)
+                  AND YEAR(`data`) IN (?) AND MONTH(`data`) BETWEEN 1 AND 12
+                  GROUP BY `mes`
+                  UNION ALL
+                  SELECT SUM(`peso` * `valor_in_ton`) AS total,
+                         SUM(`peso` / `baridade`) AS m3,
+                         MONTH(`data`) AS mes
+                  FROM $cindus
+                  LEFT JOIN `centros_analiticos`
+                  ON `ca_id` = `obra`
+                  JOIN `agregados`
+                  ON `nome_agr` = `nome_agre`
+                  JOIN `baridades`
+                  ON `agr_id` = `agregado_id`
+                  LEFT JOIN `valorun_interno_ton`
+                  ON `agr_bar_id` = `agr_id`
+                  LEFT JOIN `valorun_externo_ton`
+                  ON `agr_bar_ton_id` = `agr_id`
+                  LEFT JOIN `obras`
+                  ON `id_obra` = `obra`
+                  WHERE  `tipo_doc` IN ('GR', 'VD') AND `nome_agr` IN ($lista_agregados)
+                  AND YEAR(`data`) IN (?) AND MONTH(`data`) BETWEEN 1 AND 12
+                  GROUP BY `mes`) AS x
+                  GROUP BY x.mes
+                  ";
+
+        $rows = $this->db->prepare($query);
+        $rows->execute([$ano, $ano]);
+
+        if ($rows->rowCount() > 0) {
+            $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+            return $vars['row'];
+        } else {
+            $vars['row'] = [];
+            return $vars['row'];
+        }
+    }
+
+    private function get_producao($cIndustrial)
+    {
+        include 'src/Auxiliares/globals.php';
+
+        // if (!in_array($cIndustrial, $this->listaProducoes)) {
+        //     return [];
+        // }
+
+        $cindus = 'producoes_'.$cIndustrial;
+
+        $query = "SELECT
+                         MONTH(`data_in`) AS `mes`,
+                         ROUND(SUM(`qt` / `baridade`),2) AS `m3`,
+                         ROUND(SUM(`valor_in_ton` * `qt`),2) AS `total`
+                  FROM `$cindus`
+                  LEFT JOIN `agregados`
+                  ON `agr_id` = `cod_agr`
+                  LEFT JOIN `valorun_interno_ton`
+                  ON `agr_bar_id` = `cod_agr`
+                  JOIN `baridades`
+                  ON `cod_agr` = `agregado_id`
+                  WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN (?)
+                  AND MONTH(`data_in`) BETWEEN 1 and 12
+                  GROUP BY `mes`
+                  ORDER by `mes`
+                 ";
+
+        $rows = $this->db->prepare($query);
+        $params = array_merge([$ano]);
+        $rows->execute($params);
+
+        $array = array();
+
+        if ($rows->rowCount() > 0) {
+            $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+            // Separar cada uma das linhas da query, por nome do agregado
+            return $vars['row'];
+        } else {
+            return [];
+        }
+    }
+
+    private function get_stock($cIndustrial)
+    {
+        include 'src/Auxiliares/globals.php';
+
+        $cindus = 'producoes_'.$cIndustrial;
+
+        $query = "SELECT
+                         MONTH(`data_in`) AS `mes`,
+                         ROUND(SUM(`qt` / `baridade`),2) AS `m3`,
+                         ROUND(SUM(`valor_in_ton` * `qt`),2) AS `total`
+                  FROM `$cindus`
+                  LEFT JOIN `agregados`
+                  ON `agr_id` = `cod_agr`
+                  LEFT JOIN `valorun_interno_ton`
+                  ON `agr_bar_id` = `cod_agr`
+                  JOIN `baridades`
+                  ON `cod_agr` = `agregado_id`
+                  WHERE `nome_agre` IN ($lista_agregados) AND YEAR(`data_in`) IN (?)
+                  AND MONTH(`data_in`) BETWEEN 1 and 12
+                  GROUP BY `mes`
+                  ORDER by `mes`
+                 ";
+
+        $rows = $this->db->prepare($query);
+        $params = array_merge([$ano]);
+        $rows->execute($params);
+
+        $array = array();
+
+        if ($rows->rowCount() > 0) {
+            $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
+            // Separar cada uma das linhas da query, por nome do agregado
+        }
+
+        return $vars['row'];
+    }
+
+    public function operacional($request, $response)
+    {
+        include 'src/Auxiliares/globals.php';
+        include 'src/Auxiliares/helpers.php';
+
+        $mes = $request->getAttribute('item');
+
+        // Dados de Custos
+
+        #Custos mensais
+        $custos = $this->get_custos($mes);
+
+        #soma dos custos
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $temp = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $temp += $custos[$key][$i];
+                $custosTotal[$key][$i] = $temp;
+            }
+        }
+
+        #Produção por CI
+        $temporary = 0;
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $producao[$key] = $this->get_producao($key);
+            if (empty($producao[$key])) {
+                $temporary += 1;
+            }
+        }
+
+        if ($temp >= count($cisRelatorioMensal)) {
+            #Preencher meses sem valores
+          for ($i = 0; $i < $mes; $i++) {
+              foreach ($producao as $key => $value) {
+                  foreach ($value as $indice => $valor) {
+                      if ($valor->mes === $i+1) {
+                          $prodOrdenado[$key][$i+1] = $valor->total;
+                          $prodM3Ordenado[$key][$i+1] = $valor->m3;
+                      }
+                  }
+              }
+          }
+            for ($i = 1; $i < $mes+1; $i++) {
+                foreach ($prodOrdenado as $key => $value) {
+                    if (empty($value[$i])) {
+                        $prodOrdenado[$key][$i] = 0;
+                        $prodM3Ordenado[$key][$i] = 0;
+                    }
+                }
+            }
+
+          // Dados Acumulados
+          foreach ($prodOrdenado as $key => $value) {
+              $temp = 0;
+              for ($i = 1; $i < $mes+1; $i++) {
+                  $temp += $value[$i];
+                  $prodAcumudada[$key][$i] = $temp;
+              }
+          }
+            foreach ($prodM3Ordenado as $key => $value) {
+                $temp = 0;
+                for ($i = 1; $i < $mes+1; $i++) {
+                    $temp += $value[$i];
+                }
+                $prodM3Acumudada[$key] = $temp;
+            }
+
+          // Resultados Operacionais
+
+          foreach ($prodOrdenado as $key => $value) {
+              $resOperacional[$key] = $value[$mes] - $custosTotal[$key][$mes];
+          }
+            foreach ($prodAcumudada as $key => $value) {
+                $resOperacionalAc[$key] = $value[$mes] - $custosTotal[$key][$mes];
+            }
+
+          # CI Operacional
+          foreach ($prodOrdenado as $key => $value) {
+              if ($value[$mes] > 0) {
+                  $ciOperacional[$key][$mes] = $custos[$key][$mes] / $value[$mes];
+              } else {
+                  $ciOperacional[$key][$mes] = 0;
+              }
+          }
+            foreach ($prodAcumudada as $key => $value) {
+                if ($prodAcumudada > 0) {
+                    $ciOperacionalAc[$key] = $custosTotal[$key][$mes] / $value[$mes];
+                } else {
+                    $ciOperacional[$key] = 0;
+                }
+            }
+
+            foreach ($cisRelatorioMensal as $key => $value) {
+                $tempCustos = 0;
+                $tempProd = 0;
+                ${$key} = array();
+                for ($i = 1; $i < $mes+1; $i++) {
+                    if ($prodOrdenado > 0) {
+                        $tempCustos += $custos[$key][$i];
+                        $tempProd += $prodOrdenado[$key][$i];
+
+                        ${$key}[$i-1] = $tempCustos / $tempProd;
+                        if (${$key}[$i-1] > 3) {
+                            ${$key}[$i-1] = 3;
+                        }
+                    } else {
+                        ${$key}[$i-1] = 0;
+                    }
+                }
+            }
+        } else {
+            $vars['page'] = 'resultadooperacional';
+            $vars['title'] = 'Resultado Operacional';
+            $vars['mes'] = $mes;
+            $vars['mes_titulo'] = $lista_meses[$mes - 1];
+
+            return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
+        }
+
+        // Fornecimento
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $fornInterno[$key] = $this->get_fornecimento($key, 'GTO', 'SPA');
+        }
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $fornExterno[$key] = $this->get_fornecimento($key, 'GR', 'VD');
+        }
+
+        // Fornecimento
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $fornecimento[$key] = $this->get_fornecimentoGlobal($key);
+        }
+        foreach ($fornecimento as $key => $value) {
+            foreach ($value as $key2 => $value2) {
+                for ($i = 0; $i < $mes; $i++) {
+                    $fornOrdenado[$key][$value2->mes] = (array)$value2;
+                }
+            }
+        }
+
+        for ($i = 1; $i < $mes+1; $i++) {
+            foreach ($fornOrdenado as $key => $value) {
+                if ($fornOrdenado[$key][$i] === null) {
+                    $fornOrdenado[$key][$i] = array(
+                      'total' => 0,
+                      'm3' => 0,
+                      'mes' => $i
+                    );
+                }
+            }
+        }
+
+        # Fornecimento Acumulado
+        foreach ($fornOrdenado as $key => $value) {
+            $temp = 0;
+            for ($i = 1; $i < $mes+1; $i++) {
+                $temp += $value[$i]['total'];
+                $fornOrdenadoAc[$key][$i] = $temp;
+            }
+        }
+
+        # Valor stock inicio do ano
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $valorStockJaneiro[$key] = 0;
+            foreach ($stock[$key][$ano] as $agr => $qt) {
+                $valorStockJaneiro[$key] += $qt * $this->getPreco($agr);
+            }
+        }
+        foreach ($cisRelatorioMensal as $key => $value) {
+            for ($i = 1; $i < $mes+1; $i++) {
+                $stocki[$key][$i-1] = $valorStockJaneiro[$key] + $prodAcumudada[$key][$i] - $fornOrdenadoAc[$key][$i];
+            }
+        }
+
+        # Diferença de stock
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $diffStock[$key][1] = $stocki[$key][0] - $valorStockJaneiro[$key];
+        }
+        foreach ($stocki as $key => $value) {
+            $diffStockAc[$key] = $value[$mes-1] - $valorStockJaneiro[$key];
+            for ($i = 1; $i < $mes; $i++) {
+                $diffStock[$key][$i+1] = $value[$i] - $value[$i-1];
+            }
+        }
+
+        // Rodapés - Mensais
+
+        # Produção
+        $rodapeProdM3 = 0;
+        foreach ($prodM3Ordenado as $key => $value) {
+            $rodapeProdM3 += $value[$mes];
+        }
+        $rodapeProd = 0;
+        foreach ($prodOrdenado as $key => $value) {
+            $rodapeProd += $value[$mes];
+        }
+
+        # Custos
+        $rodapeCustos = 0;
+        foreach ($custos as $key => $value) {
+            $rodapeCustos += $value[$mes];
+        }
+
+        # Resultado operacional
+        $rodapeRO = 0;
+        foreach ($resOperacional as $key => $value) {
+            $rodapeRO += $value;
+        }
+
+        # CI Operacional
+        $rodapeCI = 0;
+        if ($rodapeProd > 0) {
+            $rodapeCI = $rodapeCustos / $rodapeProd;
+        } else {
+            $rodapeCI = 0;
+        }
+
+        # Stock mês Janeiro
+        $rodapeStkJaneiro = 0;
+        foreach ($valorStockJaneiro as $key => $value) {
+            $rodapeStkJaneiro += $value;
+        }
+
+        # Stock mês anterior
+        if ($mes > 1) {
+            $rodapeStkAnterior = 0;
+            foreach ($stocki as $key => $value) {
+                $rodapeStkAnterior += $value[$mes-2];
+            }
+        }
+
+        # Stock mês actual
+            $rodapeStkActual = 0;
+        foreach ($stocki as $key => $value) {
+            $rodapeStkActual += $value[$mes-1];
+        }
+
+        # Variação de stock
+        if ($mes == 1) {
+            $rodapeVariacaoStock = $rodapeStkActual - $rodapeStkJaneiro;
+        } else {
+            $rodapeVariacaoStock = $rodapeStkActual - $rodapeStkAnterior;
+        }
+
+        // Rodapés - Acumulados
+
+        # Produção
+        $rodapeProdM3Ac = 0;
+        foreach ($prodM3Acumudada as $key => $value) {
+            $rodapeProdM3Ac += $value;
+        }
+        $rodapeProdAc = 0;
+        foreach ($prodAcumudada as $key => $value) {
+            $rodapeProdAc += $value[$mes];
+        }
+
+        # Custos
+        $rodapeCustosAc = 0;
+        foreach ($custosTotal as $key => $value) {
+            $rodapeCustosAc += $value[$mes];
+        }
+
+        # Resultado operacional
+        foreach ($ciOperacionalAc as $key => $value) {
+            $rodapeROAc = $rodapeProdAc - $rodapeCustosAc;
+        }
+
+        # CI Operacional
+        $rodapeCIAc = 0;
+        if ($rodapeProd > 0) {
+            $rodapeCIAc = $rodapeProdAc / $rodapeCustosAc;
+        } else {
+            $rodapeCIAc = 0;
+        }
+
+        # Variação de stock
+            $rodapeVariacaoStockAc = $rodapeStkActual - $rodapeStkJaneiro;
+
+
+
+        // dump($rodapeStkActual);
+
+        $vars['page'] = 'resultadooperacional';
+        $vars['title'] = 'Resultado Operacional';
+        $vars['mes'] = $mes;
+
+        $vars['mes_titulo'] = $lista_meses[$mes - 1];
+        // Quantidade produzida
+        $vars['quantidadeProduzida'] = $prodM3Ordenado;
+        $vars['quantidadeProduzidaAcumulada'] = $prodM3Acumudada;
+        // Valor Produção
+        $vars['valorProduzida'] = $prodOrdenado;
+        $vars['valorProduzidaAcumulada'] = $prodAcumudada;
+        // Custos da operação
+        $vars['totalCustos'] = $custos;
+        $vars['totalCustosAcumulados'] = $custosTotal;
+        // Resultado operacional
+        $vars['resultadoOperacional'] = $resOperacional;
+        $vars['resultadoOperacionalAcumulado'] = $resOperacionalAc;
+        // CI operacional
+        $vars['ciOperacional'] = $ciOperacional;
+        $vars['ciOperacionalAc'] = $ciOperacionalAc;
+        // Stock mês
+        $vars['valorStockMesAnterior'] = $stocki;
+        // dump($stocki);
+        $vars['valorStockJaneiro'] = $valorStockJaneiro;
+        $vars['valorStockMes'] = $stocki;
+        // Variação de stocks
+        $vars['variacaoMensal'] = $diffStock;
+        $vars['variacaoAcumulada'] = $diffStockAc;
+
+        $vars['cisRelatorioMensal'] = $cisRelatorioMensal;
+        // Rodapé da tabela
+        $vars['somaTotalCustosAcumulados'] = $rodapeCustosAc;
+        $vars['somaTotalCustos'] = $rodapeCustos;
+        $vars['somaQuantidadeProduzida'] = $rodapeProdM3;
+        $vars['somaQuantidadeProduzidaAcumulada'] = $rodapeProdM3Ac;
+        $vars['somaValorProduzida'] = $rodapeProd;
+        $vars['somaValorProduzidaAcumulada'] = $rodapeProdAc;
+        $vars['somaResultadoOperacional'] = $rodapeRO;
+        $vars['somaResultadoOperacionalAcumulado'] = $rodapeROAc;
+        $vars['mediaCIOperacional'] = $rodapeCI;
+        $vars['mediaCIOperacionalAcumulado'] = $rodapeCIAc;
+        $vars['somaValorStockMesAnterior'] = $rodapeStkAnterior;
+        $vars['somaValorStockJaneiro'] = $rodapeStkJaneiro;
+        $vars['somaValorStockMes'] = $rodapeStkActual;
+        $vars['somaVariacaoMensal'] = $rodapeVariacaoStock;
+        $vars['somaVariacaoAcumulada'] = $rodapeVariacaoStockAc;
+
+        // dados gráfico
+        foreach ($cisRelatorioMensal as $key => $value) {
+            $vars[$key.'GraficoCI'] = ${$key};
+        }
+        foreach ($stocki as $key => $value) {
+            $vars[$key.'GraficoStock'] = $value;
+        }
+        $vars['title_grafico'] = 'CI Operacional Acumulado';
+        $vars['label1'] = 'arimba';
+        $vars['label2'] = 'caraculo';
+        $vars['label3'] = 'cassosso';
+
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
+    }
+
+    public function facturacao($request, $response)
+    {
+        include 'src/Auxiliares/globals.php';
+
+        $mes = $request->getAttribute('item');
+
+        for ($i = 1; $i <= $mes; ++$i) {
+            foreach ($cisRelatorioMensal as $key => $value) {
+                $fornecimentoInterno[$key][$i] = $this->getFornecimento($key, 'GTO', 'SPA', $i, $i);
+                $fornecimentoExterno[$key][$i] = $this->getFornecimento($key, 'GR', 'VD', $i, $i);
+            }
+        }
+
+        // Somatório dos fornecimentos de todos agregados
+        foreach ($fornecimentoInterno as $ci => $value) {
+            foreach ($value as $mes => $dados) {
+                $fornecimentoInternoTotal[$ci][$mes] = 0;
+                $fornecimentoExternoTotal[$ci][$mes] = 0;
+                foreach ($dados as $nome => $valor) {
+                    $fornecimentoInternoTotal[$ci][$mes] += $fornecimentoInterno[$ci][$mes][$nome]['total'];
+                    $fornecimentoExternoTotal[$ci][$mes] += $fornecimentoExterno[$ci][$mes][$nome]['total'];
+                }
+            }
+        }
+
+        // Total de fornecimento interno e externo
+        for ($i = 1; $i <= $mes; ++$i) {
+            $totalFI[$i] = 0;
+            $totalFE[$i] = 0;
+            foreach ($fornecimentoInternoTotal as $ci => $dados) {
+                $totalFI[$i] += $fornecimentoInternoTotal[$ci][$i];
+                $totalFE[$i] += $fornecimentoExternoTotal[$ci][$i];
+            }
+        }
+
+        // Total do mês
+        $totalMes = array();
+        for ($i = 1; $i <= $mes; ++$i) {
+            $totalMes[$i] = $totalFI[$i] + $totalFE[$i];
+        }
+
+        // Dados do rodapé
+
+        // Subtotais dos CI
+        foreach ($fornecimentoInternoTotal as $ci => $dados) {
+            $rodapeInterno[$ci] = 0;
+            $rodapeExterno[$ci] = 0;
+            for ($i = 1; $i <= $mes; ++$i) {
+                $rodapeInterno[$ci] += $fornecimentoInternoTotal[$ci][$i];
+                $rodapeExterno[$ci] += $fornecimentoExternoTotal[$ci][$i];
+            }
+        }
+
+        // Soma dos subtotais dos CI
+        foreach ($rodapeInterno as $ci => $value) {
+            $totalRodape[$ci] = $rodapeInterno[$ci] + $rodapeExterno[$ci];
+        }
+
+        // Subtotais dos totais
+            $rodapeTotaisFI = 0;
+        $rodapeTotaisFE = 0;
+        for ($i = 1; $i <= $mes; ++$i) {
+            $rodapeTotaisFI += $totalFI[$i];
+            $rodapeTotaisFE += $totalFE[$i];
+        }
+
+        // Total Geral
+        $rodapeTotalGeral = $rodapeTotaisFI + $rodapeTotaisFE;
+
+        $vars['page'] = 'facturacao';
+        $vars['title'] = 'Mapa Facturação';
+        $vars['ci'] = $cisRelatorioMensal;
+        $vars['mes_titulo'] = $lista_meses[$mes - 1];
+        $vars['meses'] = $lista_meses;
+        // Dados
+        $vars['fornecimentoInternoTotal'] = $fornecimentoInternoTotal;
+        $vars['fornecimentoExternoTotal'] = $fornecimentoExternoTotal;
+        $vars['totalFI'] = $totalFI;
+        $vars['totalFE'] = $totalFE;
+        $vars['totalMes'] = $totalMes;
+        $vars['rodapeInterno'] = $rodapeInterno;
+        $vars['rodapeExterno'] = $rodapeExterno;
+        $vars['rodapeTotalGeral'] = $rodapeTotalGeral;
+        $vars['rodapeTotaisFI'] = $rodapeTotaisFI;
+        $vars['rodapeTotaisFE'] = $rodapeTotaisFE;
+        $vars['totalRodape'] = $totalRodape;
+
+        return $this->view->render($response, 'relatorios/mensais/'.$vars['page'].'.twig', $vars);
+    }
+
     public function resultado($request, $response)
     {
         include 'src/Auxiliares/globals.php';
@@ -2147,7 +2191,7 @@ final class RelatorioMensalAction extends Action
 
         for ($i = 1; $i < $mes+1; $i++) {
             foreach ($fornInternoOrdenado as $key => $value) {
-                if ($value[$i] === null) {
+                if (empty($value[$i])) {
                     $fornInternoOrdenado[$key][$i] = 0;
                     $fornInternoOrdenadoM3[$key][$i] = 0;
                 }
