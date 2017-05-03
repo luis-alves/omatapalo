@@ -102,5 +102,5 @@ $app->group('', function () {
 
     $this->post('/tabelas/balanca', 'Src\Controllers\TabelasAction:balanca');
     $this->get('/tabelas/balanca', 'Src\Controllers\TabelasAction:balanca');
-    $this->get('/tabelas/balanca/form', 'Src\Controllers\TabelasAction:form');
+    $this->post('/tabelas/balanca/form', 'Src\Controllers\TabelasAction:form');
 })->add(Src\Middleware\AuthMiddleware::class);
