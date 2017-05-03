@@ -204,7 +204,7 @@ final class RelatorioMensalAction extends Action
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-            dump($vars['row']);
+            // dump($vars['row']);
             return $vars['row'];
         } else {
             $vars['row'] = 0;
@@ -219,16 +219,18 @@ final class RelatorioMensalAction extends Action
 
         $anoAnalise = 'ano_'.$ano;
 
-        $query = 'SELECT MONTH(`data`) AS mes,
+        $query = "SELECT MONTH(`data`) AS mes,
                          `cind`,
-	                     SUM(`h_normais` * "'.$anoAnalise.'" + `h_extras` * "'.$anoAnalise.'") AS `custo_un`
+	                     SUM(`h_normais` * $anoAnalise + `h_extras` * $anoAnalise) AS `custo_un`
                   FROM `folha_ponto`
                   LEFT JOIN `colaboradores`
                   ON `num_mec` = `n_mec`
                   WHERE  YEAR(`data`) IN (?) AND MONTH(`data`)
                          BETWEEN ? AND ? AND
                          `nacional` = ?
-                  GROUP BY cind';
+                  GROUP BY `cind`
+                  ";
+
 
         $rows = $this->db->prepare($query);
         $rows->execute([$ano, $mesInicial, $mesActual, $tipo]);
@@ -1094,7 +1096,7 @@ final class RelatorioMensalAction extends Action
                     }
                 }
             }
-            dump($custosMensais);
+            // dump($custosMensais);
             // Cálculo do total de custos por centro industrial
             foreach ($arimba_mensal as $key => $value) {
                 $arimba_mensal['total'] += $value;
@@ -1174,7 +1176,7 @@ final class RelatorioMensalAction extends Action
 
         $custosAcumulados = $this->getSQL_custos(1, $mes);
         $custosMensais = $this->getSQL_custos($mes, $mes);
-
+        // dump($custosMensais);
         $arimba_mensal = array('Materiais' => 0,
                                'Ferramentas' => 0,
                                'Expatriados' => 0,
@@ -1211,25 +1213,25 @@ final class RelatorioMensalAction extends Action
                     }
                 }
             }
-
+            // dump($cassosso_mensal);
             // Adicionar o custo com mão de obra nacional (a fazer - Possibilitar
             // entrada de valores sem que haja de outras familias)
             $moNacionalMensal = $this->getSQL_MaoDeObra($mes, $mes, 'N');
-
+            // dump($moNacionalMensal);
             if (!empty($moNacionalMensal)) {
                 foreach ($moNacionalMensal as $key => $value) {
-                    if ($value->cind == 120401) {
-                        $arimba_mensal['Nacionais'] += $moNacionalMensal[0]->custo_un;
-                    } elseif ($value->cind == 120402) {
-                        $caraculo_mensal['Nacionais'] += $moNacionalMensal[0]->custo_un;
-                    } elseif ($value->cind == 120403) {
-                        $cassosso_mensal['Nacionais'] += $moNacionalMensal[0]->custo_un;
+                    if ($value->cind === 120401) {
+                        $arimba_mensal['Nacionais'] += $value->custo_un;
+                    } elseif ($value->cind === 120402) {
+                        $caraculo_mensal['Nacionais'] += $value->custo_un;
+                    } elseif ($value->cind === 120403) {
+                        $cassosso_mensal['Nacionais'] += $value->custo_un;
                     }
                 }
             }
-
+            // dump($cassosso_mensal);
             $moExpatriadoMensal = $this->getSQL_MaoDeObra($mes, $mes, 'E');
-
+            // dump($moExpatriadoMensal);
             if (!empty($moExpatriadoMensal)) {
                 foreach ($moExpatriadoMensal as $key => $value) {
                     if ($value->cind == 120401) {
@@ -1241,7 +1243,7 @@ final class RelatorioMensalAction extends Action
                     }
                 }
             }
-
+            // dump($arimba_mensal);
             // Cálculo do total de custos por centro industrial
             foreach ($arimba_mensal as $key => $value) {
                 $arimba_mensal['total'] += $value;
@@ -1639,6 +1641,7 @@ final class RelatorioMensalAction extends Action
 
         #Custos mensais
         $custos = $this->get_custos($mes);
+        // dump($custos);
 
         #soma dos custos
         foreach ($cisRelatorioMensal as $key => $value) {
