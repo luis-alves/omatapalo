@@ -204,7 +204,7 @@ final class RelatorioMensalAction extends Action
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
-
+            dump($vars['row']);
             return $vars['row'];
         } else {
             $vars['row'] = 0;
@@ -1094,7 +1094,7 @@ final class RelatorioMensalAction extends Action
                     }
                 }
             }
-
+            dump($custosMensais);
             // Cálculo do total de custos por centro industrial
             foreach ($arimba_mensal as $key => $value) {
                 $arimba_mensal['total'] += $value;
@@ -1657,6 +1657,7 @@ final class RelatorioMensalAction extends Action
                 $temporary += 1;
             }
         }
+
 
         if ($temp >= count($cisRelatorioMensal)) {
             #Preencher meses sem valores
