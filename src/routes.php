@@ -83,6 +83,16 @@ $app->group('', function () {
     $this->get('/relatorios/fse/dresultados', 'Src\Controllers\DResultadosAction:custosFse');
     $this->get('/relatorios/pessoal/dresultados', 'Src\Controllers\DResultadosAction:custosPessoal');
     $this->get('/relatorios/financeiro/dresultados', 'Src\Controllers\DResultadosAction:financeiro');
+    # POST
+    $this->post('/relatorios/facturacao/dresultados', 'Src\Controllers\DResultadosAction:facturacao');
+    $this->post('/relatorios/producao/dresultados', 'Src\Controllers\DResultadosAction:producao');
+    $this->post('/relatorios/matdiversos/dresultados', 'Src\Controllers\DResultadosAction:matDiversos');
+    $this->post('/relatorios/matprimas/dresultados', 'Src\Controllers\DResultadosAction:matPrimas');
+    $this->post('/relatorios/equipamentos/dresultados', 'Src\Controllers\DResultadosAction:equipamentos');
+    $this->post('/relatorios/transportes/dresultados', 'Src\Controllers\DResultadosAction:transportes');
+    $this->post('/relatorios/fse/dresultados', 'Src\Controllers\DResultadosAction:custosFse');
+    $this->post('/relatorios/pessoal/dresultados', 'Src\Controllers\DResultadosAction:custosPessoal');
+    $this->post('/relatorios/financeiro/dresultados', 'Src\Controllers\DResultadosAction:financeiro');
 
     /* Tabelas */
 
