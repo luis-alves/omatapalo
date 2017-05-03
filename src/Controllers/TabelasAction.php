@@ -16,6 +16,8 @@ final class TabelasAction extends Action
         include 'src/Auxiliares/globals.php';
         include 'src/Auxiliares/helpers.php';
 
+        $_SESSION['erro'] = 0;
+        
         $cindus = 'importacao_'.$cAnalitico;
 
         $query = "SELECT DISTINCT nome_cliente FROM $cindus ORDER BY nome_cliente";
@@ -88,30 +90,13 @@ final class TabelasAction extends Action
         $vars['page'] = 'balanca';
         $vars['title'] = 'Mapa Balança';
 
-        if (!isset($_POST['data_inicio']) or !isset($_POST['data_final'])) {
+        $cindus = "importacao_".$cAnalitico;
+
+        if (empty($_POST['data_inicio']) or empty($_POST['data_final'])) {
             $vars['page'] = 'balanca/form';
-            $vars['erro'] = 'Selecione uma data';
+            $_SESSION['aviso'] = 'Selecione uma data';
             $vars['title'] = 'Formulário Balança';
-            $_SESSION['erro'] = null;
-
-            $cindus = "importacao_".$cAnalitico;
-
-            $query = "SELECT DISTINCT nome_cliente FROM `$cindus` ORDER BY nome_cliente";
-            $clientes = $this->db->prepare($query);
-            $clientes->execute();
-
-            if ($clientes->rowCount() > 0) {
-                $vars['clientes'] = $clientes->fetchAll(\PDO::FETCH_OBJ);
-            }
-
-            $query = "SELECT DISTINCT no_obra FROM obras ORDER BY no_obra";
-            $obras = $this->db->prepare($query);
-            $obras->execute();
-
-            if ($obras->rowCount() > 0) {
-                $vars['obras'] = $obras->fetchAll(\PDO::FETCH_OBJ);
-            }
-
+            $_SESSION['erro'] = 1;
             return $response->withRedirect('balanca/form');
         } else {
             $data_inicial = $_POST['data_inicio'];
@@ -121,7 +106,8 @@ final class TabelasAction extends Action
                 $check = $_POST['check'];
                 $_SESSION['erro'] = null;
             } else {
-                $_SESSION['erro'] = 'Não seleccionou um tipo de documento';
+                $_SESSION['erro'] = 1;
+                $_SESSION['aviso'] = 'Não seleccionou um tipo de documento';
                 return $response->withRedirect('balanca/form');
                 // return $response->withRedirect($this->router->pathFor('view',[], $vars));
             }
@@ -130,12 +116,14 @@ final class TabelasAction extends Action
                 $agr = $_POST['agr'];
                 $_SESSION['erro'] = null;
             } else {
-                $_SESSION['erro'] = 'Não seleccionou um agregado';
+                $_SESSION['erro'] = 1;
+                $_SESSION['aviso'] = 'Não seleccionou um agregado';
                 return $response->withRedirect('balanca/form');
             }
 
             if (!empty($_POST['check']) && !empty($_POST['agr']) && empty($_POST['data_inicio'])) {
-                $_SESSION['erro'] = 'Não seleccionou uma data';
+                $_SESSION['erro'] = 1;
+                $_SESSION['aviso'] = 'Não seleccionou uma data';
                 return $response->withRedirect('balanca/form');
             }
 
@@ -173,7 +161,7 @@ final class TabelasAction extends Action
                                       ROUND(ROUND((`peso`/`baridade`),2)*ROUND(`valor_in_ton`*`baridade`,2),2) AS `total_m3`,
                                       ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2) AS `preco_vd`,
                                       ROUND(ROUND((`peso`/`baridade`),2) * ROUND(`valor_ex_ton`*`baridade` * (1-`desco`),2),2) AS `total_v_m3`
-                              FROM `$cindus`
+                              FROM $cindus
                               LEFT JOIN `centros_analiticos`
                               ON `ca_id` = `obra`
                               JOIN `agregados`

@@ -2,9 +2,9 @@
 
 {% block content %}
     <br><br>
-    {% if session.erro != null %}
+    {% if session.erro == 1 %}
         <div class="container btn-danger">
-            <h3 style="text-align:center">{{ session.erro }}</h3>
+            <h3 style="text-align:center">{{ session.aviso }}</h3>
         </div>
         <br>
     {% endif %}
@@ -19,7 +19,7 @@
                     <!-- Datetimepicker - inicio -->
 
                     <div class="panel-body">
-                        <div class='col-md-5'>
+                        <div class='col-md-6'>
                             <div class="form-group">
                                 <div class='input-group date' id='datainicio'>
                                     <input name='data_inicio' type='text' class="form-control" placeholder="Data início"/>
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class='col-md-5'>
+                        <div class='col-md-6'>
                             <div class="form-group">
                                 <div class='input-group date' id='datafim'>
                                     <input name='data_final' type='text' class="form-control" placeholder="Data fim"/>
