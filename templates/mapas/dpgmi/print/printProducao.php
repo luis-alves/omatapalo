@@ -371,25 +371,25 @@ $vars['title'] = 'Relatório Resumo Produção';
  <html lang="pt">
 
      <head>
-         <!-- <link href="/Applications/XAMPP/xamppfiles/htdocs/omatapalo_v3/public/css/style_dpgmi_server.css" rel="stylesheet"/> -->
-         <link href="C:/xampp/htdocs/omatapalo_v3/public/css/style_dpgmi.css" rel="stylesheet"/>
+         <!-- <link href="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/css/style_dpgmi_server.css" rel="stylesheet"/> -->
+         <link href="C:/xampp/htdocs/omatapalo/public/css/style_dpgmi.css" rel="stylesheet"/>
 
          <title>Mapa Impostos</title>
          <meta name="viewport" content="width=device-width, initial-scale=1">
          <meta charset="UTF-8">
-         <!-- <link rel='favicon2 icon' href='/Applications/XAMPP/xamppfiles/htdocs/omatapalo_v3/public/img/favicon2.ico' type='image/x-icon'/ > -->
+         <!-- <link rel='favicon2 icon' href='/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/img/favicon2.ico' type='image/x-icon'/ > -->
      </head>
      <body>
          <div class="centrar">
              <div>
-                 <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo_v3/public/img/oma.svg"
+                 <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/oma.svg"
                       style="width:100px" > -->
-                <!-- <img alt="Logo" src="/Applications/XAMPP/xamppfiles/htdocs/omatapalo_v3/public/img/oma.svg"> -->
-                <img style="width:100px;heigth:100px;" alt="Logo" src="C:/xampp/htdocs/omatapalo_v3/public/img/omapng.png">
+                <!-- <img alt="Logo" src="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/img/oma.svg"> -->
+                <img style="width:100px;heigth:100px;" alt="Logo" src="C:/xampp/htdocs/omatapalo/public/img/omapng.png">
 
              </div>
              <div>
-                 <h3><font style="color:#003686">omatapalo_v3 - Engenharia e Construção, S.A.</font></h3>
+                 <h3><font style="color:#003686">omatapalo - Engenharia e Construção, S.A.</font></h3>
              </div>
              <div class="colorir">
                  <h1><?php echo $vars['title']; ?></h1>

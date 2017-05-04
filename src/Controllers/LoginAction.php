@@ -28,7 +28,7 @@ final class LoginAction extends Action
             if ($verificarNoBanco->rowCount() > 0) {
                 $_SESSION["autenticado"] = true;
 
-                return $response->withRedirect('/omatapalo_v3/home');
+                return $response->withRedirect('/omatapalo/home');
             } else {
                 $vars['erroLogin'] = 'As credenciais estão erradas';
                 return $this->view->render($response, 'login.twig', $vars);
@@ -45,7 +45,7 @@ final class LoginAction extends Action
         unset($_SESSION["autenticado"]);
         session_destroy();
 
-        return $response->withRedirect('/omatapalo_v3/login');
+        return $response->withRedirect('/omatapalo/login');
     }
 
     public function teste($request, $response)

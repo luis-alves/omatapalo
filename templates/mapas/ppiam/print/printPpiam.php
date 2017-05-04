@@ -1,6 +1,6 @@
 <?php
 
-include 'c:/xampp/htdocs/omatapalo_v3/src/Auxiliares/globals.php';
+include 'c:/xampp/htdocs/omatapalo/src/Auxiliares/globals.php';
 
 $cindus = 'importacao_'.$cAnalitico;
 
@@ -370,25 +370,25 @@ if ($stmt->rowCount() > 0) {
          <meta http-equiv="X-UA-Compatible" content="IE=edge">
          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
          <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW, NOARCHIVE">
-         <!-- <link rel='favicon icon' href='/home/luisalves/webapps/marizealves/omatapalo_v3/public/img/favicon.ico' type='image/x-icon'/ > -->
+         <!-- <link rel='favicon icon' href='/home/luisalves/webapps/marizealves/omatapalo/public/img/favicon.ico' type='image/x-icon'/ > -->
 
 
 
-         <title> omatapalo_v3, SA </title>
+         <title> omatapalo, SA </title>
 
          <!-- jquery para colocar a cor vermelha no navbar -->
          <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/
               jquery.min.js"></script> -->
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/jquery-1.11.3.min.js"></script>
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/scripts.js"></script>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/jquery-1.11.3.min.js"></script>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/scripts.js"></script>
 
          <!--  BOOTSTRAP -->
-         <link href="c:/xampp/htdocs/omatapalo_v3/public/css/bootstrap.min.css" rel="stylesheet"/>
+         <link href="c:/xampp/htdocs/omatapalo/public/css/bootstrap.min.css" rel="stylesheet"/>
          <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/
               bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
-         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo_v3/public/css/bootstrap-theme.min.css">
-         <link href="c:/xampp/htdocs/omatapalo_v3/public/css/style_dpgmi.css" rel="stylesheet" type="text/css"/>
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/bootstrap.min.js"></script>
+         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo/public/css/bootstrap-theme.min.css">
+         <link href="c:/xampp/htdocs/omatapalo/public/css/style_dpgmi.css" rel="stylesheet" type="text/css"/>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/bootstrap.min.js"></script>
 
 
          <!-- jquery para choosen ver: https://harvesthq.github.io/chosen/
@@ -397,43 +397,43 @@ if ($stmt->rowCount() > 0) {
               bootstrap-datetimepicker/ -->
          <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/
               chosen/1.4.2/chosen.css"> -->
-         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo_v3/public/css/chosen.css">
+         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo/public/css/chosen.css">
 
          <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/
               base/jquery-ui.css"> -->
-         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo_v3/public/css/jquery-ui.css">
+         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo/public/css/jquery-ui.css">
          <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/
          bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />-->
-         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo_v3/public/css/bootstrap-datetimepicker.min.css" />
-         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo_v3/public/js/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css" />
+         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo/public/css/bootstrap-datetimepicker.min.css" />
+         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo/public/js/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css" />
 
          <!-- <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/
               3.1.2/css/fixedHeader.dataTables.min.css" /> -->
-         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo_v3/public/css/fixedHeader.dataTables.min.css" />
+         <link rel="stylesheet" href="c:/xampp/htdocs/omatapalo/public/css/fixedHeader.dataTables.min.css" />
          <!--
          <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/
          jquery.dataTables.min.css" />
          -->
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/Chart2.5.js"></script>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/Chart2.5.js"></script>
          <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/
               moment.min.js"></script>-->
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/moment.min.js"></script>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/moment.min.js"></script>
          <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/
              bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
          </script>-->
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/bootstrap-datetimepicker.min.js"></script>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/bootstrap-datetimepicker.min.js"></script>
          <!-- <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>-->
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/jquery-ui.js"></script>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/jquery-ui.js"></script>
          <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/
               chosen.jquery.js"></script>-->
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/chosen.jquery.js"></script>
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/DataTables-1.10.12/media/js/jquery.dataTables.min.js">
+         <script src="c:/xampp/htdocs/omatapalo/public/js/chosen.jquery.js"></script>
+         <script src="c:/xampp/htdocs/omatapalo/public/js/DataTables-1.10.12/media/js/jquery.dataTables.min.js">
          </script>
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js">
+         <script src="c:/xampp/htdocs/omatapalo/public/js/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js">
          </script>
          <!-- <script src="https://cdn.datatables.net/fixedheader/3.1.2/js/
               dataTables.fixedHeader.min.js"></script>-->
-         <script src="c:/xampp/htdocs/omatapalo_v3/public/js/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js">
+         <script src="c:/xampp/htdocs/omatapalo/public/js/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js">
          </script>
          <!-- Bootstrap -->
          <!-- <link rel="stylesheet" href="public/css/bootstrap.min.css" > -->
@@ -442,13 +442,13 @@ if ($stmt->rowCount() > 0) {
      <body>
          <div class="centrar">
              <div>
-                 <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo_v3/public/img/oma.svg"
+                 <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/oma.svg"
                       style="width:100px" > -->
-                <img alt="Logo" src="c:/xampp/htdocs/omatapalo_v3/public/img/omapng.png" width="100px">
+                <img alt="Logo" src="c:/xampp/htdocs/omatapalo/public/img/omapng.png" width="100px">
 
              </div>
              <div>
-                 <h3><font style="color:#003686">omatapalo_v3 - Engenharia e Construção, S.A.</font></h3>
+                 <h3><font style="color:#003686">omatapalo - Engenharia e Construção, S.A.</font></h3>
              </div>
              <div class="colorir">
                  <h1>MAPA RESUMO DE PPIAM</h1>

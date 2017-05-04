@@ -36,7 +36,7 @@
                 </tr>
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/facturacao/dresultados">FACTURAÇÃO</a>
+                        <a href="/omatapalo/relatorios/facturacao/dresultados">FACTURAÇÃO</a>
                     </td>
                     {% for i in 1..12 %}
                         <td class="text-center">{{ totalVendas[i]|number_format(1,",",".") }}</td>
@@ -70,7 +70,7 @@
                 </tr>
                 <tr class="dr_blue">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/producao/dresultados">PRODUÇÃO e Trab. em curso</a>
+                        <a href="/omatapalo/relatorios/producao/dresultados">PRODUÇÃO e Trab. em curso</a>
                     </td>
                     {% for i in 1..12 %}
                         <td class="text-center">{{ producoes[i]|number_format(1,",",".") }}</td>
@@ -97,7 +97,7 @@
 
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/matdiversos/dresultados">COMPRAS MATERIAIS DIVERSOS</a>
+                        <a href="/omatapalo/relatorios/matdiversos/dresultados">COMPRAS MATERIAIS DIVERSOS</a>
                     </td>
                     {% for i in 1..12 %}
                         {% if custosGeraisOrd[i]['Materiais Diversos'] == 0 %}
@@ -140,7 +140,7 @@
 
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/matprimas/dresultados">MATÉRIAS-PRIMAS</a>
+                        <a href="/omatapalo/relatorios/matprimas/dresultados">MATÉRIAS-PRIMAS</a>
                     </td>
                     {% for i in 1..12 %}
                         {% if custosGeraisOrd[i]['Matérias-Primas'] == 0 %}
@@ -191,7 +191,7 @@
 
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/equipamentos/dresultados">EQUIPAMENTO</a>
+                        <a href="/omatapalo/relatorios/equipamentos/dresultados">EQUIPAMENTO</a>
                     </td>
                     {% for i in 1..12 %}
                         {% if totalEquipamentoMensal[i] == 0 %}
@@ -254,7 +254,7 @@
 
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/transportes/dresultados">TRANSPORTES</a>
+                        <a href="/omatapalo/relatorios/transportes/dresultados">TRANSPORTES</a>
                     </td>
                     {% for i in 1..12 %}
                         {% if totalTransporteMensal[i] == 0 %}
@@ -317,7 +317,7 @@
 
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/fse/dresultados">CUSTOS VÁRIOS (F.S.E.)</a>
+                        <a href="/omatapalo/relatorios/fse/dresultados">CUSTOS VÁRIOS (F.S.E.)</a>
                     </td>
                     {% for i in 1..12 %}
                         {% if totalFSEMensal[i] == 0 %}
@@ -760,7 +760,7 @@
 
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/pessoal/dresultados">CUSTOS COM PESSOAL</a>
+                        <a href="/omatapalo/relatorios/pessoal/dresultados">CUSTOS COM PESSOAL</a>
                     </td>
                     {% for i in 1..12 %}
                         {% if totalPessoalMensal[i] == 0 %}
@@ -923,7 +923,7 @@
 
                 <tr class="dr_titulos">
                     <td class="dr_italico">
-                        <a href="/omatapalo_v3/relatorios/financeiro/dresultados">CUSTOS FINANCEIROS</a>
+                        <a href="/omatapalo/relatorios/financeiro/dresultados">CUSTOS FINANCEIROS</a>
                     </td>
                     {% for i in 1..12 %}
                         {% if totalCustosFinanceiro[i] == 0 %}

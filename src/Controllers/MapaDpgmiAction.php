@@ -675,11 +675,13 @@ final class MapaDpgmiAction extends Action
     public function faixas($pagina)
     {
         include 'src/Auxiliares/globals.php';
+        // include 'src/Auxiliares/helpers.php';
 
         $mes = (int)$pagina;
 
         $mesNumero = $mes;
 
+        $cindus = $cisRelatorioMensal[$cAnalitico];
 
         $query = "SELECT `nome_col`,
                          `data_nasc`,
@@ -689,12 +691,12 @@ final class MapaDpgmiAction extends Action
                   FROM `colaboradores`
                   LEFT JOIN `folha_ponto`
                   ON `num_mec` = `n_mec`
-                  WHERE MONTH(`data`) = ? AND YEAR(`data`) = ?
+                  WHERE MONTH(`data`) = ? AND YEAR(`data`) = ? AND `cind` LIKE ?
                   GROUP BY `nome_col`
                   ";
 
         $rows = $this->db->prepare($query);
-        $rows->execute([$mes, $ano]);
+        $rows->execute([$mes, $ano, $cindus]);
 
         if ($rows->rowCount() > 0) {
             $vars['row'] = $rows->fetchAll(\PDO::FETCH_OBJ);
@@ -702,7 +704,7 @@ final class MapaDpgmiAction extends Action
             foreach ($vars['row'] as $key => $value) {
                 $value->idade = floor((time() - strtotime($value->data_nasc)) / 31556926);
             }
-
+            // dump($vars['row']);
             // separar os tipos de dados que se quer obtar
             $agrupamento = array('array_n_m_21', 'array_n_m_25', 'array_n_m_30',
                                  'array_n_m_40', 'array_n_m_45', 'array_n_m_50',
