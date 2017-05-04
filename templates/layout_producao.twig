@@ -75,30 +75,30 @@
                         <span class="icon-bar"></span>
                     </button>
                     <img alt="Logo" src="img/oma.svg" style="width:50px">
-                    <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo_v3/public/img/logo.svg" style="width:50px"> -->
+                    <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/logo.svg" style="width:50px"> -->
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav" id="navbar">
                         <li >
-                            <a href="/omatapalo_v3/home">Novidades
+                            <a href="/omatapalo/home">Novidades
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li >
-                            <a href="/omatapalo_v3/tabelas">Tabelas</a>
+                            <a href="/omatapalo/tabelas">Tabelas</a>
                         </li>
                         <li>
-                            <a href="/omatapalo_v3/mapas">Mapas</a>
+                            <a href="/omatapalo/mapas">Mapas</a>
                         </li>
                         <li>
-                            <a href="/omatapalo_v3/relatorios">Relatórios</a>
+                            <a href="/omatapalo/relatorios">Relatórios</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="/omatapalo_v3/logout">Sair</a>
+                            <a href="/omatapalo/logout">Sair</a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -190,7 +190,7 @@
             // pega o ano selecionado pelo evento do clique
             var value = $(this).data("ci");
             // executa uma função em ajax direcionando para outra página em PHP que irá trocar a sessão
-            var url = "/omatapalo_v3/cind";
+            var url = "/omatapalo/cind";
 
             var currentUrl = window.location.href;
 
@@ -198,7 +198,7 @@
                 ci: value
             }, function() {
                 window.location.href = currentUrl;
-                // window.location.href = "/omatapalo_v3/home";
+                // window.location.href = "/omatapalo/home";
             });
 
             event.preventDefault();
@@ -209,7 +209,7 @@
             // pega o ano selecionado pelo evento do clique
             var value = $(this).data("ano");
             // executa uma função em ajax direcionando para outra página em PHP que irá trocar a sessão
-            var url = "/omatapalo_v3/ano";
+            var url = "/omatapalo/ano";
 
             var currentUrl = window.location.href;
 
@@ -217,7 +217,7 @@
                 ano: value
             }, function() {
                 window.location.href = currentUrl;
-                // window.location.href = "/omatapalo_v3/home";
+                // window.location.href = "/omatapalo/home";
             });
 
             event.preventDefault();

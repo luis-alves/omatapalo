@@ -54,7 +54,7 @@ if (!$conn->set_charset("utf8")) {
 
          <div class="container" style="margin-top:20px">
 
-             <img id="image" style="width:125px;float:right;block:in-line" src="C:/xampp/htdocs/omatapalo_v3/public/img/omapng.png" alt="logo">
+             <img id="image" style="width:125px;float:right;block:in-line" src="C:/xampp/htdocs/omatapalo/public/img/omapng.png" alt="logo">
 
 
                  <!-- <div class="leftFloat"> -->

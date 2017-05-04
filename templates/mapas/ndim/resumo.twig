@@ -17,7 +17,7 @@
     display:block;margin-left:auto;margin-right:auto;">
                 <h4 style="text-align:center;">Sem dados</h4><br>
                 <p style="text-align:center">Retornar a
-                    <a href="/omatapalo_v3/mapas" class="alert-link">Mapas</a>
+                    <a href="/omatapalo/mapas" class="alert-link">Mapas</a>
                 </p>
             </div>
         </div>
@@ -39,10 +39,10 @@
                         </div>
                         <div id="{{ item }}" class="collapse" role="tabpanel" aria-labelledby="headingOne">
                             <div class="card-block">
-                                <form action="/omatapalo_v3/mapas/ndim/{{ session.ano }}/{{ mes }}/{{ valores['id'] }}" method="post">
+                                <form action="/omatapalo/mapas/ndim/{{ session.ano }}/{{ mes }}/{{ valores['id'] }}" method="post">
                                     <button class="btn btn-default" style="width:35em;" type="submit" name="button">Mapa Resumo da NDIM</button>
                                 </form><br>
-                                <form action="/omatapalo_v3/mapas/ndim/detalhado/{{ session.ano }}/{{ mes }}/{{ valores['id'] }}" method="post">
+                                <form action="/omatapalo/mapas/ndim/detalhado/{{ session.ano }}/{{ mes }}/{{ valores['id'] }}" method="post">
                                     <button class="btn btn-default" style="width:35em;" type="submit" name="button">Anexo com Fornecimentos Individualizados</button>
                                 </form>
                                 <br>
