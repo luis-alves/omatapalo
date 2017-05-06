@@ -1,180 +1,187 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-    <table class="items" id="myTdable" width=100%>
-        {% if label1 is not defined %}
-            <caption>
-                <div class="centrar_titulo">
-                    <div class="colorir">
-                        <h2>{{title}}</h2>
-                    </div>
-                </div>
-                <div class="al_esquerda">
-                    <p >
-                        <b>Ano:</b>
-                        {{ session.ano }}</p>
-                    <p>
-                        <b>Empresa:</b>
-                        Omatapalo, S.A.
-                    </p>
-                </div>
-                <div class="al_direita">
-                    <p>
-                        <b>Tipo de Recurso Mineral:</b>
-                        Agregado britado granitico</p>
-                </div>
-            </caption>
-        {% endif %}
-        <thead>
-            <tr>
-                <th>Mês</th>
-                <th>Gasóleo
-                    <br>(litros)</th>
-                <th>Lub. 10W
-                    <br>(litros)</th>
-                <th>Lub. 15W40
-                    <br>(litros)</th>
-                <th>Lub. HD80W90
-                    <br>(litros)</th>
-                <th>Lub. Pneuma
-                    <br>(litros)</th>
-                <th>Lub. Azolla
-                    <br>(litros)</th>
+  <table class="items" id="myTdable" width=100%>
+    {% if label1 is not defined %}
+      <caption>
+        <div class="centrar_titulo">
+          <div class="colorir">
+            <h2>{{title}}</h2>
+          </div>
+        </div>
+        <div class="al_esquerda">
+          <p >
+            <b>Ano:</b>
+            {{ session.ano }}</p>
+          <p>
+            <b>Empresa:</b>
+            Omatapalo, S.A.
+          </p>
+        </div>
+        <div class="al_direita">
+          <p>
+            <b>Tipo de Recurso Mineral:</b>
+            Agregado britado granitico</p>
+        </div>
+      </caption>
+    {% endif %}
+    <thead>
+      <tr>
+        <th>Mês</th>
+        <th>Gasóleo
+          <br>(litros)</th>
+        <th>Lub. 10W
+          <br>(litros)</th>
+        <th>Lub. 15W40
+          <br>(litros)</th>
+        <th>Lub. HD80W90
+          <br>(litros)</th>
+        <th>Lub. Pneuma
+          <br>(litros)</th>
+        <th>Lub. Azolla
+          <br>(litros)</th>
 
-            </tr>
-        </thead>
+      </tr>
+    </thead>
 
-        <tfoot>
-            <th>Totais</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-        </tfoot>
+    <tfoot>
+      <th>Totais</th>
+      <th>-</th>
+      <th>-</th>
+      <th>-</th>
+      <th>-</th>
+      <th>-</th>
+      <th>-</th>
+    </tfoot>
 
-        <tbody>
-            <tr>
-                <td>Janeiro</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
+    <tbody>
+      <tr>
+        <td>Janeiro</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
 
-            </tr>
-            <tr>
-                <td>Fevereiro</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Março</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Abril</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Maio</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Junho</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Julho</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Agosto</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Setembro</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Outubro</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Novembro</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
-            <tr>
-                <td>Dezembro</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-                <td>N/d</td>
-            </tr>
+      </tr>
+      <tr>
+        <td>Fevereiro</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Março</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Abril</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Maio</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Junho</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Julho</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Agosto</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Setembro</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Outubro</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Novembro</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
+      <tr>
+        <td>Dezembro</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+        <td>N/d</td>
+      </tr>
 
-        </tr>
-    </tbody>
+    </tr>
+  </tbody>
 </table>
+<form action="/omatapalo/dpgmi/imprimir" method="post">
+    {% if mes %}
+        <button name="printit" type="submit" value="{{print}},{{mes}},{{mesNumero}}">Imprimir</button>
+    {% else %}
+        <button style="margin-left:10px;" class="btn btn-danger" name="printit" type="submit" value="{{print}},{{title}}">Imprimir</button>
+    {% endif %}
+</form>
 
 <style>
-    td,
-    th {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
+  td,
+  th {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 
 </style>
 

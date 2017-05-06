@@ -1,30 +1,30 @@
 <?php
 include 'src/Auxiliares/globals.php';
 
-$cindus = 'importacao_'.$cAnalitico;
+$cindus = 'producao_'.$cAnalitico;
+$placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
 
-$query = "SELECT `nome_agr` AS `nome`,
-                  MONTH(`data`) AS `mes`,
-                  (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
-                  ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
-                  ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
+$query = "SELECT `nome_agre` AS `nome`,
+                 MONTH(`data_in`) AS `mes`,
+                 `qt` AS `m3`,
+                 ROUND(`valor_in_ton` * `baridade`,2) AS `pu`,
+                 `qt` * ROUND(`valor_in_ton` * `baridade`) AS `total`
           FROM `$cindus`
-          LEFT JOIN `centros_analiticos`
-          ON `ca_id` = `obra`
           JOIN `agregados`
-          ON `nome_agr` = `nome_agre`
+          ON `agr_id` = `cod_agr`
           JOIN `baridades`
-          ON `agr_id` = `agregado_id`
+          ON `cod_agr` = `agregado_id`
           JOIN `valorun_interno_ton`
-          ON `agr_bar_id` = `agregado_id`
-          WHERE  `tipo_doc` IN ('PRO', 'ENT') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
-          GROUP BY `nome_agr_corr`, MONTH(`data`)
+          ON `cod_agr` = `agr_bar_id`
+          WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
+          GROUP BY `nome_agr_corr`, MONTH(`data_in`)
           ORDER by `nome_agr_corr`
-          ";
+         ";
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 $stmt = $conn->prepare($query);
-$stmt->execute();
+$params = array_merge($lista_agregados_array, [$ano]);
+$stmt->execute($params);
 
 if ($stmt->rowCount() > 0) {
     $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
@@ -73,7 +73,7 @@ if ($stmt->rowCount() > 0) {
         }
     }
 }
-
+dump($producao);
 $totalExtraido = array(1 => 0,
                        2 => 0,
                        3 => 0,
@@ -116,7 +116,7 @@ $vars['print'] = 'printResumo';
  <html lang="pt">
 
      <head>
-         <link href="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/css/style_dpgmi_server.css" rel="stylesheet"/>
+         <?= '<link href= '. $rootDir.'\omatapalo\public\css\style_dpgmi.css'." rel='stylesheet'/>" ?>
 
          <title>Mapa Impostos</title>
          <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -128,7 +128,7 @@ $vars['print'] = 'printResumo';
              <div>
                  <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/oma.svg"
                       style="width:100px" > -->
-                <img alt="Logo" src="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/img/oma.svg">
+                <?= "<img alt='Logo' width='100px' src=".$rootDir.'\omatapalo\public\img\omapng.png'. ">" ?>
 
              </div>
              <div>

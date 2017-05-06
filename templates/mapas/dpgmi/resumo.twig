@@ -86,6 +86,13 @@
         </tr>
     </tbody>
 </table>
+<form action="/omatapalo/dpgmi/imprimir" method="post">
+    {% if print == 'printPpiam' %}
+        <button name="printit" type="submit" value="{{print}},{{mes}},{{mesNumero}}">Imprimir</button>
+    {% else %}
+        <button style="margin-left:10px;" class="btn btn-danger" name="printit" type="submit" value="{{print}},{{title}}">Imprimir</button>
+    {% endif %}
+</form>
 </div>
 
 <style>

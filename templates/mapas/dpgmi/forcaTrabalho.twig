@@ -1,63 +1,63 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-    <table class="items" id="myTdable" width=100%>
-        {% if label1 is not defined %}
-            <caption>
-                <div class="centrar_titulo">
-                    <div class="colorir">
-                        <h2>{{title}}</h2>
-                    </div>
-                </div>
-                <div class="al_esquerda">
-                    <p >
-                        <b>Ano:</b>
-                        {{ session.ano }}</p>
-                    <p>
-                        <b>Empresa:</b>
-                        Omatapalo, S.A.
-                    </p>
-                </div>
-                <div class="al_direita">
-                    <p>
-                        <b>Tipo de Recurso Mineral:</b>
-                        Agregado britado granitico</p>
-                </div>
-            </caption>
-        {% endif %}
-        <thead>
-            <tr>
-                <th rowspan="3">Mês</th>
-                <th colspan="9">Mão-de-Obra</th>
-                <th rowspan="3">Salários
-                    <br>(Akz)</th>
-                <th rowspan="3">IRT
-                    <br>(Akz)</th>
-                <th rowspan="3">ISS
-                    <br>(Akz)</th>
-            </tr>
-            <tr>
+  <table class="items" id="myTdable" width=100%>
+    {% if label1 is not defined %}
+      <caption>
+        <div class="centrar_titulo">
+          <div class="colorir">
+            <h2>{{title}}</h2>
+          </div>
+        </div>
+        <div class="al_esquerda">
+          <p >
+            <b>Ano:</b>
+            {{ session.ano }}</p>
+          <p>
+            <b>Empresa:</b>
+            Omatapalo, S.A.
+          </p>
+        </div>
+        <div class="al_direita">
+          <p>
+            <b>Tipo de Recurso Mineral:</b>
+            Agregado britado granitico</p>
+        </div>
+      </caption>
+    {% endif %}
+    <thead>
+      <tr>
+        <th rowspan="3">Mês</th>
+        <th colspan="9">Mão-de-Obra</th>
+        <th rowspan="3">Salários
+          <br>(Akz)</th>
+        <th rowspan="3">IRT
+          <br>(Akz)</th>
+        <th rowspan="3">ISS
+          <br>(Akz)</th>
+      </tr>
+      <tr>
 
-                <th colspan="3">Nacional</th>
-                <th colspan="3">Expatriado</th>
-                <th colspan="3">Total</th>
+        <th colspan="3">Nacional</th>
+        <th colspan="3">Expatriado</th>
+        <th colspan="3">Total</th>
 
-            </tr>
-            <tr>
+      </tr>
+      <tr>
 
-                <th>F</th>
-                <th>M</th>
-                <th>Sub-total</th>
-                <th>F</th>
-                <th>M</th>
-                <th>Sub-total</th>
-                <th>F</th>
-                <th>M</th>
-                <th>Sub-total</th>
+        <th>F</th>
+        <th>M</th>
+        <th>Sub-total</th>
+        <th>F</th>
+        <th>M</th>
+        <th>Sub-total</th>
+        <th>F</th>
+        <th>M</th>
+        <th>Sub-total</th>
 
-            </tr>
-        </thead>
-        <!--
+      </tr>
+    </thead>
+    <!--
     <tfoot>
         <th>Totais</th>
         <th>0</th>
@@ -74,37 +74,43 @@
         <th>-</th>
     </tfoot>
 -->
-        <tbody>
-            {% for i in 0..11 %}
+    <tbody>
+      {% for i in 0..11 %}
 
-                <tr>
-                    <td>{{lista_meses[loop.index0]}}</td>
-                    <td>{{nac_feminino[loop.index0]}}</td>
-                    <td>{{nac_masculino[loop.index0]}}</td>
-                    <td>{{nac_duplo[loop.index0]}}</td>
-                    <td>{{exp_feminino[loop.index0]}}</td>
-                    <td>{{exp_masculino[loop.index0]}}</td>
-                    <td>{{exp_duplo[loop.index0]}}</td>
-                    <td>{{fem_duplo[loop.index0]}}</td>
-                    <td>{{mas_duplo[loop.index0]}}</td>
-                    <td>{{todos_colaboradores[loop.index0]}}</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
+        <tr>
+          <td>{{lista_meses[loop.index0]}}</td>
+          <td>{{nac_feminino[loop.index0]}}</td>
+          <td>{{nac_masculino[loop.index0]}}</td>
+          <td>{{nac_duplo[loop.index0]}}</td>
+          <td>{{exp_feminino[loop.index0]}}</td>
+          <td>{{exp_masculino[loop.index0]}}</td>
+          <td>{{exp_duplo[loop.index0]}}</td>
+          <td>{{fem_duplo[loop.index0]}}</td>
+          <td>{{mas_duplo[loop.index0]}}</td>
+          <td>{{todos_colaboradores[loop.index0]}}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
 
-            {% endfor %}
+      {% endfor %}
 
-        </tbody>
-    </table>
+    </tbody>
+  </table>
+  <form action="/omatapalo/dpgmi/imprimir" method="post">
+    {% if mes %}
+      <button name="printit" type="submit" value="{{print}},{{mes}},{{mesNumero}}">Imprimir</button>
+    {% else %}
+      <button style="margin-left:10px;" class="btn btn-danger" name="printit" type="submit" value="{{print}},{{title}}">Imprimir</button>
+    {% endif %}
+  </form>
+  <style>
+    td,
+    th {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
 
-    <style>
-        td,
-        th {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-        }
-
-    </style>
+  </style>
 
 {% endblock %}

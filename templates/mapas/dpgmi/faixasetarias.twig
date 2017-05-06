@@ -1,117 +1,124 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-    <table class="items" id="myTdable" width=100%>
-        {% if label1 is not defined %}
-            <caption>
-                <div class="centrar_titulo">
-                    <div class="colorir">
-                        <h2>{{title}}</h2>
-                    </div>
-                </div>
-                <div class="al_esquerda">
-                    <p >
-                        <b>Ano:</b>
-                        {{ session.ano }}</p>
-                    <p>
-                        <b>Empresa:</b>
-                        Omatapalo, S.A.
-                    </p>
-                </div>
-                <div class="al_direita">
-                    <p>
-                        <b>Tipo de Recurso Mineral:</b>
-                        Agregado britado granitico</p>
-                </div>
-            </caption>
-        {% endif %}
-        <thead>
-            <tr>
-                <th colspan="12">DISTRIBUIÇÃO DE MÃO DE OBRA POR GRUPOS ETÁRIOS</th>
-            </tr>
-            <tr>
-                <th rowspan="2">Faixa
-                    <br>Etária</th>
-                <th colspan="4">Homens</th>
-                <th colspan="4">Mulheres</th>
-                <th colspan="2">Totais</th>
-            </tr>
-            <tr>
-                <th>Nacionais</th>
-                <th>%</th>
-                <th>Expatriados</th>
-                <th>%</th>
-                <th>Nacionais</th>
-                <th>%</th>
-                <th>Expatriadas</th>
-                <th>%</th>
-                <th>Mão-de-Obra</th>
-                <th>%</th>
-            </tr>
-        </thead>
+  <table class="items" id="myTdable" width=100%>
+    {% if label1 is not defined %}
+      <caption>
+        <div class="centrar_titulo">
+          <div class="colorir">
+            <h2>{{title}}</h2>
+          </div>
+        </div>
+        <div class="al_esquerda">
+          <p >
+            <b>Ano:</b>
+            {{ session.ano }}</p>
+          <p>
+            <b>Empresa:</b>
+            Omatapalo, S.A.
+          </p>
+        </div>
+        <div class="al_direita">
+          <p>
+            <b>Tipo de Recurso Mineral:</b>
+            Agregado britado granitico</p>
+        </div>
+      </caption>
+    {% endif %}
+    <thead>
+      <tr>
+        <th colspan="12">DISTRIBUIÇÃO DE MÃO DE OBRA POR GRUPOS ETÁRIOS</th>
+      </tr>
+      <tr>
+        <th rowspan="2">Faixa
+          <br>Etária</th>
+        <th colspan="4">Homens</th>
+        <th colspan="4">Mulheres</th>
+        <th colspan="2">Totais</th>
+      </tr>
+      <tr>
+        <th>Nacionais</th>
+        <th>%</th>
+        <th>Expatriados</th>
+        <th>%</th>
+        <th>Nacionais</th>
+        <th>%</th>
+        <th>Expatriadas</th>
+        <th>%</th>
+        <th>Mão-de-Obra</th>
+        <th>%</th>
+      </tr>
+    </thead>
 
-        <tfoot>
-            <th>Totais</th>
-            <th>{{ total_N_M }}</th>
-            <th></th>
-            <th>{{ total_E_M }}</th>
-            <th></th>
-            <th>{{ total_N_F }}</th>
-            <th></th>
-            <th>{{ total_E_F }}</th>
-            <th></th>
-            <th>{{ total_array }}</th>
-            <th></th>
-        </tfoot>
+    <tfoot>
+      <th>Totais</th>
+      <th>{{ total_N_M }}</th>
+      <th></th>
+      <th>{{ total_E_M }}</th>
+      <th></th>
+      <th>{{ total_N_F }}</th>
+      <th></th>
+      <th>{{ total_E_F }}</th>
+      <th></th>
+      <th>{{ total_array }}</th>
+      <th></th>
+    </tfoot>
 
-        <tbody>
-            {% set i = 0 %}
-            {% for key, value in faixas_etarias %}
-                <tr>
-                    <td>{{ faixas[i] }}</td>
-                    <td>{{ value['nm'] }}</td>
-                    {% if total_N_M == 0 %}
-                        <td>0</td>
-                    {% else %}
-                        <td>{{ (value['nm'] / total_N_M * 100)|number_format(0,",",".") }}</td>
-                    {% endif %}
-                    <td>{{ value['em'] }}</td>
-                    {% if total_E_M == 0 %}
-                        <td>0</td>
-                    {% else %}
-                        <td>{{ (value['em'] / total_E_M * 100)|number_format(0,",",".")}}</td>
-                    {% endif %}
-                    <td>{{ value['nf'] }}</td>
-                    {% if total_N_F == 0 %}
-                        <td>0</td>
-                    {% else %}
-                        <td>{{ (value['nf'] / total_N_F * 100)|number_format(0,",",".") }}</td>
-                    {% endif %}
-                    <td>{{ value['ef'] }}</td>
-                    {% if total_E_F == 0 %}
-                        <td>0</td>
-                    {% else %}
-                        <td>{{ (value['ef'] / total_E_F * 100)|number_format(0,",",".") }}</td>
-                    {% endif %}
-                    <td>{{ parcial_array[i] }}</td>
-                    {% if total_array == 0 %}
-                        <td>0</td>
-                    {% else %}
-                        <td>{{ (parcial_array[i] / total_array * 100)|number_format(0,",",".") }}</td>
-                    {% endif %}
-                </tr>
-                {% set i = i + 1 %}
-            {% endfor %}
-        </tbody>
-    </table>
+    <tbody>
+      {% set i = 0 %}
+      {% for key, value in faixas_etarias %}
+        <tr>
+          <td>{{ faixas[i] }}</td>
+          <td>{{ value['nm'] }}</td>
+          {% if total_N_M == 0 %}
+            <td>0</td>
+          {% else %}
+            <td>{{ (value['nm'] / total_N_M * 100)|number_format(0,",",".") }}</td>
+          {% endif %}
+          <td>{{ value['em'] }}</td>
+          {% if total_E_M == 0 %}
+            <td>0</td>
+          {% else %}
+            <td>{{ (value['em'] / total_E_M * 100)|number_format(0,",",".")}}</td>
+          {% endif %}
+          <td>{{ value['nf'] }}</td>
+          {% if total_N_F == 0 %}
+            <td>0</td>
+          {% else %}
+            <td>{{ (value['nf'] / total_N_F * 100)|number_format(0,",",".") }}</td>
+          {% endif %}
+          <td>{{ value['ef'] }}</td>
+          {% if total_E_F == 0 %}
+            <td>0</td>
+          {% else %}
+            <td>{{ (value['ef'] / total_E_F * 100)|number_format(0,",",".") }}</td>
+          {% endif %}
+          <td>{{ parcial_array[i] }}</td>
+          {% if total_array == 0 %}
+            <td>0</td>
+          {% else %}
+            <td>{{ (parcial_array[i] / total_array * 100)|number_format(0,",",".") }}</td>
+          {% endif %}
+        </tr>
+        {% set i = i + 1 %}
+      {% endfor %}
+    </tbody>
+  </table>
+  <form action="/omatapalo/dpgmi/imprimir" method="post">
+    {% if mes %}
+      <button name="printit" type="submit" value="{{print}},{{mes}},{{mesNumero}}">Imprimir</button>
+    {% else %}
+      <button style="margin-left:10px;" class="btn btn-danger" name="printit" type="submit" value="{{print}},{{title}}">Imprimir</button>
+    {% endif %}
+  </form>
 
-    <style>
-        td,
-        th {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-        }
+  <style>
+    td,
+    th {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
 
-    </style>
+  </style>
 
 {% endblock %}

@@ -230,7 +230,7 @@ unset($_SESSION['mes'])
  <html lang="pt">
 
      <head>
-         <link href="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/css/style_dpgmi_server.css" rel="stylesheet"/>
+         <?= '<link href= '. $rootDir.'\omatapalo\public\css\style_dpgmi.css'." rel='stylesheet'/>" ?>
 
          <title>Mapa Impostos</title>
          <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -240,13 +240,10 @@ unset($_SESSION['mes'])
      <body>
          <div class="centrar">
              <div>
-                 <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/oma.svg"
-                      style="width:100px" > -->
-                <!-- <img alt="Logo" src="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/img/oma.svg"> -->
-
+              <?= "<img alt='Logo' width='100px' src=".$rootDir.'\omatapalo\public\img\omapng.png'. ">" ?>
              </div>
              <div>
-                 <h3><font style="color:#003686">omatapalo - Engenharia e Construção, S.A.</font></h3>
+                 <h3><font style="color:#003686">Omatapalo - Engenharia e Construção, S.A.</font></h3>
              </div>
              <div class="colorir">
                  <h1>MAPA RESUMO DE GRUPOS ETÁRIOS</h1>
@@ -261,8 +258,7 @@ unset($_SESSION['mes'])
               <?php if (isset($mes)) {
      print_r("<p><b>Mês: </b>". $mes ."</p>");
  }
-
-              ?>
+      ?>
           </div>
         <div>
             <table class="items" id="myTdable">

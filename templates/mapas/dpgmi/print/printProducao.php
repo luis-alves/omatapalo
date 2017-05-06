@@ -371,9 +371,7 @@ $vars['title'] = 'Relatório Resumo Produção';
  <html lang="pt">
 
      <head>
-         <!-- <link href="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/css/style_dpgmi_server.css" rel="stylesheet"/> -->
-         <link href="C:/xampp/htdocs/omatapalo/public/css/style_dpgmi.css" rel="stylesheet"/>
-
+          <?= '<link href= '. $rootDir.'\omatapalo\public\css\style_dpgmi.css'." rel='stylesheet'/>" ?>
          <title>Mapa Impostos</title>
          <meta name="viewport" content="width=device-width, initial-scale=1">
          <meta charset="UTF-8">
@@ -382,17 +380,13 @@ $vars['title'] = 'Relatório Resumo Produção';
      <body>
          <div class="centrar">
              <div>
-                 <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/oma.svg"
-                      style="width:100px" > -->
-                <!-- <img alt="Logo" src="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/img/oma.svg"> -->
-                <img style="width:100px;heigth:100px;" alt="Logo" src="C:/xampp/htdocs/omatapalo/public/img/omapng.png">
-
-             </div>
+               <?= "<img alt='Logo' width='100px' src=".$rootDir.'\omatapalo\public\img\omapng.png'. ">" ?>
+              </div>
              <div>
                  <h3><font style="color:#003686">omatapalo - Engenharia e Construção, S.A.</font></h3>
              </div>
              <div class="colorir">
-                 <h1><?php echo $vars['title']; ?></h1>
+                 <h1><?php echo $_SESSION['title']; ?></h1>
              </div>
           </div>
           <div class="al_esquerda">
@@ -408,20 +402,22 @@ $vars['title'] = 'Relatório Resumo Produção';
                     <tr>
                         <th>Mês</th>
                         <th>Localização</th>
-                        <th class="text-center sum">Volume Extraido (m3)</th>
-                        <th class="text-center sum">Volume Transformado (m3)</th>
-                        <th class="text-center sum">Volume Comercializado (m3)</th>
-                        <th class="text-center">Preço Médio (Akz/m3)</th>
-                        <th class="text-center sum">Receita Bruta (Akz)</th>
+                        <th>Volume Extraido (m3)</th>
+                        <th>Volume Transformado (m3)</th>
+                        <th>Volume Comercializado (m3)</th>
+                        <th>Preço Médio (Akz/m3)</th>
+                        <th>Receita Bruta (Akz)</th>
                     </tr>
                 </thead>
                 <tfoot>
-                    <th colspan="2">Totais</th>
-                    <th><?= number_format($rodapeVolExtraido, 0, ",", ".") ?></th>
-                    <th><?= number_format($rodapeVolTrans, 0, ",", ".") ?></th>
-                    <th><?= number_format($rodapeVolComer, 0, ",", ".") ?></th>
-                    <th><?= number_format($rodapePU, 0, ",", ".") ?></th>
-                    <th><?= number_format($rodapeFactura, 0, ",", ".") ?></th>
+                  <tr>
+                    <th class='dpgm_foot' colspan="2">Totais</th>
+                    <th class='dpgm_foot'><?= number_format($rodapeVolExtraido, 0, ",", ".") ?></th>
+                    <th class='dpgm_foot'><?= number_format($rodapeVolTrans, 0, ",", ".") ?></th>
+                    <th class='dpgm_foot'><?= number_format($rodapeVolComer, 0, ",", ".") ?></th>
+                    <th class='dpgm_foot'><?= number_format($rodapePU, 0, ",", ".") ?></th>
+                    <th class='dpgm_foot'><?= number_format($rodapeFactura, 0, ",", ".") ?></th>
+                  </tr>
                 </tfoot>
 
                 <tbody>
@@ -433,13 +429,13 @@ $vars['title'] = 'Relatório Resumo Produção';
 
                     for ($i = 1; $i <= 12; $i++) {
                         echo "<tr>";
-                        echo "<td>". $lista_meses[$i-1] ."</td>";
-                        echo "<td>"."P. Arimba"."</td>";
-                        echo "<td>".number_format($totalProducao[$i] / 1.88, 0, ",", ".")."</td>";
-                        echo "<td>".number_format($totalProducao[$i], 0, ",", ".")."</td>";
-                        echo "<td>".number_format($totalVendas[$i], 0, ",", ".")."</td>";
-                        echo "<td>".number_format($mediaPrecos[$i], 0, ",", ".")."</td>";
-                        echo "<td>".number_format($totalFacturacao[$i], 0, ",", ".")."</td>";
+                        echo "<td class='dpgm_estreito'>". $lista_meses[$i-1] ."</td>";
+                        echo "<td class='dpgm_estreito'>"."P. Arimba"."</td>";
+                        echo "<td class='dpgm_estreito'>".number_format($totalProducao[$i] / 1.88, 0, ",", ".")."</td>";
+                        echo "<td class='dpgm_estreito'>".number_format($totalProducao[$i], 0, ",", ".")."</td>";
+                        echo "<td class='dpgm_estreito'>".number_format($totalVendas[$i], 0, ",", ".")."</td>";
+                        echo "<td class='dpgm_estreito'>".number_format($mediaPrecos[$i], 0, ",", ".")."</td>";
+                        echo "<td class='dpgm_estreito'>".number_format($totalFacturacao[$i], 0, ",", ".")."</td>";
                         echo "</tr>";
                     }
 

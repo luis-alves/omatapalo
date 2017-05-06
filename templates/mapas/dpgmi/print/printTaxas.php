@@ -119,7 +119,7 @@ $vars['print'] = 'printTaxas';
  <html lang="pt">
 
      <head>
-         <link href="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/css/style_dpgmi_server.css" rel="stylesheet"/>
+         <?= '<link href= '. $rootDir.'\omatapalo\public\css\style_dpgmi.css'." rel='stylesheet'/>" ?>
 
          <title>Mapa Impostos</title>
          <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -131,7 +131,7 @@ $vars['print'] = 'printTaxas';
              <div>
                  <!-- <img alt="Logo" src="/home/luisalves/webapps/marizealves/omatapalo/public/img/oma.svg"
                       style="width:100px" > -->
-                <img alt="Logo" src="/Applications/XAMPP/xamppfiles/htdocs/omatapalo/public/img/oma.svg">
+                <?= "<img alt='Logo' width='100px' src=".$rootDir.'\omatapalo\public\img\omapng.png'. ">" ?>
 
              </div>
              <div>

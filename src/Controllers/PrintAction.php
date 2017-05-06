@@ -12,10 +12,13 @@ final class PrintAction
 {
     public function imprimir($request, $response)
     {
+        include 'src/Auxiliares/helpers.php';
+
         $folha = $_POST['printit'];
         $variaveis = explode(',', $folha);
-
+  
         $nomeFicheiro = $variaveis[0];
+        $_SESSION['title'] = $variaveis[1];
 
         $printName = substr($nomeFicheiro, 5);
 
@@ -29,9 +32,9 @@ final class PrintAction
 
         ob_start();
         if ($nomeFicheiro == 'printPpiam') {
-            require('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/ppiam/print/'.$nomeFicheiro.'.php');
+            require($_SERVER['DOCUMENT_ROOT'].'/omatapalo/templates/mapas/ppiam/print/'.$nomeFicheiro.'.php');
         } else {
-            require('C:/xampp/htdocs/omatapalo/resources/views/pages/mapas/dpgmi/print/'.$nomeFicheiro.'.php');
+            require($_SERVER['DOCUMENT_ROOT'].'/omatapalo/templates/mapas/dpgmi/print/'.$nomeFicheiro.'.php');
         }
         $content = ob_get_clean();
 
@@ -41,14 +44,9 @@ final class PrintAction
         // On some systems you may have to set the path to the wkhtmltopdf executable
         $pdf->binary = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf';
 
-        $pdf -> setOptions(['orientation' => 'Landscape',
-                            // 'javascript-delay' => 500,
-                            // 'window-status' => 'myrandomstring ',
-                            // 'no-animation',
-                            // 'enable-javascript',
-                            // 'debug-javascript',
-                            // 'no-stop-slow-scripts',
-                        ]);
+        $pdf-> setOptions(['orientation' => 'Landscape',
+                            ]
+                           );
 
         if (!$pdf->send($printName.'.pdf')) {
             throw new Exception('Could not create PDF: '.$pdf->getError());

@@ -620,6 +620,7 @@ final class MapaDpgmiAction extends Action
 
         $vars['page'] = 'mapas/dpgmi/combustiveis';
         $vars['title'] = 'MAPA CONSUMO COMBUSTIVEIS E LUBRIFICANTES';
+        $vars['nomeEmpresa'] = 'Omatapalo, S.A.';
         $vars['print'] = 'printCombustiveis';
 
         return $vars;

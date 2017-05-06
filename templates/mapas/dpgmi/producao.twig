@@ -33,9 +33,9 @@
                 <th>Local</th>
                 <th class="text-center sum">V. Extraido
                     <br>(m3)</th>
-                <th class="text-center sum">V. Transf.
+                <th class="text-center sum">V. Transformado
                     <br>(m3)</th>
-                <th class="text-center sum">V. Comercial.
+                <th class="text-center sum">V. Comercializado
                     <br>(m3)</th>
                 <th class="text-center">Preço Médio
                     <br>(Akz/m3)</th>
@@ -67,6 +67,13 @@
 
         </tbody>
     </table>
+    <form action="/omatapalo/dpgmi/imprimir" method="post">
+        {% if print == 'printPpiam' %}
+            <button name="printit" type="submit" value="{{print}},{{mes}},{{mesNumero}}">Imprimir</button>
+        {% else %}
+            <button style="margin-left:10px;" class="btn btn-danger" name="printit" type="submit" value="{{print}},{{title}}">Imprimir</button>
+        {% endif %}
+    </form>
 
     <style>
         td,
