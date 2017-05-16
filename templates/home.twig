@@ -20,7 +20,10 @@
             <a href="mailto:luisalves@omatapalo.com?subject=comunicação de problema">
                 Suporte Técnico</a>
         </h5>
-
-        <img style="width:100%;margin-top:40px;" src="public/img/amc.svg" alt="britador amc">
+        <picture>
+          <source srcset="public/img/amc-large.jpg" media="(min-width: 800px)">
+          <source srcset="public/img/amc-medium.jpg" media="(min-width: 420px)">
+          <img srcset="public/img/amc-small.jpg" alt="britador amc">
+        </picture>
     </div>
 {% endblock %}
