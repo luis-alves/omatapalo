@@ -3,28 +3,30 @@ include 'src/Auxiliares/globals.php';
 
 $cindus = 'importacao_'.$cAnalitico;
 
-$query = "SELECT `nome_agr` AS `nome`,
-                  MONTH(`data`) AS `mes`,
-                  (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
-                  ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
-                  ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
-          FROM `$cindus`
-          LEFT JOIN `centros_analiticos`
-          ON `ca_id` = `obra`
+$cindusProd = 'producoes_'.$cAnalitico;
+$placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
+
+$query = "SELECT `nome_agre` AS `nome`,
+                 MONTH(`data_in`) AS `mes`,
+                 `qt` AS `m3`,
+                 ROUND(`valor_in_ton` * `baridade`,2) AS `pu`,
+                 `qt` * ROUND(`valor_in_ton` * `baridade`) AS `total`
+          FROM `$cindusProd`
           JOIN `agregados`
-          ON `nome_agr` = `nome_agre`
+          ON `agr_id` = `cod_agr`
           JOIN `baridades`
-          ON `agr_id` = `agregado_id`
+          ON `cod_agr` = `agregado_id`
           JOIN `valorun_interno_ton`
-          ON `agr_bar_id` = `agregado_id`
-          WHERE  `tipo_doc` IN ('PRO', 'ENT') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
-          GROUP BY `nome_agr_corr`, MONTH(`data`)
+          ON `cod_agr` = `agr_bar_id`
+          WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
+          GROUP BY `nome_agr_corr`, MONTH(`data_in`)
           ORDER by `nome_agr_corr`
-          ";
+         ";
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 $stmt = $conn->prepare($query);
-$stmt->execute();
+$params = array_merge($lista_agregados_array, [$ano]);
+$stmt->execute($params);
 
 if ($stmt->rowCount() > 0) {
     $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
@@ -94,7 +96,7 @@ $query = "SELECT `nome_agr` AS `nome`,
           ON `agr_id` = `agregado_id`
           JOIN `valorun_interno_ton`
           ON `agr_bar_id` = `agregado_id`
-          WHERE  `tipo_doc` IN ('GTO', 'PSA') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
+          WHERE  `tipo_doc` IN ('GTO', 'SPA') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
           GROUP BY `nome_agr_corr`, MONTH(`data`)
           ORDER by `nome_agr_corr`
           ";
@@ -158,8 +160,8 @@ if ($stmt->rowCount() > 0) {
 $query = "SELECT `nome_agr` AS `nome`,
                   MONTH(`data`) AS `mes`,
                   (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
-                  ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
-                  ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
+                  ROUND((`valor_ex_ton` * `baridade`),2) AS `pu`,
+                  ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_ex_ton` * `baridade`)) AS `total`
           FROM `$cindus`
           LEFT JOIN `centros_analiticos`
           ON `ca_id` = `obra`
@@ -167,8 +169,8 @@ $query = "SELECT `nome_agr` AS `nome`,
           ON `nome_agr` = `nome_agre`
           JOIN `baridades`
           ON `agr_id` = `agregado_id`
-          JOIN `valorun_interno_ton`
-          ON `agr_bar_id` = `agregado_id`
+          JOIN `valorun_externo_ton`
+          ON `agr_bar_ton_id` = `agregado_id`
           WHERE  `tipo_doc` IN ('GR', 'VD') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
           GROUP BY `nome_agr_corr`, MONTH(`data`)
           ORDER by `nome_agr_corr`
@@ -284,23 +286,22 @@ for ($i=1; $i <= 12; $i++) {
 }
 
 // Valor facturação mensal
-
-$totalFacturaInterna = $totalVendasInternas;
-$totalFacturaExterna = $totalVendasInternas;
-$totalFacturacao = $totalVendasInternas;
-
+for ($i=1; $i < 13; $i++) {
+    $totalFacturaInterna[$i] = 0;
+    $totalFacturaExterna[$i] = 0;
+    $totalFacturacao[$i] = 0;
+}
 for ($i=1; $i <= 12; $i++) {
     foreach ($vInterna as $key => $value) {
-        $totalFacturaInterna[$i] += $value[$i]['m3'] * $value[$i]['pu'];
+        $totalFacturaInterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
     }
 }
-
+// dump($totalFacturaInterna);
 for ($i=1; $i <= 12; $i++) {
     foreach ($vExterna as $key => $value) {
-        $totalFacturaExterna[$i] += $value[$i]['m3'] * $value[$i]['pu'];
+        $totalFacturaExterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
     }
 }
-
 for ($i=1; $i <= 12 ; $i++) {
     $totalFacturacao[$i] = $totalFacturaInterna[$i] + $totalFacturaExterna[$i];
 }
@@ -353,12 +354,10 @@ for ($i=1; $i <= 12; $i++) {
 
 $rodapePU = 0;
 
-for ($i=1; $i <= 12; $i++) {
-    if ($rodapeVolComer == 0) {
-        $rodapePU = 0;
-    } else {
-        $rodapePU = $rodapeFactura / $rodapeVolComer;
-    }
+if ($rodapeVolComer == 0) {
+    $rodapePU = 0;
+} else {
+    $rodapePU = $rodapeFactura / $rodapeVolComer ;
 }
 
 
