@@ -241,7 +241,10 @@
     </div>
 </div>
 <br>
-<div class="container">
-    <img src="public/img/panoramica.svg" alt="linha Metso" style="width:100%">
-</div>
+<picture>
+  <source srcset="public/img/panoramica-large.jpg" media="(min-width: 800px)">
+  <source srcset="public/img/panoramica-medium.jpg" media="(min-width: 420px)">
+  <img srcset="public/img/panoramica-small.jpg" alt="Panoramica do britador">
+</picture>
+
 {% endblock %}
