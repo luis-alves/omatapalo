@@ -26,6 +26,18 @@
                 </tr>
             </thead>
             <tbody>
+                <tr class="dr_fundoAzul">
+                  <td>Estado Insersão de Dados</td>
+                {% for item in 1..12 %}
+                  {% if checkerOrd[item] == 4 %}
+                    <td class="text-center">Fechado</td>
+                    {% else %}
+                        <td class="text-center">Aberto</td>
+                  {% endif %}
+                {% endfor %}
+                <td></td>
+                <td></td>
+                </tr>
                 <tr>
                     <td class="dr_red">PROVEITOS OPERACIONAIS</td>
                     {% for i in 1..12 %}
@@ -1150,7 +1162,7 @@
         <span>
             <i>Nota: Pode ver detalhadamente as
                 <strong>naturezas</strong>
-                clicando nos títulos sublinhados.</i>
+                clicando em alguns dos títulos sublinhados.</i>
         </span>
     </div>
 
