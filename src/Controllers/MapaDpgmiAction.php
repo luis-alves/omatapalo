@@ -136,15 +136,12 @@ final class MapaDpgmiAction extends Action
 
         switch (true) {
             case $pagina == 'producao':
-                $this->producao();
                 return $this->view->render($response, 'mapas/dpgmi/producao.twig', $this->producao());
                 break;
             case $pagina == 'taxas':
-                $this->taxas();
                 return $this->view->render($response, 'mapas/dpgmi/taxas.twig', $this->taxas());
                 break;
             case $pagina == 'forcatrabalho':
-                $this->forcaTrabalho();
                 if ($this->forcaTrabalho() == 'ERRO') {
                     return $this->view->render($response, 'mapas/dpgmi/erro.twig', $this->erro());
                 } else {
@@ -152,15 +149,12 @@ final class MapaDpgmiAction extends Action
                 }
                 break;
             case $pagina == 'combustiveis':
-                $this->combustiveis();
                 return $this->view->render($response, 'mapas/dpgmi/combustiveis.twig', $this->combustiveis());
                 break;
             case $pagina == 'resumo':
-                $this->resumo();
                 return $this->view->render($response, 'mapas/dpgmi/resumo.twig', $this->resumo());
                 break;
             case $pagina == 'faixasEtarias':
-                $this->faixas($mes);
                 if ($this->faixas($mes) == 'ERRO') {
                     return $this->view->render($response, 'mapas/dpgmi/erro.twig', $this->erro());
                 } else {
@@ -170,7 +164,6 @@ final class MapaDpgmiAction extends Action
                 break;
 
             default:
-                $this->erro();
                 return $this->view->render($response, 'mapas/dpgmi/erro.twig', $this->erro());
                 break;
         }
@@ -179,6 +172,8 @@ final class MapaDpgmiAction extends Action
     public function producao()
     {
         include 'src/Auxiliares/globals.php';
+
+        include 'src/Auxiliares/helpers.php';
 
         $producao = $this->getSQL('PRO', 'ENT', 'valor_in_ton');
         $vInterna = $this->getSQL('GTO', 'SPA', 'valor_in_ton');
@@ -241,11 +236,11 @@ final class MapaDpgmiAction extends Action
         }
 
         // Valor facturação mensal
-
-        $totalFacturaInterna = $totalVendasInternas;
-        $totalFacturaExterna = $totalVendasInternas;
-        $totalFacturacao = $totalVendasInternas;
-
+        for ($i=1; $i < 13; $i++) {
+            $totalFacturaInterna[$i] = 0;
+            $totalFacturaExterna[$i] = 0;
+            $totalFacturacao[$i] = 0;
+        }
         for ($i=1; $i <= 12; $i++) {
             foreach ($vInterna as $key => $value) {
                 $totalFacturaInterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
@@ -257,7 +252,6 @@ final class MapaDpgmiAction extends Action
                 $totalFacturaExterna[$i] += $value[$i]['m3'] * $value[$i]['pu'] * $cambio[$_SESSION['ano']][$i-1];
             }
         }
-
         for ($i=1; $i <= 12 ; $i++) {
             $totalFacturacao[$i] = $totalFacturaInterna[$i] + $totalFacturaExterna[$i];
         }
@@ -389,17 +383,17 @@ final class MapaDpgmiAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+        $cindus = $cisRelatorioMensal[$cAnalitico];
 
         $query = "SELECT `nome_col`,
-                         `data_nasc`,
                          MONTH(`data`) AS data,
                          `nacional`,
                          `sexo`
                   FROM `colaboradores`
                   LEFT JOIN `folha_ponto`
                   ON `num_mec` = `n_mec`
-                  WHERE YEAR(`data`) = ?
-                  GROUP BY `nome_col`
+                  WHERE YEAR(`data`) = ? and `cind` = $cindus
+
                   ";
 
         $rows = $this->db->prepare($query);
@@ -618,6 +612,7 @@ final class MapaDpgmiAction extends Action
     {
         include 'src/Auxiliares/globals.php';
 
+
         $vars['page'] = 'mapas/dpgmi/combustiveis';
         $vars['title'] = 'MAPA CONSUMO COMBUSTIVEIS E LUBRIFICANTES';
         $vars['nomeEmpresa'] = 'Omatapalo, S.A.';
@@ -631,7 +626,6 @@ final class MapaDpgmiAction extends Action
         include 'src/Auxiliares/globals.php';
 
         $producao = $this->getSQL('PRO', 'ENT', 'valor_in_ton');
-
         $totalExtraido = array(1 => 0,
                                2 => 0,
                                3 => 0,
@@ -693,7 +687,7 @@ final class MapaDpgmiAction extends Action
                   LEFT JOIN `folha_ponto`
                   ON `num_mec` = `n_mec`
                   WHERE MONTH(`data`) = ? AND YEAR(`data`) = ? AND `cind` LIKE ?
-                  GROUP BY `nome_col`
+                  
                   ";
 
         $rows = $this->db->prepare($query);
