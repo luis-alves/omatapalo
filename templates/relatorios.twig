@@ -694,7 +694,9 @@
             </div>
         </div>
     </div><br>
-    <div class="container">
-        <img src="public/img/nevenodundo.svg" alt="linha Metso">
-    </div>
+    <picture>
+      <source srcset="public/img/nevenodundo-large.jpg" media="(min-width: 800px)">
+      <source srcset="public/img/nevenodundo-medium.jpg" media="(min-width: 420px)">
+      <img srcset="public/img/nevenodundo-small.jpg" alt="Panoramica da britadeira">
+    </picture>
 {% endblock %}
