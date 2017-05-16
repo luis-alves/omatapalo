@@ -49,14 +49,14 @@ class Query
         $query = "SELECT *,
                     CASE
                          WHEN '$tipo1' IN ('GTO', 'SPA')
-                         THEN round(`peso` * `valor_in_ton`)
-                         ELSE round(`peso` * `valor_ex_ton` * (1 - `desco`))
+                         THEN (`peso` * `valor_in_ton`)
+                         ELSE (`peso` * `valor_ex_ton` * (1 - `desco`))
                          END
                         AS `total`,
                     CASE
                          WHEN '$tipo1' IN ('GTO', 'SPA')
-                         THEN round(`valor_in_ton` * `baridade`)
-                         ELSE round(`valor_ex_ton` * `baridade` * (1 - `desco`))
+                         THEN (`valor_in_ton` * `baridade`)
+                         ELSE (`valor_ex_ton` * `baridade` * (1 - `desco`))
                          END
                         AS `preco_m3`,
                     MONTH(`data`) AS `mes`,
