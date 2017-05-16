@@ -58,118 +58,18 @@
             </tfoot>
 
             <tbody>
-                    <tr>
-                        <td>Janeiro</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-
-
-                    </tr>
-                    <tr>
-                        <td>Fevereiro</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Março</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Abril</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Maio</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Junho</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Julho</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Agosto</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Setembro</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Outubro</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Novembro</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-                    <tr>
-                        <td>Dezembro</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                        <td>N/d</td>
-                    </tr>
-
-                </tr>
+                <?php
+                for ($i=1; $i < 13; $i++) {
+                    echo "<tr class='dpgm_estreito'>";
+                    echo "<td class='dpgm_estreito'>".$lista_meses[$i-1]."</td>";
+                    echo "<td class='dpgm_estreito'>N/d</td>";
+                    echo "<td class='dpgm_estreito'>N/d</td>";
+                    echo "<td class='dpgm_estreito'>N/d</td>";
+                    echo "<td class='dpgm_estreito'>N/d</td>";
+                    echo "<td class='dpgm_estreito'>N/d</td>";
+                    echo "<td class='dpgm_estreito'>N/d</td>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
