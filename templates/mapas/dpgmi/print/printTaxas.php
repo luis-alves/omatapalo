@@ -2,31 +2,30 @@
 
 include 'src/Auxiliares/globals.php';
 
-$cindus = 'importacao_'.$cAnalitico;
+$cindus = 'producoes_'.$cAnalitico;
+$placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
 
-$query = "SELECT `nome_agr` AS `nome`,
-                  MONTH(`data`) AS `mes`,
-                  (ROUND(SUM(`peso` / `baridade`))) AS `m3`,
-                  ROUND((`valor_in_ton` * `baridade`),2) AS `pu`,
-                  ROUND((SUM(`peso` / `baridade`)) * ROUND(`valor_in_ton` * `baridade`)) AS `total`
+$query = "SELECT `nome_agre` AS `nome`,
+                 MONTH(`data_in`) AS `mes`,
+                 `qt` AS `m3`,
+                 ROUND(`valor_in_ton` * `baridade`,2) AS `pu`,
+                 `qt` * ROUND(`valor_in_ton` * `baridade`) AS `total`
           FROM `$cindus`
-          LEFT JOIN `centros_analiticos`
-          ON `ca_id` = `obra`
           JOIN `agregados`
-          ON `nome_agr` = `nome_agre`
+          ON `agr_id` = `cod_agr`
           JOIN `baridades`
-          ON `agr_id` = `agregado_id`
+          ON `cod_agr` = `agregado_id`
           JOIN `valorun_interno_ton`
-          ON `agr_bar_id` = `agregado_id`
-          WHERE  `tipo_doc` IN ('PRO', 'ENT') AND `nome_agr` IN ($lista_agregados) AND YEAR(`data`) IN ('$ano')
-          GROUP BY `nome_agr_corr`, MONTH(`data`)
+          ON `cod_agr` = `agr_bar_id`
+          WHERE `nome_agre` IN ($placeholders) AND YEAR(`data_in`) IN (?)
+          GROUP BY `nome_agr_corr`, MONTH(`data_in`)
           ORDER by `nome_agr_corr`
-          ";
-
+         ";
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 $stmt = $conn->prepare($query);
-$stmt->execute();
+$params = array_merge($lista_agregados_array, [$ano]);
+$stmt->execute($params);
 
 if ($stmt->rowCount() > 0) {
     $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
@@ -187,34 +186,34 @@ $vars['print'] = 'printTaxas';
                     <?php for ($i = 1; $i <= 12; $i++): ?>
                         <tr>
                             <?php include 'src/Auxiliares/globals.php'; ?>
-                            <td><?= $lista_meses[$i-1] ?></td>
-                            <td>Isento</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td><?= number_format($totalExtraido[$i], 0, ",", ".")?></td>
-                            <td>-</td>
-                            <td>-</td>
+                            <td class="dpgm_estreito"><?= $lista_meses[$i-1] ?></td>
+                            <td class="dpgm_estreito">Isento</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito"><?= number_format($totalExtraido[$i], 0, ",", ".")?></td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
                         </tr>
                     <?php endfor; ?>
                 </tbody>
             </table>
          </div>
-        <div class="al_esquerda">
-            <?php
-                header('Content-Type: text/html; charset=iso-8859-1');
-                setlocale(LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese');
-                date_default_timezone_set('Europe/Lisbon');
-                echo "Local, " . strftime('%d de %B de %Y', strtotime(date('Y-m-d')));
-            ?>
+         <div class="al_esquerda_footer" style="padding-top:10px;">
+             <?php
+                 header('Content-Type: text/html; charset=iso-8859-1');
+                 setlocale(LC_ALL, 'pt_PT', 'pt_PT.iso-8859-1', 'pt_PT.utf-8', 'portuguese');
+                 date_default_timezone_set('Europe/Lisbon');
+                 echo "Lubango, " . strftime('%d de %B de %Y', strtotime(date('Y-m-d')));
+             ?>
 
-        </div>
-        <div class="al_direira">
-            <p class="direita"> Responsável pelo preeenchimento</p>
-            <p class="direita"> _______________________________</p>
-        </div>
+         </div>
+         <div class="al_direita_footer">
+             <p> Responsável pelo preeenchimento</p>
+             <p> _______________________________</p>
+         </div>
     </body>
 
 </html>
