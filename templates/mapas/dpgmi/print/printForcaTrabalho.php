@@ -2,6 +2,8 @@
 
 include 'src/Auxiliares/globals.php';
 
+$cindus = $cisRelatorioMensal[$cAnalitico];
+
 $query = "SELECT `nome_col`,
                  `data_nasc`,
                  MONTH(`data`) AS data,
@@ -10,12 +12,12 @@ $query = "SELECT `nome_col`,
           FROM `colaboradores`
           LEFT JOIN `folha_ponto`
           ON `num_mec` = `n_mec`
-          GROUP BY `nome_col`
+          WHERE YEAR(`data`) = ? AND `cind` = $cindus
           ";
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 $stmt = $conn->prepare($query);
-$stmt->execute();
+$stmt->execute([$ano]);
 
 if ($stmt->rowCount() > 0) {
     $vars['row'] = $stmt->fetchAll(\PDO::FETCH_OBJ);
@@ -280,20 +282,20 @@ if ($stmt->rowCount() > 0) {
                     <?php for ($i = 0; $i < 12; $i++): ?>
 
                         <tr>
-                            <td><?= $lista_meses[$i] ?></td>
-                            <td><?= $nac_feminino[$i]?></td>
-                            <td><?= $nac_masculino[$i]?></td>
-                            <td><?= $nac_feminino[$i] + $nac_masculino[$i] ?></td>
-                            <td><?= $exp_feminino[$i]?></td>
-                            <td><?= $exp_masculino[$i]?></td>
-                            <td><?= $exp_feminino[$i] + $exp_masculino[$i] ?></td>
-                            <td><?= $nac_feminino[$i] + $exp_feminino[$i] ?></td>
-                            <td><?= $nac_masculino[$i] + $nac_masculino[$i] ?></td>
-                            <td><?= $nac_feminino[$i] + $exp_feminino[$i]+
+                            <td class="dpgm_estreito"><?= $lista_meses[$i] ?></td>
+                            <td class="dpgm_estreito"><?= $nac_feminino[$i]?></td>
+                            <td class="dpgm_estreito"><?= $nac_masculino[$i]?></td>
+                            <td class="dpgm_estreito"><?= $nac_feminino[$i] + $nac_masculino[$i] ?></td>
+                            <td class="dpgm_estreito"><?= $exp_feminino[$i]?></td>
+                            <td class="dpgm_estreito"><?= $exp_masculino[$i]?></td>
+                            <td class="dpgm_estreito"><?= $exp_feminino[$i] + $exp_masculino[$i] ?></td>
+                            <td class="dpgm_estreito"><?= $nac_feminino[$i] + $exp_feminino[$i] ?></td>
+                            <td class="dpgm_estreito"><?= $nac_masculino[$i] + $nac_masculino[$i] ?></td>
+                            <td class="dpgm_estreito"><?= $nac_feminino[$i] + $exp_feminino[$i]+
                                     $nac_masculino[$i] + $nac_masculino[$i] ?></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
                         </tr>
 
                     <?php endfor ?>
