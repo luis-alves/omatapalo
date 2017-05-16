@@ -1,7 +1,7 @@
 <?php
 include 'src/Auxiliares/globals.php';
 
-$cindus = 'producao_'.$cAnalitico;
+$cindus = 'producoes_'.$cAnalitico;
 $placeholders = str_repeat('?, ', count($lista_agregados_array) - 1) . '?';
 
 $query = "SELECT `nome_agre` AS `nome`,
@@ -73,7 +73,7 @@ if ($stmt->rowCount() > 0) {
         }
     }
 }
-dump($producao);
+
 $totalExtraido = array(1 => 0,
                        2 => 0,
                        3 => 0,
@@ -181,15 +181,15 @@ $vars['print'] = 'printResumo';
                     <?php include 'src/Auxiliares/globals.php'; ?>
                     <?php for ($i = 1; $i <= 12; $i++): ?>
                         <tr>
-                            <td><?= $lista_meses[$i-1] ?></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td><?= number_format($totalExtraido[$i] / $cambio[$_SESSION['ano']][$i-1], 2, ",", ".") ?></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
+                            <td class="dpgm_estreito"><?= $lista_meses[$i-1] ?></td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito"><?= number_format($totalExtraido[$i], 2, ",", ".") ?></td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
+                            <td class="dpgm_estreito">-</td>
                         </tr>
                     <?php endfor ?>
 
