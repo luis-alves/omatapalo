@@ -12,8 +12,7 @@ $query = "SELECT `nome_col`,
           FROM `colaboradores`
           LEFT JOIN `folha_ponto`
           ON `num_mec` = `n_mec`
-          WHERE MONTH(`data`) = '$mesNumero'
-          GROUP BY `nome_col`
+          WHERE MONTH(`data`) = $mesNumero AND YEAR(`data`) = $ano AND `cind` LIKE $cisRelatorioMensal[$cAnalitico]
           ";
 
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
