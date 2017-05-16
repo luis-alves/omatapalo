@@ -71,8 +71,8 @@
                         <td class="text-center">{{ venda.no_obra }}</td>
                         <td class="text-center">{{ venda.nome_agr_corr }}</td>
                         <td class="text-center">{{ venda.m3 }}</td>
-                        <td class="text-center">{{ venda.preco_m3 }}</td>
-                        <td class="text-center">{{ venda.total }}</td>
+                        <td class="text-center">{{ venda.preco_m3|number_format(2,",",".") }}</td>
+                        <td class="text-center">{{ venda.total|number_format(0,",",".") }}</td>
                     </tr>
                 {% endfor %}
 
@@ -151,8 +151,8 @@
                         <td class="text-center">{{ venda.no_obra }}</td>
                         <td class="text-center">{{ venda.nome_agr_corr }}</td>
                         <td class="text-center">{{ venda.m3 }}</td>
-                        <td class="text-center">{{ venda.preco_m3 }}</td>
-                        <td class="text-center">{{ venda.total }}</td>
+                        <td class="text-center">{{ venda.preco_m3|number_format(2,",",".")}}</td>
+                        <td class="text-center">{{ venda.total|number_format(0,",",".") }}</td>
                     </tr>
                 {% endfor %}
 
