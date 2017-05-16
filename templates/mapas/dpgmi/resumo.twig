@@ -71,7 +71,7 @@
 
             {% for i in 1..12 %}
                 <tr>
-                    <td>{{lista_meses[loop.index0]|number_format(0,","," ") }}</td>
+                    <td>{{ lista_meses[i-1] }}</td>
                     <td>-</td>
                     <td>-</td>
                     <td>{{totalExtraido[loop.index]|number_format(0,","," ") }}</td>
