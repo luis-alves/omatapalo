@@ -6,6 +6,7 @@ use Src\Auxiliares\Query as Query;
 use Src\Models\VendasArimba as VendasArimba;
 use Src\Models\Compras as Compras;
 use Src\Models\MaoDeObra as MaoDeObra;
+use Src\Models\Checker as Checker;
 
 /**
  *
@@ -51,6 +52,13 @@ class DResultadosAction extends Action
         include 'src/Auxiliares/globals.php';
         // include 'src/Auxiliares/helpers.php';
 
+        $checker = Checker::selectRaw('mes, sum(vendas + equipamento + maodeobra + primavera) AS qt')
+                            ->where('ano', '=', $ano)
+                            ->groupBy('mes')
+                            ->get();
+        foreach ($checker as $key => $value) {
+            $checkerOrd[$value->mes] = $value->qt;
+        }
         $sql = new Query();
 
         $vendasExternas = $sql::getSQLVendas("GR", "VD");
@@ -619,6 +627,8 @@ class DResultadosAction extends Action
             $vars['margemComStock'] = $margemComStock;
             $vars['margemComStockGlobal'] = $margemComStockGlobal;
             $vars['custosOperacionais'] = $custosOperacionais;
+            $vars['checkerOrd'] = $checkerOrd;
+
 
             #percentagens totais
             $vars['percVendasExternas'] = $percVendasExternas;
@@ -887,7 +897,7 @@ class DResultadosAction extends Action
                                 ->whereIn('familia', $fields)
                                 ->whereYear('data', $ano)
                                 ->get();
-
+        // dump($custosDiversos);
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Equipamento';
         $vars['listaCustos'] = $custosDiversos;
@@ -951,11 +961,16 @@ class DResultadosAction extends Action
                                    ->whereYear('data', $ano)->get()
                                    ;
 
+        $tabela = 'ano_'.$ano;
+
         $listanac = ["N", "E"];
-        $custosSalarios = MaoDeObra::selectRaw('month(data) as mes, data, nome_col as artigo, sum(h_normais * ano_2016 + h_extras * ano_2016) as valor')
+        $custosSalarios = MaoDeObra::selectRaw('month(data) as mes,
+                                                data,
+                                                nome_col as artigo,
+                                                sum(h_normais *'.$tabela.'+ h_extras *'.$tabela.') as valor')
                                    ->leftjoin('colaboradores', 'num_mec', '=', 'n_mec')
                                    ->where('cind', '=', $cisRelatorioMensal[$cAnalitico])
-                                   ->where('ano_2016', '>', 0)
+                                   ->where($tabela, '>', 0)
                                    ->whereIn('nacional', $listanac)
                                    ->whereYear('data', $ano)->groupBy('mes')->get();
 
