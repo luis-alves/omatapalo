@@ -859,6 +859,7 @@ class DResultadosAction extends Action
 
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Materiais Diversos';
+        $vars['tituloCabecalho'] = 'Materiais Diversos';
         $vars['listaCustos'] = $custosDiversos;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
@@ -879,6 +880,7 @@ class DResultadosAction extends Action
 
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Materias Primas';
+        $vars['tituloCabecalho'] = 'Matérias Primas';
         $vars['listaCustos'] = $custosDiversos;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
@@ -900,6 +902,7 @@ class DResultadosAction extends Action
         // dump($custosDiversos);
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Equipamento';
+        $vars['tituloCabecalho'] = 'Equipamento';
         $vars['listaCustos'] = $custosDiversos;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
@@ -921,6 +924,7 @@ class DResultadosAction extends Action
 
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Transportes';
+        $vars['tituloCabecalho'] = 'Transportes';
         $vars['listaCustos'] = $custosDiversos;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
@@ -942,6 +946,7 @@ class DResultadosAction extends Action
 
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - FSE';
+        $vars['tituloCabecalho'] = 'Custps FSE';
         $vars['listaCustos'] = $custosDiversos;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
@@ -1008,6 +1013,7 @@ class DResultadosAction extends Action
 
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Custos Pessoal';
+        $vars['tituloCabecalho'] = 'Pessoal';
         $vars['listaCustos'] = $final;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
@@ -1029,6 +1035,7 @@ class DResultadosAction extends Action
 
         $vars['page'] = 'custosDR';
         $vars['title'] = 'DR - Financeiro';
+        $vars['tituloCabecalho'] = 'Financeiro';
         $vars['listaCustos'] = $custosDiversos;
         return $this->view->render($response, '/relatorios/dresultados/mapas/' . $vars['page'] .'.twig', $vars);
     }
